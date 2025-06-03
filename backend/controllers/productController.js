@@ -5,6 +5,7 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ApiFeatures = require("../utils/apiFeatures");
 const cloudinary = require("cloudinary");
+const CONSTANTS = require("../config/constants");
 
 // create product -- Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
@@ -18,7 +19,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   const imagesLink = [];
   for (let i = 0; i < images.length; ++i) {
     const result = await cloudinary.v2.uploader.upload_large(images[i], {
-      folder: "products",
+      folder: CONSTANTS.CLOUDINARY_FOLDERS.PRODUCTS,
     });
 
     imagesLink.push({
@@ -159,7 +160,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
       const imagesLink = [];
       for (let i = 0; i < images.length; ++i) {
         const result = await cloudinary.v2.uploader.upload_large(images[i], {
-          folder: "products",
+          folder: CONSTANTS.CLOUDINARY_FOLDERS.PRODUCTS,
         });
 
         imagesLink.push({

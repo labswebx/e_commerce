@@ -4,7 +4,7 @@ import { createAsyncThunkHandler } from "../../utils/createAsyncThunkHandler";
 import { setError, setLoading } from "../../utils/commonReducers";
 
 import CATEGORY_ACTION_TYPES from "./categoryActionTypes";
-import categoryApi from "../../api/categoryApi";
+import categoryApi from "./categoryApi";
 
 export const fetchCategories = createAsyncThunkHandler(
   CATEGORY_ACTION_TYPES.FETCH_ALL,

@@ -11,7 +11,7 @@ export const createConstant = createAsyncThunkHandler(
   async () => constantsApi.createConstant()
 );
 
-export const updateBanners = createAsyncThunk(
+export const updateBanners = createAsyncThunkHandler(
   CONSTANTS_ACTION_TYPES.UPDATE_BANNER,
   async () => constantsApi.updateBanners()
 );

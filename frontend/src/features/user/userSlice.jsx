@@ -8,7 +8,7 @@ import {
   setLoading,
 } from "../../utils/commonReducers";
 
-import USER_ACTION_TYPES from "./USER_ACTION_TYPES";
+import USER_ACTION_TYPES from "./userActionTypes";
 import { userApi } from "./userApi";
 
 function saveUserData(data) {

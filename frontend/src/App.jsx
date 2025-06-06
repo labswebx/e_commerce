@@ -1,5 +1,5 @@
 const App = () => {
-  return <div>Tailwindcss configff</div>;
+  return <div>Tailwindcss config</div>;
 };
 
 export default App;

@@ -38,6 +38,7 @@ export default {
       borderWidth: theme.BORDER.width,
       borderStyle: theme.BORDER.style,
       fontFamily: {
+        sfpro: [theme.TYPOGRAPHY.fontFamily.sfpro],
         sans: [theme.TYPOGRAPHY.fontFamily.primary, "sans-serif"],
         display: [theme.TYPOGRAPHY.fontFamily.secondary, "sans-serif"],
         mono: [theme.TYPOGRAPHY.fontFamily.monospace, "monospace"],

@@ -141,6 +141,7 @@ const OPACITY = {
 };
 const TYPOGRAPHY = {
   fontFamily: {
+    sfpro: ['"SF Pro Display"', "ui-sans-serif", "system-ui", "sans-serif"],
     primary: "'Inter', sans-serif",
     secondary: "'Roboto', sans-serif",
     monospace: "'Courier New', monospace",

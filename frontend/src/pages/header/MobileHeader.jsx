@@ -5,8 +5,8 @@ const MobileHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   if (!mobileMenuOpen) return null;
 
   return (
-    <div className="bg-white border-t md:hidden">
-      <div className="flex flex-col items-center justify-center gap-4 px-6 py-6 text-base font-medium shadow-sm">
+    <div className="mobile-nav">
+      <div className="mobile-nav-inner">
         <NavItem href="/" onClick={() => setMobileMenuOpen(false)}>
           Home
         </NavItem>

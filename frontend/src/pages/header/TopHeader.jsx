@@ -7,10 +7,9 @@ import NavItem from "../../components/ui/NavItems";
 
 const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   return (
-    <div className="w-full px-4 py-3 bg-white shadow-sm sm:px-6 lg:px-10">
-      <div className="grid items-center max-w-screen-xl grid-cols-12 gap-4 mx-auto">
-        {/* Logo */}
-        <div className="flex items-center col-span-6 md:col-span-2">
+    <div className="header-container">
+      <div className="header-grid">
+        <div className="header-logo">
           <Logo
             image="/logo-icon.jpg"
             text="cyber"
@@ -19,8 +18,7 @@ const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
           />
         </div>
 
-        {/* Search Bar - visible on md+ */}
-        <div className="hidden col-span-3 md:flex">
+        <div className="header-search">
           <InputField
             placeholder="Search for products"
             icon={Search}
@@ -28,23 +26,20 @@ const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
           />
         </div>
 
-        {/* Navigation - visible on md+ */}
-        <nav className="justify-center hidden col-span-5 gap-2 text-sm font-medium md:flex">
+        <nav className="header-nav">
           <NavItem to="/" label="Home" />
           <NavItem to="/about" label="About" />
           <NavItem to="/shop" label="Shop" />
           <NavItem to="/contact" label="Contact" />
         </nav>
 
-        {/* Desktop Icons - visible on md+ */}
-        <div className="justify-end hidden col-span-2 gap-6 md:flex">
+        <div className="header-icons">
           <Icon icon={Heart} variant="ghost" size="sd" />
           <Icon icon={ShoppingCart} variant="ghost" size="sd" />
           <Icon icon={User} variant="ghost" size="sd" />
         </div>
 
-        {/* Mobile Menu Toggle */}
-        <div className="flex justify-end col-span-6 md:hidden">
+        <div className="header-mobile-toggle">
           <button onClick={() => setMobileMenuOpen(!mobileMenuOpen)}>
             <Icon icon={mobileMenuOpen ? X : Menu} variant="ghost" />
           </button>

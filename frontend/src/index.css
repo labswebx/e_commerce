@@ -27,4 +27,6 @@
 @import "./styles/components/_timeline.css";
 @import "./styles/components/_toast.css";
 @import "./styles/components/_nav-tab.css";
+@import "./styles/pages/_footer.css";
+@import "./styles/pages/_header.css";
 /* @import "./styles/components"; */

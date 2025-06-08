@@ -25,8 +25,8 @@ const SubNav = () => {
   const [selected, setSelected] = useState("phones");
 
   return (
-    <div className="hidden w-full bg-[#2E2E2E] border-t md:block ">
-      <div className="w-full py-2 overflow-x-auto px-auto">
+    <div className="subnav-container">
+      <div className="subnav-wrapper ">
         <div className="whitespace-nowrap">
           <Tabs
             tabs={categoryTabs}

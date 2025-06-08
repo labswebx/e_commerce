@@ -4,7 +4,7 @@ import theme from "./src/theme";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
-  darkMode: "class", // or 'media' for system preference
+  darkMode: "class",
   safelist: [
     "btn",
     "btn-sm",
@@ -63,7 +63,6 @@ export default {
         display: [theme.TYPOGRAPHY.fontFamily.secondary, "sans-serif"],
         mono: [theme.TYPOGRAPHY.fontFamily.monospace, "monospace"],
       },
-      fontSize: theme.TYPOGRAPHY.fontSize,
       fontWeight: theme.TYPOGRAPHY.fontWeight,
       lineHeight: theme.TYPOGRAPHY.lineHeight,
       letterSpacing: theme.TYPOGRAPHY.letterSpacing,

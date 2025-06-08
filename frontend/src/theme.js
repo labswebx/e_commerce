@@ -182,6 +182,7 @@ const TYPOGRAPHY = {
 export const ICON_SIZE = {
   xs: 16,
   sm: 24,
+  sd: 28,
   md: 32,
   lg: 40,
   xl: 48,

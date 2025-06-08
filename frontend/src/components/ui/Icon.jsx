@@ -9,6 +9,7 @@ const Icon = ({
   bgColor = "transparent",
   color = "#000",
   borderRadius = 8,
+  className,
 }) => {
   const dimension = ICON_SIZE[size] || ICON_SIZE.md;
 
@@ -24,6 +25,7 @@ const Icon = ({
         justifyContent: "center",
         padding: fill ? 4 : 0,
       }}
+      className={`${className}  cursor-pointer `}
     >
       <IconComponent
         size={dimension - (fill ? 8 : 0)}

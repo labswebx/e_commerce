@@ -1,0 +1,50 @@
+@layer components {
+  /* Timeline container flex direction based on orientation */
+  .timeline-horizontal {
+    @apply flex flex-row items-start w-full gap-6 p-4 overflow-x-auto;
+  }
+  .timeline-vertical {
+    @apply flex flex-col items-center w-full gap-6 p-4;
+  }
+
+  /* Timeline step container: flex direction based on orientation */
+  .timeline-step-horizontal {
+    @apply relative flex flex-row items-center;
+  }
+  .timeline-step-vertical {
+    @apply relative flex flex-col items-center;
+  }
+
+  /* Connector lines between steps */
+  .timeline-connector-horizontal {
+    @apply absolute bg-gray-300 top-1/2 left-full h-0.5 w-10 -translate-y-1/2;
+  }
+  .timeline-connector-vertical {
+    @apply absolute bg-gray-300 bottom-0 left-1/2 w-0.5 h-10 -translate-x-1/2;
+  }
+
+  /* Icon container */
+  .timeline-icon {
+    @apply z-10 flex items-center justify-center p-3 text-gray-600 bg-gray-300 rounded-full;
+  }
+  .timeline-icon-active {
+    @apply text-white bg-black;
+  }
+  .timeline-icon-completed {
+    @apply text-white bg-black;
+  }
+
+  /* Step label */
+  .timeline-label {
+    @apply mt-2 text-sm text-gray-600 whitespace-nowrap;
+  }
+  .timeline-label-active {
+    @apply font-semibold text-black;
+  }
+  .timeline-label-horizontal {
+    @apply text-center;
+  }
+  .timeline-label-vertical {
+    @apply text-left;
+  }
+}

@@ -1,0 +1,19 @@
+@layer components{
+    /* Divider */
+  .divider {
+    @apply relative;
+  }
+  .divider-line {
+    @apply w-full border-t border-gray-300;
+  }
+  .divider-vertical {
+    @apply w-px h-full mx-2 bg-gray-300;
+  }
+  .divider-content {
+    @apply absolute flex justify-center;
+  }
+  .divider-text {
+    @apply px-2 text-sm text-gray-500 bg-white;
+  }
+
+}

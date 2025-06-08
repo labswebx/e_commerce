@@ -1,0 +1,21 @@
+@layer components {
+  .toast-base {
+    @apply flex items-center gap-2 p-2 rounded-md shadow-lg cursor-pointer text-md;
+  }
+
+  .toast-success {
+    @apply text-green-800 bg-green-100 border border-white;
+  }
+
+  .toast-error {
+    @apply text-red-800 bg-red-100 border border-red-100;
+  }
+
+  .toast-warning {
+    @apply text-yellow-700 bg-yellow-100 border border-yellow-100;
+  }
+
+  .toast-info {
+    @apply text-blue-800 bg-blue-100 border border-blue-100;
+  }
+}

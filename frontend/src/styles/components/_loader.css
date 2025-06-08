@@ -1,0 +1,21 @@
+@layer components {
+  .loader-container {
+    @apply grid w-full place-items-center;
+  }
+  .loader-container--small {
+    @apply h-12;
+  }
+  .loader-container--large {
+    @apply h-[70vh];
+  }
+
+  .loader-spinner {
+    @apply rounded-full animate-spin-reverse;
+  }
+  .loader-spinner--small {
+    @apply w-8 h-8 border-b border-b-black;
+  }
+  .loader-spinner--large {
+    @apply w-20 h-20 border-b-4 border-b-black/70;
+  }
+}

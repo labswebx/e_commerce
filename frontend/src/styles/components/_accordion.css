@@ -1,0 +1,25 @@
+@layer components {
+  .accordion-container {
+    @apply space-y-3;
+  }
+
+  .accordion-item {
+    @apply overflow-hidden border rounded-md;
+  }
+
+  .accordion-button {
+    @apply flex items-center justify-between w-full p-4 font-medium text-left text-gray-800 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500;
+  }
+
+  .accordion-icon {
+    @apply transition-transform duration-200;
+  }
+
+  .accordion-icon-open {
+    @apply rotate-180;
+  }
+
+  .accordion-panel {
+    @apply p-4 text-gray-900 bg-white border-t;
+  }
+}

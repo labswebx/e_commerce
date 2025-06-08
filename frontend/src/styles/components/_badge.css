@@ -1,0 +1,30 @@
+@layer components {
+  /* Badge */
+  .badge {
+    @apply inline-flex items-center font-medium rounded-full;
+  }
+  .badge-sm {
+    @apply px-2 py-0.5 text-xs;
+  }
+  .badge-md {
+    @apply px-2.5 py-1 text-sm;
+  }
+  .badge-lg {
+    @apply px-3 py-1.5 text-base;
+  }
+  .badge-default {
+    @apply text-gray-800 bg-gray-100;
+  }
+  .badge-primary {
+    @apply text-blue-800 bg-blue-100;
+  }
+  .badge-success {
+    @apply text-green-800 bg-green-100;
+  }
+  .badge-warning {
+    @apply text-yellow-800 bg-yellow-100;
+  }
+  .badge-danger {
+    @apply text-red-800 bg-red-100;
+  }
+}

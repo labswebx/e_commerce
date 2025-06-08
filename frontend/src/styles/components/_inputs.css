@@ -1,0 +1,40 @@
+@layer components {
+  .input-wrapper {
+    @apply relative flex items-center gap-2;
+  }
+
+  .input-text {
+    @apply w-full px-4 py-4 text-sm leading-5 placeholder-gray-500 bg-white border border-gray-400 rounded-md text-charcoal focus:outline-none focus:ring-2 focus:ring-gray-600;
+    font-size: 14px;
+    line-height: 20px;
+    border-width: 0.5px;
+  }
+
+  .input-label {
+    @apply text-sm font-medium text-[#545454];
+    font-family: "SF Pro Display", sans-serif;
+    line-height: 16px;
+  }
+
+  .input-text::placeholder {
+    font-family: "SF Pro Display", sans-serif;
+    font-size: 14px;
+    line-height: 24px;
+    letter-spacing: -0.005em;
+    opacity: 1;
+  }
+  .input-control {
+    @apply w-6 h-6 text-black border border-black appearance-none focus:outline-none focus:ring-2 focus:ring-black focus:border-black hover:border-black active:border-black checked:bg-black checked:border-black disabled:opacity-50 disabled:cursor-not-allowed;
+  }
+  .input-radio {
+    @apply rounded-full input-control;
+  }
+
+  .input-checkbox {
+    @apply rounded input-control;
+  }
+
+  .input-button {
+    @apply px-4 py-2 text-sm text-white transition bg-black rounded-md hover:bg-gray-800;
+  }
+}

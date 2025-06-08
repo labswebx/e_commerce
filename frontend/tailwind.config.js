@@ -5,6 +5,24 @@ import theme from "./src/theme";
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   darkMode: "class", // or 'media' for system preference
+  safelist: [
+    "btn",
+    "btn-sm",
+    "btn-md",
+    "btn-lg",
+    "btn-filled",
+    "btn-filled-hover",
+    "btn-filled-disabled",
+    "btn-outline",
+    "btn-outline-hover",
+    "btn-outline-disabled",
+    "btn-ghost",
+    "btn-ghost-hover",
+    "btn-ghost-disabled",
+    "btn-rounded",
+    "btn-full",
+    "animate-pulse",
+  ],
   theme: {
     screens: theme.SCREEN,
     extend: {
@@ -15,9 +33,11 @@ export default {
         error: theme.COLORS.error,
         gray: theme.COLORS.gray,
         charcoal: theme.COLORS.charcoal,
+        softGray: theme.COLORS.softGray,
         accent: {
           purple: theme.COLORS.accentPurple,
           orange: theme.COLORS.orange,
+          softOrange: theme.COLORS.softOrange,
         },
         status: {
           success: theme.COLORS.success,
@@ -49,6 +69,24 @@ export default {
       letterSpacing: theme.TYPOGRAPHY.letterSpacing,
       opacity: theme.OPACITY,
       boxShadow: theme.BOX_SHADOW,
+    },
+    keyframes: {
+      "toast-in": {
+        "0%": { opacity: "0", transform: "translateX(100%)" },
+        "100%": { opacity: "1", transform: "translateX(0)" },
+      },
+      "toast-out": {
+        "0%": { opacity: "1", transform: "translateX(0)" },
+        "100%": { opacity: "0", transform: "translateX(100%)" },
+      },
+      spinReverse: {
+        to: { transform: "rotate(-360deg)" },
+      },
+    },
+    animation: {
+      "toast-in": "toast-in 300ms ease forwards",
+      "toast-out": "toast-out 300ms ease forwards",
+      "spin-reverse": "spinReverse 800ms linear infinite",
     },
   },
   plugins: [

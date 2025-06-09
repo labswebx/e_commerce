@@ -9,11 +9,11 @@
   }
 
   .tab-underline-selected {
-    @apply font-semibold text-white;
+    @apply font-semibold text-black;
   }
 
   .tab-underline-unselected {
-    @apply text-zinc-400 hover:text-white;
+    @apply text-zinc-400 hover:text-gray-800;
   }
 
   /* ---------------- Box style ---------------- */

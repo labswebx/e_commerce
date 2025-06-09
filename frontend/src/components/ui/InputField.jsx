@@ -21,7 +21,9 @@ const InputField = ({
   const inputId = id || `input-${label?.replace(/\s+/g, "-").toLowerCase()}`;
 
   return (
-    <div className="w-full space-y-1 md:space-y-2">
+    <div
+      className={`${type === "radio" ? "" : "w-full"} space-y-1 md:space-y-2`}
+    >
       {label && (
         <label htmlFor={inputId} className="input-label">
           {label}

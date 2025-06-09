@@ -1,4 +1,10 @@
+// components/ui/Card.js
+import { Cross, Edit, Pencil, X } from "lucide-react";
 import React from "react";
+import InputField from "./InputField";
+import Icon from "./Icon";
+import DatePicker from "./DatePicker";
+import Button from "./Button";
 
 const ProductCard = ({ data, onAddToCart }) => (
   <div className="card-base w-72">
@@ -6,9 +12,11 @@ const ProductCard = ({ data, onAddToCart }) => (
     <h3 className="mt-2 text-lg font-medium">{data.title}</h3>
     <p className="text-sm text-gray-500">{data.description}</p>
     <p className="mt-2 text-xl font-semibold">${data.price}</p>
-    <button onClick={onAddToCart} className="btn-cart">
-      Add to Cart
-    </button>
+    <Button
+      onClick={onAddToCart}
+      className="btn-cart"
+      label="Add to cart"
+    ></Button>
   </div>
 );
 
@@ -55,33 +63,124 @@ const ReviewCard = ({ data }) => (
     )}
   </div>
 );
+
 const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => (
-  <div className="card-cart-item">
+  <div className="flex items-center justify-between p-4 border-b border-gray-200 max-sm:flex-col">
+    {/* image */}
     <div className="flex gap-4">
-      <img src={data.image} alt={data.title} className="w-16 h-16 rounded-lg" />
+      <img
+        src={data.image}
+        alt={data.name || data.title}
+        className="w-16 h-16 rounded-lg"
+      />
       <div>
-        <h4 className="text-sm font-semibold">{data.title}</h4>
-        <p className="text-xs text-gray-500">{data.productId}</p>
-        <div className="flex items-center gap-2 mt-2">
-          <button className="btn-qty" onClick={onDecrement}>
-            -
-          </button>
-          <span className="w-6 text-center">{data.quantity}</span>
-          <button className="btn-qty" onClick={onIncrement}>
-            +
-          </button>
-        </div>
+        <h4 className="text-sm font-semibold">{data.name || data.title}</h4>
+        <p className="text-xs text-gray-800">{data.category}</p>
       </div>
     </div>
-    <div className="flex flex-col items-end">
+    <div className="flex items-center gap-2 mt-2 ">
+      <button
+        className="flex items-center justify-center w-6 h-6 border border-gray-300 rounded"
+        onClick={() => onDecrement(data.id)}
+      >
+        -
+      </button>
+      <span className="w-6 text-center">{data.quantity || 1}</span>
+      <button
+        className="flex items-center justify-center w-6 h-6 border border-gray-300 rounded"
+        onClick={() => onIncrement(data.id)}
+      >
+        +
+      </button>
+      {/* <div className="flex flex-col items-end"> */}
       <p className="text-lg font-bold">${data.price}</p>
       <button
-        className="mt-1 text-gray-500 hover:text-red-600"
-        onClick={onRemove}
+        className="mt-1 text-gray-800 hover:text-red-600"
+        onClick={() => onRemove(data.id)}
       >
         ✕
       </button>
+      {/* </div> */}
     </div>
+  </div>
+);
+
+const AddressCard = ({ data, selected, onSelect, onEdit, onDelete }) => (
+  <div
+    className={`flex items-start justify-between w-full p-4 rounded-md  border ${
+      selected ? "border-black" : "border-transparent"
+    }`}
+  >
+    {/* Left section: Radio + Address details */}
+    <div className="flex gap-2">
+      <InputField
+        type="radio"
+        checked={selected}
+        onChange={() => onSelect(data.id)}
+        className="w-4 h-4 mt-1"
+      />
+      <div>
+        <div className="flex items-center gap-2">
+          <p className="font-semibold text-md">{data.name}</p>
+          <span className="px-2 py-0.5 text-xs font-bold text-white bg-black rounded">
+            {data.tag}
+          </span>
+        </div>
+        <p className="text-sm text-gray-600">{data.fullAddress}</p>
+        <p className="text-sm text-gray-600">{data.phone}</p>
+      </div>
+    </div>
+
+    {/* Right section: Actions */}
+    <div className="flex items-center gap-2">
+      <button onClick={() => onEdit(data.id)} title="Edit">
+        <Icon icon={Pencil} size="sm" />
+      </button>
+      <button onClick={() => onDelete(data.id)} title="Delete">
+        <Icon icon={X} size="sm" />
+      </button>
+    </div>
+  </div>
+);
+
+const ShippingCard = ({
+  data,
+  selectedId,
+  onSelect,
+  onDateChange,
+  selectedDate,
+}) => (
+  <div className="space-y-2">
+    {data.map((option) => (
+      <div
+        key={option.id}
+        className={`flex items-start justify-between p-4 rounded-md border cursor-pointer gap-2 ${
+          selectedId === option.id ? "border-black" : "border-gray-200"
+        }`}
+        onClick={() => onSelect(option.id)}
+      >
+        <div className="flex items-center gap-2">
+          <InputField
+            type="radio"
+            checked={selectedId === option.id}
+            onChange={() => onSelect(option.id)}
+            className="mt-1"
+          />
+          <div>
+            <p className="text-sm font-medium">{option.label}</p>
+            <p className="text-xs text-gray-500">{option.description}</p>
+          </div>
+        </div>
+        <div className="text-sm font-semibold text-right text-gray-700">
+          {selectedId || option.id !== selectedId
+            ? option.date || option.price
+            : ""}
+        </div>
+        {selectedId === "schedule" && option.id === "schedule" && (
+          <DatePicker value={selectedDate} onChange={onDateChange} />
+        )}
+      </div>
+    ))}
   </div>
 );
 
@@ -93,8 +192,40 @@ const Card = ({ type, data, ...handlers }) => {
       return <CategoryCard data={data} />;
     case "review":
       return <ReviewCard data={data} />;
-    case "cartItem":
+    case "shipping":
       return (
+        <ShippingCard
+          data={data}
+          selectedId={handlers.selectedId}
+          onSelect={handlers.onSelect}
+        />
+      );
+
+    case "address":
+      return (
+        <AddressCard
+          data={data}
+          selected={handlers.selected}
+          onSelect={handlers.onSelect}
+          onEdit={handlers.onEdit}
+          onDelete={handlers.onDelete}
+        />
+      );
+
+    case "cartItem":
+      return Array.isArray(data) ? (
+        <div className="border border-gray-200 divide-y divide-gray-200 rounded-lg">
+          {data.map((item) => (
+            <CartItemCard
+              key={item.id}
+              data={item}
+              onIncrement={handlers.onIncrement}
+              onDecrement={handlers.onDecrement}
+              onRemove={handlers.onRemove}
+            />
+          ))}
+        </div>
+      ) : (
         <CartItemCard
           data={data}
           onIncrement={handlers.onIncrement}

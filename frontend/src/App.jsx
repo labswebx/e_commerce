@@ -5,15 +5,15 @@ import Footer from "./pages/Footer/Footer";
 import ShoppingCart from "./pages/cart/ShoppingCart";
 import Cart from "./pages/cart/Cart";
 import ProductsPage from "./pages/product/list/ProductsPage";
+import BannerPage from "./pages/Landing/BannerPage";
 
 const App = () => {
   return (
     <div>
       <Router>
         <Header />
-        <ShoppingCart />
-        <Cart />
-        <ProductsPage />
+        <BannerPage />
+
         <Footer />
       </Router>
     </div>

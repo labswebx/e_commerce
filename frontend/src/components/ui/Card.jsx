@@ -1,4 +1,3 @@
-// components/ui/Card.js
 import { Cross, Edit, Pencil, X } from "lucide-react";
 import React from "react";
 import InputField from "./InputField";

@@ -77,7 +77,6 @@ const initialBannerData = [
 
 const BannerPage = () => {
   const [banners, setBanners] = useState(initialBannerData);
-  console.log(banners);
 
   return (
     <section className="container px-4 py-8 mx-auto space-y-4">

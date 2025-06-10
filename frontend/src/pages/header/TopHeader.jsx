@@ -2,10 +2,36 @@ import React from "react";
 import Logo from "../../components/ui/Logo";
 import InputField from "../../components/ui/InputField";
 import Icon from "../../components/ui/Icon";
-import { Heart, ShoppingCart, User, Search, Menu, X } from "lucide-react";
+import {
+  Heart,
+  ShoppingCart,
+  User,
+  Search,
+  Menu,
+  X,
+  LogOutIcon,
+  LogIn,
+} from "lucide-react";
 import NavItem from "../../components/ui/NavItems";
+import { logout } from "../../features/user/userSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { isAuthenticated } = useSelector((state) => state.user);
+
+  const handleLogout = () => {
+    dispatch(logout());
+    navigate("/login");
+  };
+
+  const handleAuthClick = () => {
+    isAuthenticated ? handleLogout() : navigate("/login");
+  };
+
   return (
     <div className="header-container">
       <div className="header-grid">
@@ -36,7 +62,13 @@ const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
         <div className="header-icons">
           <Icon icon={Heart} variant="ghost" size="sd" />
           <Icon icon={ShoppingCart} variant="ghost" size="sd" />
-          <Icon icon={User} variant="ghost" size="sd" />
+          <Icon
+            icon={isAuthenticated ? LogOutIcon : LogIn}
+            variant="ghost"
+            size="sd"
+            onClick={handleAuthClick}
+          />
+          {isAuthenticated && <Icon icon={User} variant="ghost" size="sd" />}
         </div>
 
         <div className="header-mobile-toggle">

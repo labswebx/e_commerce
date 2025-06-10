@@ -1,6 +1,5 @@
 import React from "react";
 import { ICON_SIZE } from "../../theme";
-// import { ICON_SIZE } from "../theme";
 
 const Icon = ({
   icon: IconComponent,
@@ -10,6 +9,7 @@ const Icon = ({
   color = "#000",
   borderRadius = 8,
   className,
+  onClick,
 }) => {
   const dimension = ICON_SIZE[size] || ICON_SIZE.md;
 
@@ -25,6 +25,7 @@ const Icon = ({
         justifyContent: "center",
         padding: fill ? 4 : 0,
       }}
+      onClick={onClick}
       className={`${className}  cursor-pointer `}
     >
       <IconComponent

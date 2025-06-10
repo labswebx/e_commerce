@@ -22,7 +22,7 @@ const ProgressBar = ({
   errorMessage = "",
   striped = false,
   animated = false,
-  color = "", // optional custom color class
+  color = "",
   onPause,
   onCancel,
 }) => {

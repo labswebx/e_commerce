@@ -23,11 +23,11 @@ const Rating = ({ rating = 0, outOf = 5, editable = false, onChange }) => {
       {[...Array(outOf)].map((_, i) => {
         const fillPercentage = displayRating - i;
 
-        let fillColor = "#d1d5db"; // gray-300
+        let fillColor = "#d1d5db";
         let fill = "none";
 
         if (fillPercentage >= 1) {
-          fillColor = "#facc15"; // full yellow
+          fillColor = "#facc15";
           fill = fillColor;
         } else if (fillPercentage > 0) {
           // Partial fill using gradient

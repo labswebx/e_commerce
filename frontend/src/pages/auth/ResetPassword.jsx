@@ -46,6 +46,7 @@ const ResetPassword = () => {
         value={values.password}
         onChange={handleChange}
         error={errors.password}
+        className="mb-2"
         // required
       />
 

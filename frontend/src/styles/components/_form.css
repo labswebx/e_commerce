@@ -37,6 +37,10 @@
     @apply text-sm font-medium text-black hover:text-zinc-500;
   }
   .form-footer {
-    @apply text-sm text-center text-gray-600;
+    @apply mt-6 space-y-2 text-sm text-center text-gray-600;
+  }
+
+  .form-link {
+    @apply text-sm font-medium text-black underline hover:text-zinc-500;
   }
 }

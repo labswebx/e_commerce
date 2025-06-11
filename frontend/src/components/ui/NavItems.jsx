@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink, useLocation } from "react-router-dom";
+import { NavLink, useLocation, Link } from "react-router-dom";
 import classNames from "classnames";
 
 const NavItem = ({
@@ -10,6 +10,7 @@ const NavItem = ({
   href,
   onClick,
   disabled,
+  link,
 }) => {
   const location = useLocation();
 
@@ -33,6 +34,25 @@ const NavItem = ({
       >
         {children || label}
       </NavLink>
+    );
+  }
+
+  if (link) {
+    return (
+      <Link
+        to={link}
+        onClick={disabled ? undefined : onClick}
+        className={classNames(
+          "nav-item text-black",
+          {
+            disabled: disabled,
+          },
+          className
+        )}
+        aria-disabled={disabled}
+      >
+        {children || label}
+      </Link>
     );
   }
 

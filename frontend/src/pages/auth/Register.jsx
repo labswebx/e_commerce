@@ -94,9 +94,11 @@ const Register = () => {
           </div>
 
           <div className="form-actions">
-            <Button type="submit" disabled={isSubmitting || loading}>
-              {loading ? "Registering..." : "Register"}
-            </Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting || loading}
+              label={loading ? "Registering..." : "Register"}
+            ></Button>
             {apiError && <p className="form-error">{apiError}</p>}
           </div>
         </form>

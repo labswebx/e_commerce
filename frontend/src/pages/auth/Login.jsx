@@ -8,6 +8,7 @@ import useForm from "../../hooks/useForm";
 import { validateLogin } from "../../utils/validation/validation";
 import Toast from "../../components/ui/Toast";
 import { useNavigate } from "react-router-dom";
+import NavItem from "../../components/ui/NavItems";
 
 const Login = () => {
   const dispatch = useDispatch();
@@ -73,6 +74,23 @@ const Login = () => {
             />
           </div>
         </form>
+        <div className="form-footer">
+          <p>
+            <NavItem
+              link="/password/forgot"
+              label="Forgot password?"
+              className="form-link"
+            />
+          </p>
+          <p className="mt-2">
+            Don't have an account?{" "}
+            <NavItem
+              link="/register"
+              label="Register"
+              className="inline form-link"
+            />
+          </p>
+        </div>
       </div>
     </div>
   );

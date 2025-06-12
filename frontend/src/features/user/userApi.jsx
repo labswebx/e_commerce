@@ -17,7 +17,10 @@ export const userApi = {
 
   login: async (credentials) => {
     try {
-      const res = await axiosInstance.post(USER_API_ENDPOINTS.LOGIN, credentials);
+      const res = await axiosInstance.post(
+        USER_API_ENDPOINTS.LOGIN,
+        credentials
+      );
       return res.data;
     } catch (err) {
       handleError(err);
@@ -44,7 +47,10 @@ export const userApi = {
 
   updateProfile: async (data) => {
     try {
-      const res = await axiosInstance.put(USER_API_ENDPOINTS.UPDATE_ME, data);
+      const res = await axiosInstance.put(
+        USER_API_ENDPOINTS.UPDATE_USER_PROFILE,
+        data
+      );
       return res.data;
     } catch (err) {
       handleError(err);
@@ -53,7 +59,10 @@ export const userApi = {
 
   changePassword: async (data) => {
     try {
-      const res = await axiosInstance.put(USER_API_ENDPOINTS.PASSWORD_UPDATE, data);
+      const res = await axiosInstance.put(
+        USER_API_ENDPOINTS.PASSWORD_UPDATE,
+        data
+      );
       return res.data;
     } catch (err) {
       handleError(err);
@@ -86,7 +95,10 @@ export const userApi = {
 
   deleteUser: async (data) => {
     try {
-      const res = await axiosInstance.post(USER_API_ENDPOINTS.DELETE_USER, data);
+      const res = await axiosInstance.post(
+        USER_API_ENDPOINTS.DELETE_USER,
+        data
+      );
       return res.data;
     } catch (err) {
       handleError(err);

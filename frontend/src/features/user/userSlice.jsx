@@ -11,10 +11,10 @@ import {
 import USER_ACTION_TYPES from "./USER_ACTION_TYPES";
 import { userApi } from "./userApi";
 
-function saveUserData(data) {
+const saveUserData = (data) => {
   localStorage.setItem("user", JSON.stringify(data.user));
   localStorage.setItem("token", data.token);
-}
+};
 const userFromStorage = JSON.parse(localStorage.getItem("user"));
 const tokenFromStorage = localStorage.getItem("token");
 
@@ -39,7 +39,7 @@ export const loginUser = createAsyncThunkHandler(
 
 export const getProfile = createAsyncThunkHandler(
   USER_ACTION_TYPES.GET_USER_PROFILE,
-  async () => userApi.getProfile()
+  async () => userApi.getUserProfile()
 );
 
 export const updateProfile = createAsyncThunkHandler(

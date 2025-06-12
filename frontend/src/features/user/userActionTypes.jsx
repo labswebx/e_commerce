@@ -1,7 +1,7 @@
 const USER_ACTION_TYPES = {
   REGISTER_USER: "user/registerUser",
   LOGIN_USER: "user/loginUser",
-  LOGOUT_USER: "user/logouUser",
+  LOGOUT_USER: "user/logoutUser",
   GET_USER_PROFILE: "user/getUserProfile",
   UPDATE_PROFILE: "user/updateProfile",
   CHANGE_PASSWORD: "user/changePassword",

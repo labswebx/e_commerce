@@ -18,7 +18,6 @@ export const fetchSubcategoriesOfCategory = createAsyncThunkHandler(
 
 const initialState = {
   subcategories: [],
-  currentSubcategory: null,
   loading: false,
   error: null,
   success: false,

@@ -50,8 +50,8 @@ const orderSchema = new mongoose.Schema(
       paymentInstrument: {
         type: Object,
         required: false,
-        default: {}
-      }
+        default: {},
+      },
     },
     paidAt: {
       type: Date,

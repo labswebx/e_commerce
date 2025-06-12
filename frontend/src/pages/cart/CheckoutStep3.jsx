@@ -3,54 +3,64 @@ import Card from "../../components/ui/Card";
 import Tabs from "../../components/ui/Tabs";
 import InputField from "../../components/ui/InputField";
 import Button from "../../components/ui/Button";
+import { useSelector } from "react-redux";
 
-const OrderSummaryCard = ({
-  items,
-  address,
-  shipment,
-  subtotal,
-  tax,
-  shipping,
-  total,
-}) => (
-  <div className="w-full max-w-md p-6 space-y-4 bg-white border rounded-lg shadow-sm">
-    <h2 className="text-lg font-semibold">Summary</h2>
+const OrderSummaryCard = (
+  {
+    // items,
+    // address,
+    // shipment,
+    // subtotal,
+    // tax,
+    // shipping,
+    // total,
+  }
+) => {
+  const selectedAddress = useSelector((state) => state.cart.selectedAddress);
+  const { items, shipment, subtotal, tax, shipping, total } = useSelector(
+    (state) => state.cart
+  );
+  console.log(selectedAddress);
+  return (
+    <div className="w-full max-w-md p-6 space-y-4 bg-white border rounded-lg shadow-sm">
+      <h2 className="text-lg font-semibold">Summary</h2>
 
-    <Card type="cartItem" data={items} />
+      <Card type="cartItem" data={items} />
 
-    <div>
-      <h4 className="mb-1 text-sm text-gray-500">Address</h4>
-      <p className="text-sm">{address}</p>
+      <div>
+        <h4 className="mb-1 text-sm text-gray-500">Address</h4>
+        <p className="text-sm">{selectedAddress.address}</p>
+      </div>
+
+      <div>
+        <h4 className="mb-1 text-sm text-gray-500">Shipment method</h4>
+        <p className="text-sm font-medium">{shipment}</p>
+      </div>
+
+      <div className="pt-4 space-y-2 text-sm border-t">
+        <div className="flex justify-between">
+          <span>Subtotal</span>
+          <span>${subtotal}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>Estimated Tax</span>
+          <span>${tax}</span>
+        </div>
+        <div className="flex justify-between">
+          <span>Shipping & Handling</span>
+          <span>${shipping}</span>
+        </div>
+        <div className="flex justify-between pt-2 text-base font-semibold border-t">
+          <span>Total</span>
+          <span>${total}</span>
+        </div>
+      </div>
     </div>
-
-    <div>
-      <h4 className="mb-1 text-sm text-gray-500">Shipment method</h4>
-      <p className="text-sm font-medium">{shipment}</p>
-    </div>
-
-    <div className="pt-4 space-y-2 text-sm border-t">
-      <div className="flex justify-between">
-        <span>Subtotal</span>
-        <span>${subtotal}</span>
-      </div>
-      <div className="flex justify-between">
-        <span>Estimated Tax</span>
-        <span>${tax}</span>
-      </div>
-      <div className="flex justify-between">
-        <span>Shipping & Handling</span>
-        <span>${shipping}</span>
-      </div>
-      <div className="flex justify-between pt-2 text-base font-semibold border-t">
-        <span>Total</span>
-        <span>${total}</span>
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 
 // Payment Tabs
-const PaymentTabs = () => {
+const PaymentTabs = ({ handleNext, handleBack }) => {
   const [selectedTab, setSelectedTab] = useState("card");
 
   const tabs = [
@@ -128,10 +138,12 @@ const PaymentTabs = () => {
           className="px-4 py-2 border rounded-md "
           variant="outline"
           label="Back"
+          onClick={handleBack}
         >
           Back
         </Button>
         <Button
+          onClick={handleNext}
           className="px-6 py-2 text-white bg-black rounded-md"
           label="Pay"
         >
@@ -142,7 +154,7 @@ const PaymentTabs = () => {
   );
 };
 
-const CheckoutStep3 = () => {
+const CheckoutStep3 = ({ handleNext, handleBack }) => {
   const items = [
     {
       id: 1,
@@ -182,7 +194,7 @@ const CheckoutStep3 = () => {
           shipping={29}
           total={2426}
         />
-        <PaymentTabs />
+        <PaymentTabs handleBack={handleBack} handleNext={handleNext} />
       </div>
     </div>
   );

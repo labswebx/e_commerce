@@ -8,7 +8,10 @@ import subcategoryReducer from "./features/subcategory/subcategorySlice";
 import couponReducer from "./features/coupon/couponSlice";
 import constantsReducer from "./features/constants/constantsSlice";
 import addressReducer from "./features/address/addressSlice";
+import cartReducer from "./features/cart/cartSlice";
+import { loadCartState, saveCartState } from "./utils/localStorage";
 
+const preloadedCart = loadCartState();
 export const store = configureStore({
   reducer: {
     user: userReducer,
@@ -19,5 +22,13 @@ export const store = configureStore({
     coupon: couponReducer,
     constants: constantsReducer,
     address: addressReducer,
+    cart: cartReducer,
   },
+  preloadedState: {
+    cart: preloadedCart, // load persisted cart
+  },
+});
+
+store.subscribe(() => {
+  saveCartState(store.getState().cart);
 });

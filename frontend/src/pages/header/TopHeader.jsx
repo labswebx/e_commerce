@@ -16,13 +16,14 @@ import NavItem from "../../components/ui/NavItems";
 import { logout } from "../../features/user/userSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Badge from "../../components/ui/Badge";
 
 const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const { isAuthenticated } = useSelector((state) => state.user);
-
+  const { totalQuantity } = useSelector((state) => state.cart);
   const handleLogout = () => {
     dispatch(logout());
     navigate("/login");
@@ -61,7 +62,23 @@ const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
 
         <div className="header-icons">
           <Icon icon={Heart} variant="ghost" size="sd" />
-          <Icon icon={ShoppingCart} variant="ghost" size="sd" />
+          <div className="relative w-fit">
+            <Icon
+              icon={ShoppingCart}
+              size="md"
+              onClick={() => navigate("/cart")}
+            />
+            {totalQuantity > 0 && (
+              <Badge
+                size="sm"
+                variant="danger"
+                position="top-right"
+                className="!absolute -top-1 -right-1"
+              >
+                {totalQuantity}
+              </Badge>
+            )}
+          </div>
           <Icon
             icon={isAuthenticated ? LogOutIcon : LogIn}
             variant="ghost"

@@ -1,8 +1,25 @@
 import React from "react";
+import classNames from "classnames";
 
-const Badge = ({ variant = "default", size = "md", children }) => {
+const Badge = ({
+  variant = "default",
+  size = "md",
+  children,
+  className = "",
+  position = "top-right", // e.g., top-right, bottom-left
+}) => {
   return (
-    <span className={`badge badge-${size} badge-${variant}`}>{children}</span>
+    <span
+      className={classNames(
+        "badge",
+        `badge-${size}`,
+        `badge-${variant}`,
+        `badge-${position}`,
+        className
+      )}
+    >
+      {children}
+    </span>
   );
 };
 

@@ -68,11 +68,14 @@ const formValidator = {
       value === undefined ||
       (typeof value === "string" && value.trim() === "");
 
-    const hasRequiredRule = rules.some((rule) =>
-      typeof rule === "string"
-        ? rule === "required"
-        : rule.rule[0] === "required"
-    );
+    const hasRequiredRule = rules.some((rule) => {
+      if (typeof rule === "string") return rule === "required";
+      if (Array.isArray(rule.rule)) {
+        const first = rule.rule[0];
+        return typeof first === "string" && first === "required";
+      }
+      return false;
+    });
 
     if (isEmpty && hasRequiredRule) {
       errors.push(this.getDefaultMessage("required", value));
@@ -85,24 +88,31 @@ const formValidator = {
 
     for (const rule of rules) {
       if (typeof rule === "string") {
-        if (rule !== "required" && !this.methods[rule](value)) {
-          errors.push(this.getDefaultMessage(rule, value));
-          break;
+        if (rule !== "required") {
+          const method = this.methods[rule];
+          if (typeof method !== "function") {
+            console.error(`Invalid validation rule: '${rule}'`);
+            continue;
+          }
+          if (!method(value)) {
+            errors.push(this.getDefaultMessage(rule, value));
+            break;
+          }
         }
       } else if (typeof rule === "object") {
         const [ruleName, ...params] = rule.rule;
-        if (ruleName !== "required") {
-          const isValid =
-            typeof ruleName === "function"
-              ? ruleName(value, allValues)
-              : this.methods[ruleName](value, ...params);
+        const isValid =
+          typeof ruleName === "function"
+            ? ruleName(value, allValues)
+            : typeof this.methods[ruleName] === "function"
+            ? this.methods[ruleName](value, ...params)
+            : (console.error(`Invalid validation method: '${ruleName}'`), true);
 
-          if (!isValid) {
-            errors.push(
-              rule.message || this.getDefaultMessage(ruleName, value, ...params)
-            );
-            break;
-          }
+        if (!isValid) {
+          errors.push(
+            rule.message || this.getDefaultMessage(ruleName, value, ...params)
+          );
+          break;
         }
       }
     }
@@ -120,7 +130,7 @@ const formValidator = {
     for (const field in schema) {
       const value = values[field];
       const rules = schema[field];
-      const result = this.validateField(value, rules);
+      const result = this.validateField(value, rules, values);
       if (!result.isValid) {
         errors[field] = result.errors;
         isValid = false;

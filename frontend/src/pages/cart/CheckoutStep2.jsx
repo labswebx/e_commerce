@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Card from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 
-const CheckoutStep2 = () => {
+const CheckoutStep2 = ({ handleNext, handleBack }) => {
   const [selectedShippingId, setSelectedShippingId] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
@@ -41,8 +41,13 @@ const CheckoutStep2 = () => {
         <div></div>
         <div className="flex gap-3 md:w-1/2">
           {" "}
-          <Button label="Back" variant="outline" fullWidth />
-          <Button label="Next" fullWidth />
+          <Button
+            label="Back"
+            variant="outline"
+            fullWidth
+            onClick={handleBack}
+          />
+          <Button label="Next" fullWidth onClick={handleNext} />
         </div>
       </div>
     </div>

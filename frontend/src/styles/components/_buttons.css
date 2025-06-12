@@ -49,7 +49,7 @@
   }
 
   .btn-ghost-hover:hover {
-    @apply text-white bg-black;
+    @apply text-white bg-gray-550;
   }
 
   .btn-ghost-disabled {

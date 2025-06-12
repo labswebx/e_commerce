@@ -4,31 +4,67 @@ import InputField from "./InputField";
 import Icon from "./Icon";
 import DatePicker from "./DatePicker";
 import Button from "./Button";
+import AddToCartButton from "./AddToCartButton";
 
-const ProductCard = ({ data, onAddToCart }) => (
-  <div className="card-base w-72">
-    <img src={data.image} alt={data.title} className="card-product-img" />
-    <h3 className="mt-2 text-lg font-medium">{data.title}</h3>
-    <p className="text-sm text-gray-500">{data.description}</p>
-    <p className="mt-2 text-xl font-semibold">${data.price}</p>
-    <Button
-      onClick={onAddToCart}
-      className="btn-cart"
-      label="Add to cart"
-    ></Button>
-  </div>
-);
+const ProductCard = ({ data, onAddToCart, imageOnly = false }) => {
+  console.log("product at card", data._id, data, onAddToCart); //single product
+  return (
+    <div className="text-center card-base w-72">
+      <img
+        src={data.image}
+        alt={data.title}
+        className={`rounded-md object-cover ${
+          imageOnly
+            ? "w-full h-52 sm:h-60 md:h-64"
+            : "mx-auto w-full h-40 sm:h-48 md:h-52"
+        }`}
+      />
 
-const CategoryCard = ({ data }) => (
-  <div className="card-category">
-    <div className="flex flex-col items-center gap-2 p-4">
-      <div className="flex items-center justify-center w-12 h-12 text-black">
-        {data.icon}
-      </div>
-      <p className="text-lg font-semibold">{data.title}</p>
+      {imageOnly ? (
+        <>
+          <h3 className="mt-2 text-lg font-semibold">{data.title}</h3>
+          <Button
+            variant="outline"
+            onClick={onAddToCart}
+            label="Shop Now"
+            // className="px-4 py-2 mt-2 text-white bg-blue-600 rounded hover:bg-blue-700"
+          ></Button>
+        </>
+      ) : (
+        <>
+          <h3 className="mt-2 text-lg font-medium">{data.title}</h3>
+          <p className="text-sm text-gray-500">{data.description}</p>
+          <p className="mt-2 text-xl font-semibold">${data.price}</p>
+          <div className="w-full mt-2">
+            {imageOnly ? (
+              <Button
+                variant="outline"
+                onClick={onAddToCart}
+                label="Shop Now"
+                fullWidth
+              />
+            ) : (
+              <AddToCartButton product={data} />
+            )}
+          </div>
+        </>
+      )}
     </div>
-  </div>
-);
+  );
+};
+
+const CategoryCard = ({ data }) => {
+  return (
+    <div className="card-category ">
+      <div className="card-category-inner">
+        <div className="flex items-center justify-center w-12 h-12 text-black">
+          {data.icon}
+        </div>
+        <p className="card-category-title">{data.title || data.name}</p>
+      </div>
+    </div>
+  );
+};
 
 const ReviewCard = ({ data }) => (
   <div className="card-review">
@@ -63,84 +99,89 @@ const ReviewCard = ({ data }) => (
   </div>
 );
 
-const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => (
-  <div className="flex items-center justify-between p-4 border-b border-gray-200 max-sm:flex-col">
-    {/* image */}
-    <div className="flex gap-4">
-      <img
-        src={data.image}
-        alt={data.name || data.title}
-        className="w-16 h-16 rounded-lg"
-      />
-      <div>
-        <h4 className="text-sm font-semibold">{data.name || data.title}</h4>
-        <p className="text-xs text-gray-800">{data.category}</p>
-      </div>
-    </div>
-    <div className="flex items-center gap-2 mt-2 ">
-      <button
-        className="flex items-center justify-center w-6 h-6 border border-gray-300 rounded"
-        onClick={() => onDecrement(data.id)}
-      >
-        -
-      </button>
-      <span className="w-6 text-center">{data.quantity || 1}</span>
-      <button
-        className="flex items-center justify-center w-6 h-6 border border-gray-300 rounded"
-        onClick={() => onIncrement(data.id)}
-      >
-        +
-      </button>
-      {/* <div className="flex flex-col items-end"> */}
-      <p className="text-lg font-bold">${data.price}</p>
-      <button
-        className="mt-1 text-gray-800 hover:text-red-600"
-        onClick={() => onRemove(data.id)}
-      >
-        ✕
-      </button>
-      {/* </div> */}
-    </div>
-  </div>
-);
-
-const AddressCard = ({ data, selected, onSelect, onEdit, onDelete }) => (
-  <div
-    className={`flex items-start justify-between w-full p-4 rounded-md  border ${
-      selected ? "border-black" : "border-transparent"
-    }`}
-  >
-    {/* Left section: Radio + Address details */}
-    <div className="flex gap-2">
-      <InputField
-        type="radio"
-        checked={selected}
-        onChange={() => onSelect(data.id)}
-        className="w-4 h-4 mt-1"
-      />
-      <div>
-        <div className="flex items-center gap-2">
-          <p className="font-semibold text-md">{data.name}</p>
-          <span className="px-2 py-0.5 text-xs font-bold text-white bg-black rounded">
-            {data.tag}
-          </span>
+const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => {
+  console.log(data, onIncrement, onDecrement, onRemove); //oncremenet and decrement undefined
+  return (
+    <div className="flex items-center justify-between p-4 border-b border-gray-200 max-sm:flex-col">
+      {/* image */}
+      <div className="flex gap-4">
+        <img
+          src={data.image}
+          alt={data.name || data.title}
+          className="w-16 h-16 rounded-lg"
+        />
+        <div>
+          <h4 className="text-sm font-semibold">{data.name || data.title}</h4>
+          <p className="text-xs text-gray-800">{data.category}</p>
         </div>
-        <p className="text-sm text-gray-600">{data.fullAddress}</p>
-        <p className="text-sm text-gray-600">{data.phone}</p>
+      </div>
+      <div className="flex items-center gap-2 mt-2 ">
+        <AddToCartButton product={data} />
+        <p className="text-lg font-bold">${data.price}</p>
+        <button
+          className="mt-1 text-gray-800 hover:text-red-600"
+          onClick={() => onRemove(data.id)}
+        >
+          ✕
+        </button>{" "}
+        {/* </div> */}
       </div>
     </div>
+  );
+};
 
-    {/* Right section: Actions */}
-    <div className="flex items-center gap-2">
-      <button onClick={() => onEdit(data.id)} title="Edit">
-        <Icon icon={Pencil} size="sm" />
-      </button>
-      <button onClick={() => onDelete(data.id)} title="Delete">
-        <Icon icon={X} size="sm" />
-      </button>
+const AddressCard = ({
+  data,
+  selected,
+  onSelect,
+  onEdit,
+  onDelete,
+  onClick,
+}) => {
+  console.log(selected, onSelect);
+  return (
+    <div
+      className={`flex items-start justify-between w-full p-4 rounded-md  border ${
+        selected ? "border-black" : "border-transparent"
+      }`}
+    >
+      {/* Left section: Radio + Address details */}
+      <div className="flex gap-2">
+        <InputField
+          name="addressSelect"
+          type="radio"
+          checked={selected}
+          onClick={onClick}
+          onChange={() => {
+            console.log(data);
+            onSelect(data);
+          }}
+          className="w-4 h-4 mt-1"
+        />
+        <div>
+          <div className="flex items-center gap-2">
+            <p className="font-semibold text-md">{data.city}</p>
+            <span className="px-2 py-0.5 text-xs font-bold text-white bg-black rounded">
+              {data.label}
+            </span>
+          </div>
+          <p className="text-sm text-gray-600">{data.address}</p>
+          <p className="text-sm text-gray-600">{data.contactNumber}</p>
+        </div>
+      </div>
+
+      {/* Right section: Actions */}
+      <div className="flex items-center gap-2">
+        <button onClick={() => onEdit(data)} title="Edit">
+          <Icon icon={Pencil} size="sm" />
+        </button>
+        <button onClick={() => onDelete(data._id)} title="Delete">
+          <Icon icon={X} size="sm" />
+        </button>
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 const ShippingCard = ({
   data,
@@ -183,10 +224,16 @@ const ShippingCard = ({
   </div>
 );
 
-const Card = ({ type, data, ...handlers }) => {
+const Card = ({ type, data, imageOnly, ...handlers }) => {
   switch (type) {
     case "product":
-      return <ProductCard data={data} onAddToCart={handlers.onAddToCart} />;
+      return (
+        <ProductCard
+          data={data}
+          onAddToCart={handlers.onAddToCart}
+          imageOnly={imageOnly}
+        />
+      );
     case "category":
       return <CategoryCard data={data} />;
     case "review":

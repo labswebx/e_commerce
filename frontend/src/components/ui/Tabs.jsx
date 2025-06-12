@@ -62,10 +62,10 @@ const Tabs = ({
                         : minimal
                         ? isSelected
                           ? "white"
-                          : "#d4d4d8" 
+                          : "#d4d4d8"
                         : isSelected
                         ? "white"
-                        : "#a1a1aa" 
+                        : "#a1a1aa"
                     }
                     className="opacity-50"
                   />

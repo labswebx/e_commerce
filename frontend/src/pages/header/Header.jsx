@@ -8,7 +8,7 @@ const Header = () => {
 
   return (
     <header className="bg-white shadow-sm">
-      <TopHeader
+    <TopHeader
         mobileMenuOpen={mobileMenuOpen}
         setMobileMenuOpen={setMobileMenuOpen}
       />

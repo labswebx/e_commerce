@@ -1,6 +1,7 @@
 @layer components {
   .header-container {
-    @apply w-full px-4 py-3 bg-white shadow-sm sm:px-6 lg:px-10;
+    @apply z-50 w-full px-4 py-3 bg-white shadow-sm sm:px-6 lg:px-10;
+    /* fixed top-0 left-0 */
   }
 
   .header-grid {
@@ -36,7 +37,7 @@
   }
 
   .mobile-nav {
-    @apply bg-white border-t md:hidden;
+    @apply fixed top-0 left-0 z-30 w-full bg-white border-t md:hidden;
   }
 
   .mobile-nav-inner {

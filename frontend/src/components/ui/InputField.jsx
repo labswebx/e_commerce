@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Icon from "./Icon";
+import { Eye, EyeOff } from "lucide-react";
 
 const InputField = ({
   id,
@@ -19,6 +20,7 @@ const InputField = ({
   className = "",
   ...props
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
   const inputId = id || `input-${label?.replace(/\s+/g, "-").toLowerCase()}`;
 
   const getInputClass = () => {
@@ -26,6 +28,8 @@ const InputField = ({
     if (type === "checkbox") return "input-checkbox";
     return "input-text";
   };
+
+  const isPasswordField = type === "password";
 
   return (
     <div
@@ -41,7 +45,7 @@ const InputField = ({
         </label>
       )}
 
-      <div className="input-wrapper">
+      <div className="relative input-wrapper">
         {showIcon && icon && (
           <div className="absolute transform -translate-y-1/2 left-3 top-1/2">
             <Icon icon={icon} size="sm" color="#989898" />
@@ -50,7 +54,7 @@ const InputField = ({
 
         <input
           id={inputId}
-          type={type}
+          type={isPasswordField && showPassword ? "text" : type}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
@@ -58,9 +62,21 @@ const InputField = ({
           disabled={disabled}
           className={`${getInputClass()} ${className} ${
             showIcon ? "pl-10" : ""
-          }`}
+          } ${isPasswordField ? "pr-10" : ""}`}
           {...props}
         />
+
+        {/* Toggle password visibility */}
+        {isPasswordField && (
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute text-gray-500 transform -translate-y-1/2 right-3 top-1/2"
+            tabIndex={-1}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
+        )}
 
         {buttonLabel && (
           <button

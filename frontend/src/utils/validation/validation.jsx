@@ -5,7 +5,12 @@ export const validateRegister = {
   confirmPassword: [
     "required",
     {
-      rule: [(value, values) => value === values.password],
+      rule: [
+        (value, values) => {
+          console.log("Comparing", value, "vs", values.password);
+          return value === values.password;
+        },
+      ],
       message: "Passwords do not match.",
     },
   ],

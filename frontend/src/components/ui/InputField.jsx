@@ -18,6 +18,8 @@ const InputField = ({
   disabled = false,
   error = "",
   className = "",
+  name,
+  size,
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -54,6 +56,7 @@ const InputField = ({
 
         <input
           id={inputId}
+          name={name}
           type={isPasswordField && showPassword ? "text" : type}
           placeholder={placeholder}
           value={value}
@@ -62,7 +65,7 @@ const InputField = ({
           disabled={disabled}
           className={`${getInputClass()} ${className} ${
             showIcon ? "pl-10" : ""
-          } ${isPasswordField ? "pr-10" : ""}`}
+          } ${isPasswordField ? "pr-10" : ""}   ${size ? `size-${size}` : ""}`}
           {...props}
         />
 

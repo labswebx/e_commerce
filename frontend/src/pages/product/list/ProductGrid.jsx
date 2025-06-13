@@ -4,7 +4,7 @@ import Button from "../../../components/ui/Button";
 
 const ProductGrid = ({ products = [], loading = false, title = "" }) => {
   const [visibleCount, setVisibleCount] = useState(8); // initial product count
-  console.log("Products ar product grid", products); //10 products
+
   const handleLoadMore = () => {
     setVisibleCount((prev) => prev + 8);
   };

@@ -2,18 +2,18 @@ export const validateRegister = {
   name: ["required"],
   email: ["required", "email"],
   password: ["required", { rule: ["minLength", 8] }, "password"],
-  confirmPassword: [
-    "required",
-    {
-      rule: [
-        (value, values) => {
-          console.log("Comparing", value, "vs", values.password);
-          return value === values.password;
-        },
-      ],
-      message: "Passwords do not match.",
-    },
-  ],
+  // confirmPassword: [
+  //   "required",
+  //   {
+  //     rule: [
+  //       (value, values) => {
+  //         console.log("Comparing", value, "vs", values.password);
+  //         return value === values.password;
+  //       },
+  //     ],
+  //     message: "Passwords do not match.",
+  //   },
+  // ],
   contactNumber: ["required", "phone"],
   pincode: ["required", "numeric"],
 };

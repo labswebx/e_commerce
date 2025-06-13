@@ -37,10 +37,10 @@
   }
 
   .mobile-nav {
-    @apply fixed top-0 left-0 z-30 w-full bg-white border-t md:hidden;
+    @apply fixed top-0 left-0 z-30 w-full bg-white border-t shadow-md md:hidden;
   }
 
   .mobile-nav-inner {
-    @apply flex flex-col items-center justify-center gap-4 px-6 py-6 text-base font-medium shadow-sm;
+    @apply flex items-center justify-between px-4 py-4 border-b;
   }
 }

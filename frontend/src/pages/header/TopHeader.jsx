@@ -61,7 +61,12 @@ const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
         </nav>
 
         <div className="header-icons">
-          <Icon icon={Heart} variant="ghost" size="sd" />
+          <Icon
+            icon={Heart}
+            variant="ghost"
+            size="sd"
+            onClick={() => navigate("/orders")}
+          />
           <div className="relative w-fit">
             <Icon
               icon={ShoppingCart}

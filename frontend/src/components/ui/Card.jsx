@@ -7,11 +7,10 @@ import Button from "./Button";
 import AddToCartButton from "./AddToCartButton";
 
 const ProductCard = ({ data, onAddToCart, imageOnly = false }) => {
-  console.log("product at card", data._id, data, onAddToCart); //single product
   return (
     <div className="text-center card-base w-72">
       <img
-        src={data.image}
+        src={data.images[0]?.public_id || "/logo-icon.jpg"}
         alt={data.title}
         className={`rounded-md object-cover ${
           imageOnly
@@ -25,9 +24,8 @@ const ProductCard = ({ data, onAddToCart, imageOnly = false }) => {
           <h3 className="mt-2 text-lg font-semibold">{data.title}</h3>
           <Button
             variant="outline"
-            onClick={onAddToCart}
+            onClick={() => onAddToCart(data)}
             label="Shop Now"
-            // className="px-4 py-2 mt-2 text-white bg-blue-600 rounded hover:bg-blue-700"
           ></Button>
         </>
       ) : (
@@ -39,7 +37,7 @@ const ProductCard = ({ data, onAddToCart, imageOnly = false }) => {
             {imageOnly ? (
               <Button
                 variant="outline"
-                onClick={onAddToCart}
+                onClick={() => onAddToCart(data)}
                 label="Shop Now"
                 fullWidth
               />
@@ -100,31 +98,48 @@ const ReviewCard = ({ data }) => (
 );
 
 const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => {
-  console.log(data, onIncrement, onDecrement, onRemove); //oncremenet and decrement undefined
   return (
-    <div className="flex items-center justify-between p-4 border-b border-gray-200 max-sm:flex-col">
-      {/* image */}
-      <div className="flex gap-4">
+    <div className="flex flex-col gap-4 p-4 border-b border-gray-200 sm:flex-row sm:items-center sm:justify-between">
+      {/* Image and Info */}
+      <div className="flex items-start gap-4">
         <img
-          src={data.image}
-          alt={data.name || data.title}
-          className="w-16 h-16 rounded-lg"
+          src={data?.images?.[0]?.public_id || "/logo-icon.jpg"}
+          alt={data?.name || data?.title}
+          className="object-cover w-20 h-20 rounded-lg"
         />
         <div>
-          <h4 className="text-sm font-semibold">{data.name || data.title}</h4>
-          <p className="text-xs text-gray-800">{data.category}</p>
+          <h4 className="text-base font-semibold sm:text-sm">
+            {data?.name || data?.title}
+          </h4>
+          <p className="text-xs text-gray-600">{data?.category}</p>
         </div>
       </div>
-      <div className="flex items-center gap-2 mt-2 ">
-        <AddToCartButton product={data} />
-        <p className="text-lg font-bold">${data.price}</p>
+
+      {/* Quantity and Price Controls */}
+      <div className="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap sm:gap-4">
+        {/* <div className="flex items-center gap-2 px-2 py-1 border rounded">
+          <button
+            onClick={() => onDecrement(data || data._id)}
+            className="text-xl font-medium"
+          >
+            −
+          </button>
+          <span className="text-sm font-semibold">{data?.quantity}</span>
+          <button
+            onClick={() => onIncrement(data || data._id)}
+            className="text-xl font-medium"
+          >
+            +
+          </button>
+        </div> */}
+        {/* <p className="text-lg font-bold text-gray-800">₹{data?.price}</p>
         <button
-          className="mt-1 text-gray-800 hover:text-red-600"
-          onClick={() => onRemove(data.id)}
+          onClick={() => onRemove(data?._id)}
+          className="text-xl text-gray-500 hover:text-red-600"
         >
           ✕
-        </button>{" "}
-        {/* </div> */}
+        </button> */}
+        <AddToCartButton product={data} />
       </div>
     </div>
   );
@@ -138,7 +153,6 @@ const AddressCard = ({
   onDelete,
   onClick,
 }) => {
-  console.log(selected, onSelect);
   return (
     <div
       className={`flex items-start justify-between w-full p-4 rounded-md  border ${
@@ -153,20 +167,19 @@ const AddressCard = ({
           checked={selected}
           onClick={onClick}
           onChange={() => {
-            console.log(data);
             onSelect(data);
           }}
           className="w-4 h-4 mt-1"
         />
         <div>
           <div className="flex items-center gap-2">
-            <p className="font-semibold text-md">{data.city}</p>
+            <p className="font-semibold text-md">{data.city || ""}</p>
             <span className="px-2 py-0.5 text-xs font-bold text-white bg-black rounded">
               {data.label}
             </span>
           </div>
-          <p className="text-sm text-gray-600">{data.address}</p>
-          <p className="text-sm text-gray-600">{data.contactNumber}</p>
+          <p className="text-sm text-gray-600">{data.address || ""}</p>
+          <p className="text-sm text-gray-600">{data.contactNumber || ""}</p>
         </div>
       </div>
 

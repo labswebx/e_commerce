@@ -1,53 +1,37 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import Card from "../../components/ui/Card";
 import Button from "../../components/ui/Button";
 
-const CheckoutStep2 = ({ handleNext, handleBack }) => {
+import { useCart } from "../../features/cart/cartHooks";
+import { shippingOptions } from "../../features/cart/cartConstants";
+import { useCheckout } from "../../hooks/useCheckout";
+
+const CheckoutStep2 = () => {
   const [selectedShippingId, setSelectedShippingId] = useState(null);
   const [selectedDate, setSelectedDate] = useState("");
 
-  const shippingOptions = [
-    {
-      id: "free",
-      label: "Free",
-      description: "Regular shipment",
-      date: "17 Oct, 2023",
-    },
-    {
-      id: "fast",
-      label: "$8.50",
-      description: "Get your delivery as soon as possible",
-      date: "1 Oct, 2023",
-    },
-    {
-      id: "schedule",
-      label: "Schedule",
-      description: "Pick a date when you want to get your delivery",
-      date: "Select Date",
-    },
-  ];
+  const { updateShipping } = useCart();
+  const { next, back } = useCheckout();
+  const handleSelect = (option) => {
+    setSelectedShippingId(option.id);
+    updateShipping(option.label);
+  };
 
   return (
     <div>
       <Card
         type="shipping"
         data={shippingOptions}
-        selectedId={selectedShippingId}
-        onSelect={setSelectedShippingId}
+        selectedId={selectedShippingId || true}
+        onSelect={() => handleSelect(shippingOptions[0])}
         selectedDate={selectedDate}
         onDateChange={setSelectedDate}
       />
       <div className="flex justify-end w-full gap-3 ">
         <div></div>
         <div className="flex gap-3 md:w-1/2">
-          {" "}
-          <Button
-            label="Back"
-            variant="outline"
-            fullWidth
-            onClick={handleBack}
-          />
-          <Button label="Next" fullWidth onClick={handleNext} />
+          <Button label="Back" variant="outline" fullWidth onClick={back} />
+          <Button label="Next" fullWidth onClick={next} />
         </div>
       </div>
     </div>

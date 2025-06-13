@@ -4,7 +4,7 @@ const formValidator = {
     email: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     phone: /^\+?[\d\s-]{10,}$/,
     url: /^(https?:\/\/)?([\da-z.-]+)\.([a-z.]{2,6})([/\w .-]*)*\/?$/,
-    password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
+    // password: /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/,
     numeric: /^\d+$/,
     alpha: /^[a-zA-Z]+$/,
     alphanumeric: /^[a-zA-Z0-9]+$/,
@@ -28,8 +28,8 @@ const formValidator = {
       formValidator.methods.pattern(value, formValidator.patterns.phone),
     url: (value) =>
       formValidator.methods.pattern(value, formValidator.patterns.url),
-    password: (value) =>
-      formValidator.methods.pattern(value, formValidator.patterns.password),
+    // password: (value) =>
+    //   formValidator.methods.pattern(value, formValidator.patterns.password),
     numeric: (value) =>
       formValidator.methods.pattern(value, formValidator.patterns.numeric),
     alpha: (value) =>
@@ -45,7 +45,7 @@ const formValidator = {
       email: "Please enter a valid email address.",
       phone: "Please enter a valid phone number.",
       url: "Please enter a valid URL.",
-      password: "Password must contain upper/lower case letters and numbers.",
+      // password: "Password must contain upper/lower case letters and numbers.",
       numeric: "Only numeric values allowed.",
       alpha: "Only alphabetic characters allowed.",
       alphanumeric: "Only alphanumeric characters allowed.",
@@ -91,7 +91,6 @@ const formValidator = {
         if (rule !== "required") {
           const method = this.methods[rule];
           if (typeof method !== "function") {
-            console.error(`Invalid validation rule: '${rule}'`);
             continue;
           }
           if (!method(value)) {

@@ -26,7 +26,7 @@ const useForm = (initialValues, onSubmit, schema) => {
     }
   };
 
-  const resetForm = () => {
+  const resetForm = (initialValues) => {
     setValues(initialValues);
     setErrors({});
   };

@@ -4,6 +4,9 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import Loader from "../components/ui/Loader";
 import DefaultLayout from "../components/layout/DefaultLayout";
 import NotFound from "../pages/NotFound";
+import OrderStatus from "../pages/cart/OrderStatus";
+import AllOrders from "../pages/cart/AllOrders";
+import SingleOrder from "../pages/cart/SingleOrder";
 
 // Lazy load components
 const Home = lazy(() => import("../pages/Landing/Home"));
@@ -22,6 +25,9 @@ const MainRoutes = () => {
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
+          <Route path="/order-confirmation/success" element={<OrderStatus />} />
+          <Route path="/orders" element={<AllOrders/>} />
+          <Route path="/order/:id" element={<SingleOrder />} />
         </Route>
 
         {/* Public Routes (auth pages) */}

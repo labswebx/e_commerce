@@ -5,6 +5,7 @@ import { createAsyncThunkHandler } from "../../utils/createAsyncThunkHandler";
 
 import addressActionTypes from "./addressActionTypes";
 import addressApi from "./addressApi";
+import { initialAddressState } from "./addressConstants";
 
 export const createAddress = createAsyncThunkHandler(
   addressActionTypes.CREATE,
@@ -13,7 +14,7 @@ export const createAddress = createAsyncThunkHandler(
 
 export const updateAddress = createAsyncThunkHandler(
   addressActionTypes.UPDATE,
-  async (id, data) => addressApi.updateAddress(id, data)
+  async ({ id, data }) => addressApi.updateAddress(id, data)
 );
 
 export const deleteAddress = createAsyncThunkHandler(
@@ -33,14 +34,7 @@ export const getAddressDetails = createAsyncThunkHandler(
 
 const addressSlice = createSlice({
   name: "address",
-  initialState: {
-    address: null,
-    addresses: [],
-    loading: false,
-    error: null,
-    success: null,
-    message: null,
-  },
+  initialState: initialAddressState,
   reducers: {
     clearErrors: (state) => {
       state.error = null;

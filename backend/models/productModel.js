@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 
 // When we create a product without a subcategory, then we get an error that cannot parse "" as ObjectId. This is to bypass that error
 const castObjectId = mongoose.ObjectId.cast();
-mongoose.ObjectId.cast(v => v === '' ? v : castObjectId(v));
+mongoose.ObjectId.cast((v) => (v === "" ? v : castObjectId(v)));
 
 const productSchema = new mongoose.Schema(
   {
@@ -44,7 +44,7 @@ const productSchema = new mongoose.Schema(
     },
     order: {
       type: Number,
-      default: null
+      default: null,
     },
     ratings: {
       type: Number,
@@ -54,22 +54,22 @@ const productSchema = new mongoose.Schema(
       {
         public_id: {
           type: String,
-          required: true,
+          // required: true,
         },
         url: {
           type: String,
-          required: true,
+          // required: true,
         },
       },
     ],
     category: {
       type: String,
-      requred: [true, "Please enter valid product category"],
+      // requred: [true, "Please enter valid product category"],
     },
     subCategory: {
-      type: mongoose.Schema.ObjectId,
+      type: String,
       ref: "SubCategory",
-      default: ''
+      // default: "",
     },
     stock: {
       type: Number,
@@ -93,27 +93,27 @@ const productSchema = new mongoose.Schema(
       {
         name: {
           type: String,
-          required: true,
+          // required: true,
         },
         rating: {
           type: Number,
-          required: true,
+          // required: true,
         },
         comment: {
           type: String,
-          required: true,
+          // required: true,
         },
         user: {
           type: mongoose.Schema.ObjectId,
           ref: "User",
-          required: true,
+          // required: true,
         },
       },
     ],
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      required: true,
+      // required: true,
     },
     createdAt: {
       type: Date,

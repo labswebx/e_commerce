@@ -9,6 +9,7 @@ const orderApi = {
         ORDER_API_ENDPOINTS.CREATE_ORDER,
         orderData
       );
+
       return res.data;
     } catch (err) {
       handleError(err);
@@ -40,6 +41,7 @@ const orderApi = {
       const res = await axiosInstance.get(
         ORDER_API_ENDPOINTS.CHECK_PAYMENT_STATUS(txnId)
       );
+      console.log("response payment data", res);
       return res.data;
     } catch (err) {
       handleError(err);

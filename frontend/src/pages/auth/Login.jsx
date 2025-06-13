@@ -9,15 +9,34 @@ import { validateLogin } from "../../utils/validation/validation";
 import Toast from "../../components/ui/Toast";
 import { useNavigate } from "react-router-dom";
 import NavItem from "../../components/ui/NavItems";
+// import { addItemToCart, setUserId } from "../../features/cart/cartSlice";
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const { error: apiError } = useSelector((state) => state.user);
-
   const submitForm = async (values) => {
     const resultAction = await dispatch(loginUser(values));
+
     if (loginUser.fulfilled.match(resultAction)) {
+      // const { user } = resultAction.payload;
+
+      // 🧹 Clear or assign cart ownership to the new user
+      // const guestCart = JSON.parse(localStorage.getItem("cart")) || null;
+      // console.log(guestCart);
+      // if (guestCart?.items?.length > 0) {
+      //   console.log(
+      //     `📦 Merging ${guestCart.items.length} guest cart items for user ${user._id}`
+      //   );
+
+      //   guestCart.items.forEach((item) => {
+      //     dispatch(addItemToCart(item));
+      //   });
+      // }
+
+      // //  Set user ID so cart saves with user
+      // dispatch(setUserId(user._id));
+
       Toast.success("User login successfully");
       navigate("/cart");
     } else {

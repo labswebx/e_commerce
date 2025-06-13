@@ -2,38 +2,48 @@ import React, { useEffect, useState } from "react";
 import Card from "../../components/ui/Card";
 import AddNewAddressDivider from "../../components/ui/AddressDivider";
 import Button from "../../components/ui/Button";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getMyAddress,
-  deleteAddress,
-  // createAddress,
-  // updateAddress,
-} from "../../features/address/addressSlice";
 import AddAddressModal from "../../components/ui/AddAddressModal";
+import Toast from "../../components/ui/Toast";
+import toastMessage from "../../constants/toastMessage";
+import { useDispatch } from "react-redux";
 import { setSelectedAddress } from "../../features/cart/cartSlice";
+import useAddress from "../../features/address/addressHooks";
+import Loader from "../../components/ui/Loader";
+import ErrorMessage from "../../utils/ErrorMessage";
+import NoData from "../../utils/NoData";
+import { useCheckout } from "../../hooks/useCheckout";
 
-const CheckoutStep1 = ({ handleNext, handleBack }) => {
+const CheckoutStep1 = () => {
   const dispatch = useDispatch();
+  const {
+    addresses = [],
+    fetchAddresses,
+    removeAddress,
+    loading,
+    error,
+  } = useAddress();
+  const { next, back } = useCheckout();
+
   const [selectedId, setSelectedId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editData, setEditData] = useState(null);
-  const { addresses, loading, error, selectedAddress } = useSelector(
-    (state) => state.address
-  );
 
   useEffect(() => {
-    dispatch(getMyAddress());
-  }, [dispatch]);
+    fetchAddresses()
+      .unwrap()
+      .catch(() => Toast.error(toastMessage.ADDRESS_LOAD.ERROR));
+  }, []);
 
-  console.log(addresses);
-  const handleDelete = (id) => {
-    console.log("delete id", id);
-    dispatch(deleteAddress(id));
-    dispatch(getMyAddress());
+  const handleDelete = async (id) => {
+    try {
+      await removeAddress(id).unwrap();
+      Toast.success(toastMessage.ADDRESS_DELETE.SUCCESS);
+    } catch (err) {
+      Toast.error(err?.message || toastMessage.ADDRESS_DELETE.ERROR);
+    }
   };
 
   const handleEdit = (address) => {
-    console.log("delete id", address);
     setEditData(address);
     setShowModal(true);
   };
@@ -42,41 +52,52 @@ const CheckoutStep1 = ({ handleNext, handleBack }) => {
     setShowModal(false);
     setEditData(null);
   };
-  const handleSelectAddress = () => {
-    console.log(selectedAddress);
-    dispatch(setSelectedAddress(selectedId));
+
+  const handleSelectAddress = (address) => {
+    setSelectedId(address._id);
+    dispatch(setSelectedAddress(address));
   };
+
+  if (loading) return <Loader />;
+  if (error) return <ErrorMessage message={error} />;
+  if (!addresses || addresses.length === 0) {
+    return (
+      <div>
+        <NoData message="No saved addresses." />
+        <AddNewAddressDivider onClick={() => setShowModal(true)} />
+        <AddAddressModal
+          isOpen={showModal}
+          onClose={handleModalClose}
+          initialData={editData}
+          isEdit={!!editData}
+        />
+      </div>
+    );
+  }
+
   return (
     <div className="space-y-4">
-      {addresses?.length > 0 ? (
-        addresses.map((address) => (
-          <Card
-            onClick={handleSelectAddress}
-            key={address._id}
-            type="address"
-            data={address}
-            selected={selectedId === address._id}
-            onSelect={() => setSelectedId(address._id)}
-            onEdit={handleEdit}
-            onDelete={handleDelete}
-          />
-        ))
-      ) : (
-        <p className="text-sm text-gray-500">No saved addresses.</p>
-      )}
-
+      {addresses.map((address) => (
+        <Card
+          key={address._id}
+          type="address"
+          data={address}
+          selected={selectedId === address._id}
+          onSelect={() => handleSelectAddress(address)}
+          onEdit={handleEdit}
+          onDelete={handleDelete}
+        />
+      ))}
       <AddNewAddressDivider onClick={() => setShowModal(true)} />
-
       <AddAddressModal
         isOpen={showModal}
         onClose={handleModalClose}
         initialData={editData}
         isEdit={!!editData}
       />
-
       <div className="flex justify-end gap-3 pt-4">
-        <Button label="Back" variant="outline" onClick={handleBack} />
-        <Button label="Next" onClick={handleNext} disabled={!selectedId} />
+        <Button label="Back" variant="outline" onClick={back} />
+        <Button label="Next" onClick={next} disabled={!selectedId} />
       </div>
     </div>
   );

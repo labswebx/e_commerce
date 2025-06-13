@@ -1,47 +1,22 @@
-import React from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { Minus, Plus } from "lucide-react";
 import Button from "./Button";
-import {
-  addItemToCart,
-  removeItemFromCart,
-} from "../../features/cart/cartSlice";
+import { useCart } from "../../features/cart/cartHooks";
 
 const AddToCartButton = ({ product }) => {
-  console.log("product at cart", product);
-  const dispatch = useDispatch();
-  const cartItem = useSelector((state) =>
-    state.cart.items.find((item) => item._id === product._id)
-  );
-  const { total, totalQuantity } = useSelector((state) => state.cart);
-  console.log("cart item", cartItem);
-  console.log("total", total);
-  console.log("totalQuantity", totalQuantity);
+  const { getCartItem, addToCart, removeFromCart, cart } = useCart();
+
+  const cartItem = getCartItem(product._id);
 
   const quantity = cartItem?.quantity || 0;
-  console.log(quantity);
-  const handleAdd = () => {
-    console.log("cart increase");
-    dispatch(addItemToCart(product));
-  };
-
-  const handleRemove = () => {
-    console.log("cart decrease");
-    dispatch(removeItemFromCart(product._id));
-  };
 
   return (
     <div className="flex items-center w-full gap-2">
       {quantity === 0 ? (
-        <Button
-          onClick={handleAdd}
-          label="Add to cart"
-          // className="px-4 py-2 text-white bg-blue-600 rounded hover:bg-blue-700"
-        />
+        <Button onClick={() => addToCart(product)} label="Add to cart" />
       ) : (
         <>
           <Button
-            onClick={handleRemove}
+            onClick={() => removeFromCart(product._id)}
             variant="ghost"
             iconLeft={Minus}
             label=""
@@ -51,7 +26,7 @@ const AddToCartButton = ({ product }) => {
             {quantity}
           </span>
           <Button
-            onClick={handleAdd}
+            onClick={() => addToCart(product)}
             iconLeft={Plus}
             label=""
             variant="ghost"

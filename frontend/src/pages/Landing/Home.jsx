@@ -57,7 +57,6 @@ const Home = () => {
         return products;
     }
   };
-  console.log("get product by tab", getProductsByTab);
 
   return (
     <div className="space-y-8 ">

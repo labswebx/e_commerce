@@ -3,11 +3,13 @@ const enums = require("../utils/enums");
 
 const orderSchema = new mongoose.Schema(
   {
+    //  from address slice
     shippingAddress: {
       type: mongoose.Schema.ObjectId,
       ref: "Address",
       required: true,
     },
+    //  from  cart (items)
     orderItems: [
       {
         name: {
@@ -24,7 +26,7 @@ const orderSchema = new mongoose.Schema(
         },
         image: {
           type: String,
-          required: true,
+          // required: true,
         },
         product: {
           type: mongoose.Schema.ObjectId,
@@ -33,19 +35,21 @@ const orderSchema = new mongoose.Schema(
         },
       },
     ],
+    //  from user login adn register
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
       required: true,
     },
+    //  from cart slice(shippingMethod) only paymentInstrument
     paymentInfo: {
       transactionId: {
         type: String,
-        required: true,
+        // required: true,
       },
       status: {
         type: String,
-        required: true,
+        // required: true,
       },
       paymentInstrument: {
         type: Object,
@@ -57,29 +61,35 @@ const orderSchema = new mongoose.Schema(
       type: Date,
       required: true,
     },
+    //  from coupon slice
     coupon: {
       type: String,
       default: "",
     },
+    //  from coupon discount
     couponDiscount: {
       type: Number,
       default: 0,
     },
+    //  from cart slice ()
     itemsPrice: {
       type: Number,
       requierd: true,
       default: 0,
     },
+    //      from cart slice (tax)
     taxPrice: {
       type: Number,
       requierd: true,
       default: 0,
     },
+    //  from cart slice (shipping)
     shippingPrice: {
       type: Number,
       requierd: true,
       default: 0,
     },
+    //  from cart slice ()
     totalPrice: {
       type: Number,
       requierd: true,

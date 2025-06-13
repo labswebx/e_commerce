@@ -37,4 +37,13 @@
   .input-button {
     @apply px-4 py-2 text-sm text-white transition bg-black rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2;
   }
+  .size-sm {
+    @apply px-3 py-2 text-sm;
+  }
+  .size-md {
+    @apply py-2.5 px-4 text-base;
+  }
+  .size-lg {
+    @apply px-5 py-3 text-lg;
+  }
 }

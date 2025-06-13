@@ -9,6 +9,7 @@ import couponReducer from "./features/coupon/couponSlice";
 import constantsReducer from "./features/constants/constantsSlice";
 import addressReducer from "./features/address/addressSlice";
 import cartReducer from "./features/cart/cartSlice";
+import checkoutReducer from "./features/checkout/checkoutSlice";
 import { loadCartState, saveCartState } from "./utils/localStorage";
 
 const preloadedCart = loadCartState();
@@ -23,6 +24,7 @@ export const store = configureStore({
     constants: constantsReducer,
     address: addressReducer,
     cart: cartReducer,
+    checkout: checkoutReducer,
   },
   preloadedState: {
     cart: preloadedCart, // load persisted cart

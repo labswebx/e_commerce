@@ -68,11 +68,8 @@ const Home = () => {
     trendingProducts,
     favouriteProducts,
     mostOrderedProducts,
-    loading: productsLoading = true,
+    loading: productsLoading,
   } = useSelector((state) => state.products);
-
-  const { categories, loading, error } = useCategory();
-
   useEffect(() => {
     dispatch(fetchProducts());
     dispatch(fetchTrendingProducts());
@@ -107,7 +104,6 @@ const Home = () => {
     <div className="space-y-8 ">
       {/* banner page */}
       <LandingPage />
-      {/* iske saare elemnt ko cneter me karo  */}
       <div className="">
         {/* Category Carousel */}
         <CategoryCarousel />

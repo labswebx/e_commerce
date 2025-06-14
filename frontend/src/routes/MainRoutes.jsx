@@ -7,6 +7,9 @@ import NotFound from "../pages/NotFound";
 import OrderStatus from "../pages/cart/OrderStatus";
 import AllOrders from "../pages/cart/AllOrders";
 import SingleOrder from "../pages/cart/SingleOrder";
+import ProductListing from "../pages/product/list/ProductListing";
+import ProtectedRoute from "./ProtectedRoutes";
+import ProductDetails from "../pages/product/details/ProductDetails";
 
 // Lazy load components
 const Home = lazy(() => import("../pages/Landing/Home"));
@@ -25,9 +28,8 @@ const MainRoutes = () => {
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/order-confirmation/success" element={<OrderStatus />} />
-          <Route path="/orders" element={<AllOrders/>} />
-          <Route path="/order/:id" element={<SingleOrder />} />
+          <Route path="/products" element={<ProductListing />} />
+          <Route path="/product/:id" element={<ProductDetails />} />
         </Route>
 
         {/* Public Routes (auth pages) */}
@@ -37,12 +39,19 @@ const MainRoutes = () => {
         <Route path="/password/reset/:token" element={<ResetPassword />} />
 
         {/*  Private Routes */}
-        {/*
-        <Route element={<PrivateRoute />}>
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/profile" element={<Profile />} />
+
+        <Route element={<ProtectedRoute />}>
+          <Route element={<DefaultLayout />}>
+            {/* <Route path="/dashboard" element={<Dashboard />} /> */}
+            <Route
+              path="/order-confirmation/success"
+              element={<OrderStatus />}
+            />
+            <Route path="/orders" element={<AllOrders />} />
+            <Route path="/order/:id" element={<SingleOrder />} />
+            {/* <Route path="/profile" element={<Profile />} /> */}
+          </Route>
         </Route>
-        */}
 
         {/* Fallback route */}
         <Route path="*" element={<NotFound />} />

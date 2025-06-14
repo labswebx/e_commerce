@@ -27,7 +27,7 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
       case "compact":
         return (
           <>
-            <h3 className="mt-2 text-base font-semibold">{data.title}</h3>
+            <h3 className="mt-2 text-base font-semibold">{data.name}</h3>
             <Button
               variant="outline"
               onClick={() => onAddToCart(data)}
@@ -39,15 +39,15 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
       case "minimal":
         return (
           <>
-            <h3 className="mt-2 text-sm font-medium">{data.title}</h3>
+            <h3 className="mt-2 text-sm font-medium">{data.name}</h3>
           </>
         );
 
       case "highlight":
         return (
           <>
-            <h3 className="mt-4 text-xl font-bold">{data.title}</h3>
-            <p className="text-sm text-gray-600">{data.description}</p>
+            <h3 className="mt-4 text-xl font-bold">{data.name}</h3>
+            {/* <p className="text-sm text-gray-600">{data.description}</p> */}
             <p className="mt-1 text-lg font-semibold">${data.price}</p>
             <Button
               variant="outline"
@@ -61,8 +61,8 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
       default: // "default"
         return (
           <>
-            <h3 className="mt-2 text-lg font-medium">{data.title}</h3>
-            <p className="text-sm text-gray-500">{data.description}</p>
+            <h3 className="mt-2 text-lg font-medium">{data.name}</h3>
+            {/* <p className="text-sm text-gray-500">{data.description}</p> */}
             <p className="mt-2 text-xl font-semibold">${data.price}</p>
             <div className="w-full mt-2">
               <AddToCartButton product={data} />
@@ -80,7 +80,7 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
     >
       <img
         src={imageUrl}
-        alt={data.title}
+        alt={data.name}
         className={`rounded-md object-cover ${getImageClasses()}`}
       />
       {renderContent()}

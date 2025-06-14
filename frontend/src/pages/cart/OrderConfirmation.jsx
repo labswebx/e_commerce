@@ -30,13 +30,12 @@ const OrderConfirmation = () => {
 
   const coupon = useSelector((state) => state.coupon);
   const { placeOrder, error: orderError, loading: orderLoading } = useOrders();
-  console.log(items, total);
+
   useEffect(() => {
     if (!items.length || !selectedAddress) {
       navigate("/cart");
     }
   }, [items, selectedAddress, navigate]);
-  console.log(selectedAddress);
   const orderData = {
     shippingAddress: selectedAddress._id || "",
     orderItems: items.map((item) => ({

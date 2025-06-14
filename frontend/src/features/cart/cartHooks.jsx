@@ -33,7 +33,6 @@ export const useCart = () => {
     if (!Array.isArray(items)) return null;
     return items.find((item) => item._id === productId) || null;
   };
-  console.log(total);
   return {
     // All cart data
     cart,

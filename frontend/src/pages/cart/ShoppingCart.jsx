@@ -45,7 +45,6 @@ export default function ShoppingCart() {
     removeCoupon();
     setCouponCode("");
   };
-  console.log(total);
 
   return (
     <div className="min-h-screen px-2 py-4 bg-gray-50 sm:px-4 md:px-6 lg:px-10 xl:px-20">

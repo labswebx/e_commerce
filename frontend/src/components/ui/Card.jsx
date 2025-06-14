@@ -6,47 +6,84 @@ import DatePicker from "./DatePicker";
 import Button from "./Button";
 import AddToCartButton from "./AddToCartButton";
 
-const ProductCard = ({ data, onAddToCart, imageOnly = false }) => {
-  return (
-    <div className="text-center card-base w-72">
-      <img
-        src={data.images[0]?.public_id || "/logo-icon.jpg"}
-        alt={data.title}
-        className={`rounded-md object-cover ${
-          imageOnly
-            ? "w-full h-52 sm:h-60 md:h-64"
-            : "mx-auto w-full h-40 sm:h-48 md:h-52"
-        }`}
-      />
+export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
+  const imageUrl = data.images?.[0]?.public_id || "/logo-icon.jpg";
 
-      {imageOnly ? (
-        <>
-          <h3 className="mt-2 text-lg font-semibold">{data.title}</h3>
-          <Button
-            variant="outline"
-            onClick={() => onAddToCart(data)}
-            label="Shop Now"
-          ></Button>
-        </>
-      ) : (
-        <>
-          <h3 className="mt-2 text-lg font-medium">{data.title}</h3>
-          <p className="text-sm text-gray-500">{data.description}</p>
-          <p className="mt-2 text-xl font-semibold">${data.price}</p>
-          <div className="w-full mt-2">
-            {imageOnly ? (
-              <Button
-                variant="outline"
-                onClick={() => onAddToCart(data)}
-                label="Shop Now"
-                fullWidth
-              />
-            ) : (
+  const getImageClasses = () => {
+    switch (variant) {
+      case "compact":
+        return "w-full h-40 sm:h-48 md:h-52";
+      case "minimal":
+        return "w-full h-32";
+      case "highlight":
+        return "w-full h-60";
+      default:
+        return "mx-auto w-full h-40 sm:h-48 md:h-52";
+    }
+  };
+
+  const renderContent = () => {
+    switch (variant) {
+      case "compact":
+        return (
+          <>
+            <h3 className="mt-2 text-base font-semibold">{data.title}</h3>
+            <Button
+              variant="outline"
+              onClick={() => onAddToCart(data)}
+              label="Shop Now"
+            />
+          </>
+        );
+
+      case "minimal":
+        return (
+          <>
+            <h3 className="mt-2 text-sm font-medium">{data.title}</h3>
+          </>
+        );
+
+      case "highlight":
+        return (
+          <>
+            <h3 className="mt-4 text-xl font-bold">{data.title}</h3>
+            <p className="text-sm text-gray-600">{data.description}</p>
+            <p className="mt-1 text-lg font-semibold">${data.price}</p>
+            <Button
+              variant="outline"
+              onClick={() => onAddToCart(data)}
+              label="Buy Now"
+              className="mt-2"
+            />
+          </>
+        );
+
+      default: // "default"
+        return (
+          <>
+            <h3 className="mt-2 text-lg font-medium">{data.title}</h3>
+            <p className="text-sm text-gray-500">{data.description}</p>
+            <p className="mt-2 text-xl font-semibold">${data.price}</p>
+            <div className="w-full mt-2">
               <AddToCartButton product={data} />
-            )}
-          </div>
-        </>
-      )}
+            </div>
+          </>
+        );
+    }
+  };
+
+  return (
+    <div
+      className={`card-base text-center ${
+        variant === "highlight" ? "w-full p-4" : "w-72"
+      }`}
+    >
+      <img
+        src={imageUrl}
+        alt={data.title}
+        className={`rounded-md object-cover ${getImageClasses()}`}
+      />
+      {renderContent()}
     </div>
   );
 };

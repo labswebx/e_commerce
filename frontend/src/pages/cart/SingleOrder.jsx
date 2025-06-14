@@ -25,7 +25,6 @@ const SingleOrder = () => {
   if (!order?.order) return <NoData message="No order found" />;
 
   const orderData = order.order;
-  console.log(orderData);
   const { shippingAddress, paymentInfo, orderItems } = orderData;
   const paymentMethod = paymentInfo?.paymentInstrument || "N/A";
   const maskedCard =

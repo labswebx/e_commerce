@@ -5,6 +5,7 @@ import Icon from "./Icon";
 import DatePicker from "./DatePicker";
 import Button from "./Button";
 import AddToCartButton from "./AddToCartButton";
+import { Link } from "react-router-dom";
 
 export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
   const imageUrl = data.images?.[0]?.public_id || "/logo-icon.jpg";
@@ -27,7 +28,11 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
       case "compact":
         return (
           <>
-            <h3 className="mt-2 text-base font-semibold">{data.name}</h3>
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-2 text-base font-semibold hover:underline">
+                {data.name}
+              </h3>
+            </Link>
             <Button
               variant="outline"
               onClick={() => onAddToCart(data)}
@@ -39,16 +44,24 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
       case "minimal":
         return (
           <>
-            <h3 className="mt-2 text-sm font-medium">{data.name}</h3>
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-2 text-sm font-medium hover:underline">
+                {data.name}
+              </h3>
+            </Link>
           </>
         );
 
       case "highlight":
         return (
           <>
-            <h3 className="mt-4 text-xl font-bold">{data.name}</h3>
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-4 text-xl font-bold hover:underline">
+                {data.name}
+              </h3>
+              <p className="mt-1 text-lg font-semibold">${data.price}</p>
+            </Link>
             {/* <p className="text-sm text-gray-600">{data.description}</p> */}
-            <p className="mt-1 text-lg font-semibold">${data.price}</p>
             <Button
               variant="outline"
               onClick={() => onAddToCart(data)}
@@ -61,8 +74,11 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
       default: // "default"
         return (
           <>
-            <h3 className="mt-2 text-lg font-medium">{data.name}</h3>
-            {/* <p className="text-sm text-gray-500">{data.description}</p> */}
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-2 text-lg font-medium hover:underline">
+                {data.name}
+              </h3>
+            </Link>
             <p className="mt-2 text-xl font-semibold">${data.price}</p>
             <div className="w-full mt-2">
               <AddToCartButton product={data} />
@@ -78,11 +94,13 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
         variant === "highlight" ? "w-full p-4" : "w-72"
       }`}
     >
-      <img
-        src={imageUrl}
-        alt={data.name}
-        className={`rounded-md object-cover ${getImageClasses()}`}
-      />
+      <Link to={`/product/${data._id}`}>
+        <img
+          src={imageUrl}
+          alt={data.name}
+          className={`rounded-md object-cover ${getImageClasses()}`}
+        />
+      </Link>
       {renderContent()}
     </div>
   );

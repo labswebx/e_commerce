@@ -22,7 +22,6 @@ const ProductDetails = () => {
 
   const totalReviews = productDetails.reviews.length;
 
-  // Initialize array: index 0 => 5 stars, ..., index 4 => 1 star
   const ratingsBreakdown = [0, 0, 0, 0, 0];
 
   let ratingSum = 0;
@@ -30,7 +29,7 @@ const ProductDetails = () => {
   productDetails.reviews.forEach((review) => {
     const rating = review.rating;
     ratingSum += rating;
-    const index = 5 - rating; // rating 5 goes to index 0, 4 to 1, ..., 1 to 4
+    const index = 5 - rating;
     ratingsBreakdown[index]++;
   });
 

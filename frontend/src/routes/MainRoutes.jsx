@@ -7,9 +7,9 @@ import NotFound from "../pages/NotFound";
 import OrderStatus from "../pages/cart/OrderStatus";
 import AllOrders from "../pages/cart/AllOrders";
 import SingleOrder from "../pages/cart/SingleOrder";
-import ProductListing from "../pages/product/list/ProductListing";
 import ProtectedRoute from "./ProtectedRoutes";
 import ProductDetails from "../pages/product/details/ProductDetails";
+import ProductList from "../pages/product/list/ProductList";
 
 // Lazy load components
 const Home = lazy(() => import("../pages/Landing/Home"));
@@ -28,7 +28,7 @@ const MainRoutes = () => {
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/cart" element={<Cart />} />
-          <Route path="/products" element={<ProductListing />} />
+          <Route path="/products" element={<ProductList />} />
           <Route path="/product/:id" element={<ProductDetails />} />
         </Route>
 

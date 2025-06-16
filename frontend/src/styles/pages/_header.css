@@ -33,7 +33,7 @@
   }
 
   .subnav-wrapper {
-    @apply w-full py-2 overflow-x-auto;
+    @apply w-full py-2 overflow-x-auto lg:px-28 sm:px-10;
   }
 
   .mobile-nav {

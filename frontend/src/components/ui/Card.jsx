@@ -6,9 +6,16 @@ import DatePicker from "./DatePicker";
 import Button from "./Button";
 import AddToCartButton from "./AddToCartButton";
 import { Link } from "react-router-dom";
-
+import { useState } from "react";
+import { Heart, HeartOff } from "lucide-react";
+import { formatPrice } from "../../utils/formatter";
 export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
+  const [liked, setLiked] = useState(false);
   const imageUrl = data.images?.[0]?.url || "/logo-icon.jpg";
+
+  const toggleLike = () => {
+    setLiked(!liked);
+  };
 
   const getImageClasses = () => {
     switch (variant) {
@@ -79,9 +86,14 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
                 {data.name}
               </h3>
             </Link>
-            <p className="mt-2 text-xl font-semibold">${data.price}</p>
-            <div className="w-full mt-2">
-              <AddToCartButton product={data} />
+            <p className="mt-2 text-xl font-semibold">
+              {formatPrice(data.price)}
+            </p>
+
+            <div className="flex justify-center w-full px-4 mt-auto">
+              <div className="w-full lg:max-w-[127px]">
+                <AddToCartButton product={data} className="w-full" />
+              </div>
             </div>
           </>
         );
@@ -90,19 +102,37 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
 
   return (
     <div
-      className={`card-base text-center ${
+      className={`relative card-base h-full flex flex-col justify-between text-center ${
         variant === "highlight" ? "w-full p-4" : "w-72"
       }`}
     >
       <Link to={`/product/${data._id}`}>
-        <img
-          src={imageUrl}
-          alt={data.name}
-          loading="lazy"
-          className={`rounded-md object-cover ${getImageClasses()}`}
-        />
+        <div
+          className={`relative overflow-hidden bg-white rounded-md ${getImageClasses()}`}
+        >
+          <img
+            src={imageUrl}
+            alt={data.name}
+            loading="lazy"
+            className="absolute top-0 left-0 object-contain w-full h-full "
+          />
+        </div>
       </Link>
-      {renderContent()}
+
+      <button
+        onClick={toggleLike}
+        className="absolute top-4 right-4 p-[6px] bg-white rounded-full shadow-md hover:bg-gray-100 transition"
+      >
+        {liked ? (
+          <Heart className="w-6 h-6 text-red-500" fill="red" />
+        ) : (
+          <Heart className="w-6 h-6" />
+        )}
+      </button>
+
+      <div className="flex flex-col justify-between flex-1 mt-4">
+        {renderContent()}
+      </div>
     </div>
   );
 };

@@ -7,63 +7,85 @@ const ApiFeatures = require("../utils/apiFeatures");
 const cloudinary = require("cloudinary");
 
 // create product -- Admin
+// Create Product -- Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   let images = [];
-
-  if (!req.body.images) {
-    return res.status(400).json({
-      success: false,
-      message: "Product images are required.",
-    });
-  }
-
-  if (typeof req.body.images === "string") {
-    images = [req.body.images];
-  } else if (Array.isArray(req.body.images)) {
-    images = req.body.images;
-  } else if (
-    typeof req.body.images === "object" &&
-    req.body.images.public_id &&
-    req.body.images.url
-  ) {
-    images = [req.body.images];
-  } else {
-    return res.status(400).json({
-      success: false,
-      message:
-        "Invalid image format. Must be a string, array of strings, or array of public_id/url objects.",
-    });
-  }
-
   const imagesLink = [];
 
-  for (let i = 0; i < images.length; i++) {
-    if (typeof images[i] === "string") {
-      const result = await cloudinary.v2.uploader.upload_large(images[i], {
+  // ✅ CASE 1: Multi-part form-data (req.files.images)
+  if (req.files && req.files.images) {
+    const files = Array.isArray(req.files.images)
+      ? req.files.images
+      : [req.files.images];
+
+    for (const file of files) {
+      const result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
         folder: "products",
+        resource_type: "auto",
       });
 
       imagesLink.push({
-        public_id: result?.public_id,
-        url: result?.secure_url,
-      });
-    } else if (
-      typeof images[i] === "object" &&
-      images[i].public_id &&
-      images[i].url
-    ) {
-      imagesLink.push(images[i]);
-    } else {
-      return res.status(400).json({
-        success: false,
-        message: `Invalid image format at index ${i}.`,
+        public_id: result.public_id,
+        url: result.secure_url,
       });
     }
   }
 
+  // ✅ CASE 2: Base64 or URL via JSON (req.body.images)
+  else if (req.body.images) {
+    if (typeof req.body.images === "string") {
+      images = [req.body.images];
+    } else if (Array.isArray(req.body.images)) {
+      images = req.body.images;
+    } else if (
+      typeof req.body.images === "object" &&
+      req.body.images.public_id &&
+      req.body.images.url
+    ) {
+      images = [req.body.images];
+    } else {
+      return next(
+        new ErrorHandler(
+          "Invalid image format. Must be string, array of strings, or public_id/url object.",
+          400
+        )
+      );
+    }
+
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+
+      // Upload if it's a base64 or URL string
+      if (typeof image === "string") {
+        const result = await cloudinary.v2.uploader.upload(image, {
+          folder: "products",
+          resource_type: "auto",
+        });
+
+        imagesLink.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+        });
+      }
+
+      // Push pre-uploaded object
+      else if (image.public_id && image.url) {
+        imagesLink.push(image);
+      } else {
+        return next(
+          new ErrorHandler(`Invalid image format at index ${i}`, 400)
+        );
+      }
+    }
+  } else {
+    return next(new ErrorHandler("Product images are required.", 400));
+  }
+
+  // Attach images and user
   req.body.images = imagesLink;
   req.body.user = req.user?.id;
 
+  // Save Product
   const product = await Product.create(req.body);
 
   res.status(200).json({
@@ -71,7 +93,6 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     product,
   });
 });
-
 // get all products
 exports.getAllProducts = catchAsyncErrors(async (req, res) => {
   const resultsPerPage = 5;
@@ -192,50 +213,67 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Product Not Found", 404));
   }
 
-  // Deleting existing images from cloudinary & adding new images (if any)
-  if (req.body.images.length > 0) {
-    let images = [];
-    if (typeof req.body.images === "string") {
-      images.push(req.body.images);
-    } else {
-      images = req.body.images;
-    }
+  try {
+    // Deleting existing images from cloudinary & adding new images (if any)
+    if (req.body.images && req.body.images.length > 0) {
+      let images = [];
+      if (typeof req.body.images === "string") {
+        images.push(req.body.images);
+      } else if (Array.isArray(req.body.images)) {
+        images = req.body.images;
+      } else {
+        return next(new ErrorHandler("Invalid images format", 400));
+      }
 
-    if (images !== undefined) {
       // delete images from Cloudinary
       for (let i = 0; i < product.images.length; ++i) {
-        await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+        if (product.images[i].public_id) {
+          await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+        }
       }
 
       // Uploading new images
       const imagesLink = [];
       for (let i = 0; i < images.length; ++i) {
-        const result = await cloudinary.v2.uploader.upload_large(images[i], {
-          folder: "products",
-        });
+        if (typeof images[i] === "string") {
+          const result = await cloudinary.v2.uploader.upload(images[i], {
+            folder: "products",
+            resource_type: "auto",
+          });
 
-        imagesLink.push({
-          public_id: result.public_id,
-          url: result.secure_url,
-        });
+          imagesLink.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        } else if (images[i] && images[i].public_id && images[i].url) {
+          imagesLink.push(images[i]);
+        } else {
+          return next(
+            new ErrorHandler(`Invalid image format at index ${i}`, 400)
+          );
+        }
       }
 
       req.body.images = imagesLink;
+    } else {
+      req.body.images = product.images;
     }
-  } else {
-    req.body.images = product.images;
+
+    product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    });
+
+    res.status(200).json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    return next(
+      new ErrorHandler(error.message || "Error updating product", 500)
+    );
   }
-
-  product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
-
-  res.status(200).json({
-    success: true,
-    product,
-  });
 });
 
 // get product details

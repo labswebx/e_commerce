@@ -7,7 +7,7 @@ mongoose.ObjectId.cast((v) => (v === "" ? v : castObjectId(v)));
 const productSchema = new mongoose.Schema(
   {
     name: {
-      type: "String",
+      type: String,
       required: [true, "Please enter product name"],
       trim: true,
     },

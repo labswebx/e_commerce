@@ -12,21 +12,23 @@ import Card, { ProductCard } from "../../components/ui/Card";
 import Tabs from "../../components/ui/Tabs";
 import ProductGrid from "../product/list/ProductGrid";
 import { useCategory } from "../../features/category/categoryHooks";
-import LandingPage from "./LandingSection";
+import LandingPage, { Section } from "./LandingSection";
 import Loader from "../../components/ui/Loader";
+// import { Section } from "lucide-react";
+import { useConstants } from "../../features/constants/constantsHooks";
 
 const CategoryCarousel = () => {
   const { categories, loading, error } = useCategory();
 
   if (loading) {
     return (
-      <div className="w-full px-4 py-6">
+      <div className="w-full px-4 py-6 ">
         <h2 className="mb-4 text-base font-semibold">Browse Categories</h2>
-        <div className="flex gap-4 pb-2 overflow-x-auto scrollbar-hide">
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
           {Array.from({ length: 6 }).map((_, index) => (
             <div
               key={index}
-              className="min-w-[100px] h-[100px] bg-gray-200 animate-pulse rounded-xl shadow-md flex items-center justify-center px-3 py-2 text-center"
+              className="h-[100px] bg-gray-200 animate-pulse rounded-xl shadow-md flex items-center justify-center text-center"
             >
               <div className="w-8 h-8 bg-gray-300 rounded-full" />
             </div>
@@ -41,31 +43,31 @@ const CategoryCarousel = () => {
       <p className="text-center text-red-500">Error loading categories.</p>
     );
 
-  // Light pastel background color classes
   const bgColors = [
     "bg-[#E6EFE4]",
     "bg-[#E6EFE4]",
     "bg-[#ECE4EF]",
     "bg-[#EFE4E4]",
   ];
+
   return (
-    <div className="w-full px-4 py-6 max-sm:mt-[5.31rem]">
+    <div className="w-ful lg:pb-20 md:pb-10">
       <h2 className="mb-4 text-base font-semibold">Browse Categories</h2>
 
-      <div className="flex gap-4 pb-2 overflow-x-auto scrollbar-hide">
-        {categories.map((category, index) => (
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
+        {categories.slice(0, 6).map((category, index) => (
           <div
             key={category._id}
-            className={`min-w-[100px] h-[100px] ${
+            className={`h-[100px] ${
               bgColors[index % bgColors.length]
-            } rounded-xl shadow-md flex flex-col items-center justify-center px-3 py-2 text-center border hover:shadow-lg transition-all`}
+            } rounded-xl shadow-md flex flex-col items-center justify-center px-4 py-3 text-center border hover:shadow-lg transition-all`}
           >
-            {/* <img
-              src={category?.images[0]?.public_url }
+            <img
+              src={category?.image?.url}
               alt={category.name}
-              className="object-contain w-8 h-8 mb-1"
+              className="object-contain w-12 h-12 mb-1 filter brightness-0 saturate-0"
               loading="lazy"
-            /> */}
+            />
             <span className="text-[10px] font-medium text-gray-800">
               {category.name}
             </span>
@@ -81,6 +83,30 @@ const Home = () => {
   const [activeTab, setActiveTab] = useState("regular");
   const [page, setPage] = useState(1);
   const limit = 50;
+  const { banners, fetchBanners, loading, error } = useConstants();
+
+  useEffect(() => {
+    fetchBanners();
+  }, []);
+
+  const bannerPairs = Array.isArray(banners)
+    ? banners.flatMap((b) => b?.metadata?.banners || [])
+    : [];
+
+  const filteredBannerPairs = bannerPairs.filter(
+    (img) => img?.url || img?.public_id
+  );
+
+  const bannerImages =
+    filteredBannerPairs.length >= 2
+      ? [
+          {
+            small: filteredBannerPairs[0].url,
+            large: filteredBannerPairs[1].url,
+            title: filteredBannerPairs[0].title || "Banner",
+          },
+        ]
+      : [];
   // Fetch state
   const {
     products,
@@ -99,16 +125,11 @@ const Home = () => {
   }, [dispatch, page]);
 
   const canLoadMore = products.length < productsCount;
-  console.log(products.length, productsCount);
   const tabOptions = [
-    { key: "regular", label: "Regular" },
-    { key: "trending", label: "Trending" },
-    { key: "favourite", label: "Favourite" },
-    { key: "mostOrdered", label: "Most Ordered" },
+    { key: "regular", label: "New Arrival" },
+    { key: "mostOrdered", label: "Best Sellers" },
+    { key: "favourite", label: "Featured Products" },
   ];
-  console.log("Page:", page);
-  console.log("Total:", productsCount);
-  console.log("Loaded:", products.length);
 
   const visibleProducts = products.slice(0, 12);
   const getProductsByTab = () => {
@@ -130,16 +151,14 @@ const Home = () => {
     }
   };
 
-  // if (productsLoading) return <Loader />;
-  console.log(productsLoading);
   return (
     <div className="space-y-8 ">
       {/* banner page */}
       <LandingPage />
-      <div className="">
+      {/* Centered content with max width */}
+      <div className="px-4 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8 ">
         {/* Category Carousel */}
         <CategoryCarousel />
-
         {/* Product Tabs */}
         <div className="md:w-[450px]">
           <Tabs
@@ -150,7 +169,7 @@ const Home = () => {
             minimal={false}
           />
         </div>
-
+        {/* Product Grid */}
         <div className="space-y-4">
           <h2 className="text-xl font-semibold"></h2>
           <ProductGrid
@@ -171,16 +190,48 @@ const Home = () => {
             </button>
           </div>
         )}
+        {/* Extra Visible Products */}
         <div className="flex flex-wrap justify-center gap-4">
           {visibleProducts.map((item) => (
             <div key={item._id} className="m-2">
-              <ProductCard
-                data={item}
-                // onAddToCart={handleAdd}
-                variant="compact"
-              />
+              <ProductCard data={item} variant="compact" />
             </div>
           ))}
+        </div>
+      </div>
+      {/* bottom banner */}
+
+      <div className="relative w-full my-8 md:h-96 ">
+        {/* Mobile Image (shown on small screens) */}
+        <img
+          src={filteredBannerPairs[10]?.url} // Replace with your mobile image path
+          alt="Summer Sale"
+          className="object-contain w-full h-full md:hidden"
+        />
+
+        {/* Desktop Image (shown on medium screens and up) */}
+        <img
+          src={filteredBannerPairs[11]?.url} // Replace with your desktop image path
+          alt="Summer Sale"
+          className="hidden object-cover w-full h-full md:block"
+        />
+
+        {/* Content Overlay */}
+        <div className="absolute inset-0 flex items-center justify-center bg-black sm:p-6 bg-opacity-20 md:p-12">
+          <div className="max-w-md text-center text-white">
+            <span className="block mb-1 text-sm font-medium">
+              8 euros, vacances
+            </span>
+            <h2 className="mb-2 text-2xl font-bold md:text-4xl">
+              Big Summer Sale
+            </h2>
+            <p className="mb-4 text-sm md:text-base">
+              Commodo fames vitae vitae leo mauris in. Eu consequat.
+            </p>
+            <button className="px-6 py-2 text-sm text-gray-900 transition-colors bg-white rounded-md hover:bg-gray-100 md:text-base">
+              Shop Now
+            </button>
+          </div>
         </div>
       </div>
     </div>

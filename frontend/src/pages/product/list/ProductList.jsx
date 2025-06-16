@@ -4,7 +4,6 @@ import ProductGrid from "./ProductGrid";
 
 const ProductList = () => {
   const { products } = useProducts();
-  console.log(products);
   return (
     <div>
       <ProductGrid products={products} />

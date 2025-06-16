@@ -42,7 +42,7 @@ const constantsSlice = createSlice({
       .addCase(getAllBanners.pending, setLoading)
       .addCase(getAllBanners.fulfilled, (state, action) => {
         state.loading = false;
-        state.banners = action.payload;
+        state.banners = action.payload.banners;
       })
       .addCase(getAllBanners.rejected, setError)
 

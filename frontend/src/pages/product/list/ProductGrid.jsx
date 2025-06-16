@@ -32,12 +32,12 @@ const ProductGrid = ({ products = [], loading, title = "" }) => {
     [loading, visibleCount, products.length]
   );
 
-  const visibleProducts = products.slice(0, visibleCount);
+  const visibleProducts = products.slice(0, 8);
 
   return (
     <div className="space-y-4">
       {/* Grid layout */}
-      <div className="grid gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5">
+      <div className="grid gap-4 grid-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
         {loading
           ? Array.from({ length: getInitialCount() }).map((_, idx) => (
               <div

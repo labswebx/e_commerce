@@ -14,7 +14,6 @@ const ProductReviews = ({ reviewsData }) => {
   const { id } = useParams();
   const { reviews, loading, error } = useProductReviews(id);
   const safeReviews = Array.isArray(reviews) ? reviews : [];
-  console.log(id);
   const totalReviews = reviews?.length;
   let ratingSum = 0;
   const ratingsBreakdown = [0, 0, 0, 0, 0];

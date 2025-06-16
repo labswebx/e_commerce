@@ -166,7 +166,6 @@ const productSlice = createSlice({
       // fetchProductDetails
       .addCase(fetchProductDetails.pending, setLoading)
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
-        console.log("🟢 Product Details Payload:", action.payload);
         state.loading = false;
         state.productDetails = action.payload.product || null;
       })

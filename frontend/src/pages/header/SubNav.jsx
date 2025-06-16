@@ -21,10 +21,10 @@ const SubNav = () => {
       const mapped = categories.map((cat, index) => {
         // Convert category name to a simple key
         const key = cat._id;
-
         return {
           key,
           label: cat.name,
+          image: cat?.image?.url,
         };
       });
 

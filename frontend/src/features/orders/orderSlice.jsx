@@ -3,7 +3,7 @@ import { createSlice } from "@reduxjs/toolkit";
 import { createAsyncThunkHandler } from "../../utils/createAsyncThunkHandler";
 import { setError, setLoading } from "../../utils/commonReducers";
 
-import orderApi from "../../api/orderApi";
+import orderApi from "./orderApi";
 import ORDER_ACTION_TYPES from "./orderActionTypes";
 
 // Thunks

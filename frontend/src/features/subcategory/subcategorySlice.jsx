@@ -49,7 +49,7 @@ const subcategorySlice = createSlice({
       .addCase(fetchSubcategoriesOfCategory.fulfilled, (state, action) => {
         state.subcategories = action.payload;
       })
-      .addCase(fetchSubcategoriesOfCategory.pending, setError);
+      .addCase(fetchSubcategoriesOfCategory.rejected, setError);
   },
 });
 

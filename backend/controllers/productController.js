@@ -76,15 +76,14 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 exports.getAllProducts = catchAsyncErrors(async (req, res) => {
   const resultsPerPage = 5;
   const productsCount = await Product.countDocuments();
-
+  const currentPage = Number(req.query.page) || 1;
   const apiFeature = new ApiFeatures(
     Product.find().sort({ order: 1, createdAt: -1 }),
     req.query
   )
     .search()
-    .filter();
-
-  // .pagination(resultsPerPage);
+    .filter()
+    .pagination(resultsPerPage);
   const products = await apiFeature.query;
 
   return res.status(200).json({
@@ -92,27 +91,24 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
     products,
     productsCount,
     resultsPerPage,
+    currentPage,
   });
 });
 
 // get all products -- Admin
 exports.getAdminProducts = catchAsyncErrors(async (req, res) => {
-  const page = parseInt(req.query.page, 10) || 1; // Default to page 1
-  const limit = parseInt(req.query.limit, 10) || 20; // Default to 20 products per page
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 20;
 
-  // Calculate the starting index
   const skip = (page - 1) * limit;
 
-  // Get the total count of products for pagination metadata
   const totalProducts = await Product.countDocuments();
 
-  // Fetch products with pagination
   const products = await Product.find()
     .populate("subCategory")
     .skip(skip)
     .limit(limit);
 
-  // Calculate total pages
   const totalPages = Math.ceil(totalProducts / limit);
 
   return res.status(200).json({
@@ -141,14 +137,26 @@ exports.searchAdminProducts = catchAsyncErrors(async (req, res) => {
 
 // get trending products
 exports.getTrendingProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find({ trending: true }).sort({
-    createdAt: -1,
-  });
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 20;
+
+  const skip = (page - 1) * limit;
+
+  const totalProducts = await Product.countDocuments();
+  const products = await Product.find({ trending: true })
+    .sort({
+      createdAt: -1,
+    })
+    .skip(skip)
+    .limit(limit);
 
   return res.status(200).json({
     success: true,
     products,
     productsCount: products.length,
+    productsCount,
+    resultsPerPage,
+    currentPage,
   });
 });
 
@@ -341,13 +349,15 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    product: product,
+    review: product.reviews,
     message: "Product rating added successfully",
   });
 });
 
 // get all reviews of a product
 exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
-  const product = await Product.findById(req.query.id);
+  const product = await Product.findById(req.params.id);
   if (!product) {
     return next(new ErrorHandler("Product Not Found.", 404));
   }

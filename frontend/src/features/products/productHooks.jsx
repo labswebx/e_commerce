@@ -39,7 +39,7 @@ export const useProducts = () => {
     dispatch(fetchFavouriteProducts());
     dispatch(fetchMostOrderedProducts());
     dispatch(fetchSuggestedProducts());
-    dispatch(fetchReviews());
+    dispatch((id) => fetchReviews(id));
   }, [dispatch]);
 
   return {
@@ -64,8 +64,13 @@ export const useProductDetails = (id) => {
   );
 
   useEffect(() => {
-    if (id) dispatch(fetchProductDetails(id));
-    return () => dispatch(clearProductDetails());
+    if (id) {
+      dispatch(fetchProductDetails(id));
+    }
+
+    return () => {
+      dispatch(clearProductDetails());
+    };
   }, [dispatch, id]);
 
   return { productDetails, loading, error };
@@ -107,4 +112,18 @@ export const useProductError = () => {
   const clear = () => dispatch(clearError());
 
   return { error, clear };
+};
+
+// productHooks.js
+export const useProductReviews = (productId) => {
+  const dispatch = useDispatch();
+  const { reviews, loading, error } = useSelector((state) => state.products);
+
+  useEffect(() => {
+    if (productId) {
+      dispatch(fetchReviews({ id: productId }));
+    }
+  }, [dispatch, productId]);
+
+  return { reviews, loading, error };
 };

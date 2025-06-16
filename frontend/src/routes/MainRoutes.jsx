@@ -8,7 +8,7 @@ import OrderStatus from "../pages/cart/OrderStatus";
 import AllOrders from "../pages/cart/AllOrders";
 import SingleOrder from "../pages/cart/SingleOrder";
 import ProtectedRoute from "./ProtectedRoutes";
-import ProductDetails from "../pages/product/details/ProductDetails";
+// import ProductDetails from "../pages/product/details/ProductDetails";
 import ProductList from "../pages/product/list/ProductList";
 
 // Lazy load components
@@ -19,6 +19,9 @@ const Login = lazy(() => import("../pages/auth/Login"));
 const Register = lazy(() => import("../pages/auth/Register"));
 const ForgotPassword = lazy(() => import("../pages/auth/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
+const ProductDetails = lazy(() =>
+  import("../pages/product/details/ProductDetails")
+);
 
 const MainRoutes = () => {
   return (

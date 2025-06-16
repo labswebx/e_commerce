@@ -1,9 +1,12 @@
 import { useParams } from "react-router-dom";
+
 import { useProductDetails } from "../../../features/products/productHooks";
-import Loader from "../../../components/ui/Loader";
+
 import ErrorMessage from "../../../utils/ErrorMessage";
 import NoData from "../../../utils/NoData";
+
 import toastMessage from "../../../constants/toastMessage";
+
 import AddToCartButton from "../../../components/ui/AddToCartButton";
 import { ProductImageSection } from "./components/ProductImageSection";
 import DescriptionWithToggle from "./components/DescriptionWithToggle";
@@ -13,37 +16,19 @@ import ProductReviews from "./components/ProductReviews";
 
 const ProductDetails = () => {
   const { id } = useParams();
-  const { productDetails, error, loading } = useProductDetails(id);
+  const { productDetails, error } = useProductDetails(id);
 
-  if (loading) return <Loader />;
   if (error) return <ErrorMessage message={error} />;
-  if (!productDetails)
+  if (!productDetails) {
     return <NoData message={toastMessage.PRODUCT_LOAD.EMPTY} />;
+  }
 
-  const totalReviews = productDetails.reviews.length;
-
-  const ratingsBreakdown = [0, 0, 0, 0, 0];
-
-  let ratingSum = 0;
-
-  productDetails.reviews.forEach((review) => {
-    const rating = review.rating;
-    ratingSum += rating;
-    const index = 5 - rating;
-    ratingsBreakdown[index]++;
-  });
-
-  const averageRating = totalReviews > 0 ? ratingSum / totalReviews : 0;
-
-  const reviewsData = {
-    averageRating,
-    totalReviews,
-    ratingsBreakdown,
-  };
   const { name, description, price, finalPrice, discount, category } =
     productDetails;
+
   const discountPercent = ((price - finalPrice) / price) * 100;
   const formatted = discountPercent.toFixed(2) + "% OFF";
+
   return (
     <div className="p-4 mx-auto bg-white rounded-md shadow-md max-w-7xl">
       <div className="flex flex-col lg:flex-row lg:gap-8">
@@ -95,12 +80,12 @@ const ProductDetails = () => {
 
       {/* Reviews */}
       <div className="mt-6">
-        <ProductReviews reviewsData={reviewsData} />
+        <ProductReviews />
       </div>
 
       {/* Comment Section */}
       <div className="mt-6">
-        <CommentSection reviews={productDetails.reviews} />
+        <CommentSection id={id} />
       </div>
       {/* related product section soon */}
       <div>{/* <RelatedProducts relatedProducts={relatedProducts} /> */}</div>

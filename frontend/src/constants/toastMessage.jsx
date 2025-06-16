@@ -92,7 +92,7 @@ const toastMessage = {
   },
   PRODUCT_LOAD: {
     ERROR: "Failed to load product(s)",
-    EMPTY: "No products found",
+    EMPTY: "No product found",
   },
   REVIEW_SUBMIT: {
     SUCCESS: "Review submitted successfully",

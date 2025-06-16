@@ -1,5 +1,5 @@
 import React from "react";
-import { Truck, Store, ShieldCheck, Star, Heart } from "lucide-react";
+import { Truck, Store, ShieldCheck } from "lucide-react";
 
 const ProductInfoIcons = ({ product }) => {
   const deliveryEstimate = product.stock > 0 ? "1–2 days" : "5–7 days";

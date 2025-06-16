@@ -11,7 +11,8 @@ import productsApi from "./productsApi";
 // ALl products
 export const fetchProducts = createAsyncThunkHandler(
   PRODUCT_ACTION_TYPES.FETCH_PRODUCTS,
-  async () => await productsApi.getAllProducts()
+  async ({ page = 1, limit = 5 }) =>
+    await productsApi.getAllProducts(page, limit)
 );
 
 // fetch trending products
@@ -59,7 +60,7 @@ export const createReview = createAsyncThunkHandler(
 //  fetch review
 export const fetchReviews = createAsyncThunkHandler(
   PRODUCT_ACTION_TYPES.FETCH_REVIEWS,
-  async () => productsApi.getReviews()
+  async (id) => productsApi.getReviews(id)
 );
 
 const initialState = {
@@ -86,7 +87,7 @@ const initialState = {
   reviews: [],
 
   // general
-  loading: false,
+  loading: true,
   error: null,
 };
 
@@ -113,10 +114,16 @@ const productSlice = createSlice({
       // fetchProducts
       .addCase(fetchProducts.pending, setLoading)
       .addCase(fetchProducts.fulfilled, (state, action) => {
+        const isPaginated = action.meta.arg.page > 1;
         state.loading = false;
         state.products = action.payload.products || [];
         state.resultsPerPage = action.payload.resultsPerPage || 0;
         state.productsCount = action.payload.productsCount || 0;
+        if (isPaginated) {
+          state.products = [...state.products, ...action.payload.products];
+        } else {
+          state.products = action.payload.products;
+        }
       })
       .addCase(fetchProducts.rejected, setError)
 
@@ -159,6 +166,7 @@ const productSlice = createSlice({
       // fetchProductDetails
       .addCase(fetchProductDetails.pending, setLoading)
       .addCase(fetchProductDetails.fulfilled, (state, action) => {
+        console.log("🟢 Product Details Payload:", action.payload);
         state.loading = false;
         state.productDetails = action.payload.product || null;
       })

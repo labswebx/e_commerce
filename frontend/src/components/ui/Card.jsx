@@ -8,7 +8,7 @@ import AddToCartButton from "./AddToCartButton";
 import { Link } from "react-router-dom";
 
 export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
-  const imageUrl = data.images?.[0]?.public_id || "/logo-icon.jpg";
+  const imageUrl = data.images?.[0]?.url || "/logo-icon.jpg";
 
   const getImageClasses = () => {
     switch (variant) {
@@ -98,6 +98,7 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
         <img
           src={imageUrl}
           alt={data.name}
+          loading="lazy"
           className={`rounded-md object-cover ${getImageClasses()}`}
         />
       </Link>

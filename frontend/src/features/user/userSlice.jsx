@@ -49,7 +49,11 @@ export const updateProfile = createAsyncThunkHandler(
 
 export const changePassword = createAsyncThunkHandler(
   USER_ACTION_TYPES.CHANGE_PASSWORD,
-  async (data) => userApi.changePassword(data)
+  async (data) => {
+    const response = await userApi.changePassword(data);
+    saveUserData(response);
+    return response;
+  }
 );
 
 export const forgotPassword = createAsyncThunkHandler(

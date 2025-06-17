@@ -1,6 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import Icon from "./Icon";
+import theme from "../../theme";
 
 const Tabs = ({
   tabs,
@@ -62,10 +63,10 @@ const Tabs = ({
                         : minimal
                         ? isSelected
                           ? "white"
-                          : "#d4d4d8" // zinc-300
+                          : theme.COLORS.offWhite // zinc-300
                         : isSelected
                         ? "white"
-                        : "#a1a1aa" // zinc-400
+                        : theme.COLORS.gray[700] // zinc-400
                     }
                     className="opacity-50"
                   />

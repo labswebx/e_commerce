@@ -55,3 +55,23 @@
 # routes setup
 
 Faceted search,
+
+## 📄 Pages Checklist
+
+- [ ] About
+- [ ] Contact
+- [ ] FAQ
+- [ ] Exchange & Return Policy
+- [ ] Shipping & Delivery Policy
+- [ ] Order Tracking
+- [ ] Cancellation Policy
+- [ ] Terms & Conditions
+- [ ] Privacy Policy
+- [ ] Warranty & Repairs
+- [ ] Payment Methods
+
+---
+
+### Footer
+
+Only include pages in the footer to which we already have working routes/links.

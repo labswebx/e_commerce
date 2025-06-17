@@ -1,60 +1,78 @@
-# Basic setup
+# 🛠️ Project TODO
 
-# redux setup
+## 1. Basic Setup
 
-- [ ] cart
-- [x] user
-- [x] product
-- [x] order
-- [x] coupon
-- [x] category
-- [x] subcategory
-- [ ]
+---
 
-# Api integration and setup
+## 2. Redux Setup
 
-# tailwindcss and ui config
+- [ ] Cart
+- [x] User
+- [x] Product
+- [x] Order
+- [x] Coupon
+- [x] Category
+- [x] Subcategory
 
-# Component
+---
 
-- [x] Accordion
-- [x] Avatar
-- [x] Badge
-- [x] Breadcrumb
-- [x] Button
-- [x] Card
-- [ ] Carousel
-- [x] Divider
-- [x] GridWrapper
-- [x] Icon
-- [x] InputField
-- [x] Loader
-- [x] Logo
-- [x] Modal
-- [x] Pagination
-- [x] ProgressBar
-- [x] Rating
-- [x] SelectBox
-- [x] Tabs
-- [x] Timeline
-- [x] Toast
+## 3. API Integration & Setup
 
-# Pages
+---
+
+## 4. TailwindCSS & UI Configuration
+
+---
+
+## 5. Components
+
+| Component      | Status |
+| -------------- | :----: |
+| Accordion      |   ✅   |
+| Avatar         |   ✅   |
+| Badge          |   ✅   |
+| Breadcrumb     |   ✅   |
+| Button         |   ✅   |
+| Card           |   ✅   |
+| Carousel       |   ⬜   |
+| Divider        |   ✅   |
+| GridWrapper    |   ✅   |
+| Icon           |   ✅   |
+| InputField     |   ✅   |
+| Loader         |   ✅   |
+| Logo           |   ✅   |
+| Modal          |   ✅   |
+| Pagination     |   ✅   |
+| ProgressBar    |   ✅   |
+| Rating         |   ✅   |
+| SelectBox      |   ✅   |
+| Tabs           |   ✅   |
+| Timeline       |   ✅   |
+| Toast          |   ✅   |
+
+---
+
+## 6. Pages
 
 - [x] Header
 - [ ] Home
 - [x] Footer
+- [ ] Product Detail Page
+- [ ] Shopping Cart Page
+- [ ] Order Page with Details
+- [ ] FAQ Section
 
-- [ ] Product detail page
-- [ ] shopping cart page
-- [ ] Order page with details
-- [ ] FAQ section
+---
 
-# custom hooks
+## 7. Custom Hooks
 
-# routes setup
+---
 
-Faceted search,
+## 8. Routes Setup
+
+- Faceted search
+
+---
 
 ## 📄 Pages Checklist
 
@@ -72,6 +90,7 @@ Faceted search,
 
 ---
 
-### Footer
+### 📌 Footer
 
-Only include pages in the footer to which we already have working routes/links.
+> Only include pages in the footer that have working routes/links.
+

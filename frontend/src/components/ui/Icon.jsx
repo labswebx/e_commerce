@@ -19,11 +19,11 @@ const Icon = ({
         width: dimension,
         height: dimension,
         backgroundColor: fill ? bgColor : "transparent",
-        borderRadius: borderRadius || 8,
+        borderRadius: fill ? borderRadius : 0,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: 4,
+        padding: fill ? 4 : 0,
       }}
       onClick={onClick}
       className={`${className}  cursor-pointer `}

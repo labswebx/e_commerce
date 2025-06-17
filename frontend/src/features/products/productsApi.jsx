@@ -10,6 +10,7 @@ const productsApi = {
         `${PRODUCTS_API_ENDPOINTS.GET_PRODUCTS}?page=${page}&limit=${limit}`
       );
       return res.data;
+      console.log("responsoe data", res.data);
     } catch (err) {
       handleError(err);
     }

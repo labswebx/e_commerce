@@ -14,7 +14,6 @@ const ProductGrid = ({ products = [], loading, title = "" }) => {
   const [visibleCount, setVisibleCount] = useState(getInitialCount());
   const observerRef = useRef(null);
 
-  // Auto-load more products as user scrolls
   const lastProductRef = useCallback(
     (node) => {
       if (loading || !node) return;
@@ -32,8 +31,7 @@ const ProductGrid = ({ products = [], loading, title = "" }) => {
     [loading, visibleCount, products.length]
   );
 
-  const visibleProducts = products.slice(0, 8);
-
+  console.log(products);
   return (
     <div className="space-y-4">
       {/* Grid layout */}
@@ -50,8 +48,8 @@ const ProductGrid = ({ products = [], loading, title = "" }) => {
                 <div className="w-full h-8 mt-2 bg-gray-300 rounded" />
               </div>
             ))
-          : visibleProducts.map((product, index) => {
-              const isLast = index === visibleProducts.length - 1;
+          : products.map((product, index) => {
+              const isLast = index === products.length - 1;
               return (
                 <div
                   key={product._id}
@@ -63,13 +61,6 @@ const ProductGrid = ({ products = [], loading, title = "" }) => {
               );
             })}
       </div>
-
-      {/* Loader when more products are being fetched */}
-      {/* {!loading && visibleCount < products.length && (
-        <div className="flex justify-center mt-4">
-          <Loader small />
-        </div>
-      )} */}
     </div>
   );
 };

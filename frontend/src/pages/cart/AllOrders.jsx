@@ -13,9 +13,11 @@ import {
   formatPrice,
   getShortOrderId,
 } from "../../utils/formatter";
+import Button from "../../components/ui/Button";
+import { useNavigate } from "react-router-dom";
 const AllOrders = () => {
   const { myOrders, getMyOrders, loading, error } = useOrders();
-
+  const navigate = useNavigate();
   useEffect(() => {
     getMyOrders();
   }, []);
@@ -35,53 +37,26 @@ const AllOrders = () => {
         {myOrders.map((order) => (
           <div
             key={order._id}
-            className="p-6 transition-shadow bg-white rounded-lg shadow-md hover:shadow-lg"
+            className="p-4 transition-shadow bg-gray-100 rounded-lg shadow-md hover:shadow-lg"
           >
-            <div className="flex flex-col md:flex-row md:justify-between md:items-center">
-              <div className="mb-4 md:mb-0">
-                <h3 className="text-lg font-semibold text-gray-800">
-                  Order #{getShortOrderId(order._id)}
+            <div className="flex flex-col gap-4 md:flex-row md:justify-between md:items-start">
+              {/* Left side: Items and info */}
+              <div className="flex-1">
+                <h3 className="mb-1 text-sm text-gray-600 lg:font-medium lg:text-base">
+                  {capitalizeFirstLetter(order.orderStatus)} •{" "}
+                  {formatDate(order.createdAt)}
                 </h3>
-                <p className="text-sm text-gray-500">
-                  Placed on {formatDate(order.createdAt)}
-                </p>
-              </div>
 
-              <div className="flex flex-col items-start md:items-end">
-                <span
-                  className={`px-3 py-1 text-sm rounded-full ${getOrderStatusClass(
-                    order.orderStatus
-                  )}`}
-                >
-                  {capitalizeFirstLetter(order.orderStatus)}
-                </span>
-                <p className="mt-2 text-xl font-bold text-gray-900">
-                  {formatPrice(order.totalPrice)}
-                </p>
-              </div>
-            </div>
-
-            <div className="pt-4 mt-6 border-t border-gray-200">
-              <h4 className="font-medium text-gray-700">
-                {order.orderItems.length}{" "}
-                {order.orderItems.length > 1 ? "Items" : "Item"}
-              </h4>
-
-              <div className="grid grid-cols-2 gap-4 mt-3 sm:grid-cols-3 md:grid-cols-4">
-                {order.orderItems.slice(0, 4).map((item) => {
-                  return (
-                    <div key={item._id} className="flex items-center">
+                <div className="space-y-5 ">
+                  {order.orderItems.slice(0, 2).map((item) => (
+                    <div key={item._id} className="flex items-center ">
                       <img
-                        loading="lazy"
-                        src={
-                          item.product?.images?.[0]?.public_id ||
-                          "/fallback.jpg"
-                        }
+                        src={item.product?.images?.[0]?.url || "/fallback.jpg"}
                         alt={item.name}
-                        className="object-cover w-16 h-16 rounded"
+                        className="object-cover w-12 h-12 rounded"
                       />
                       <div className="ml-3">
-                        <p className="text-sm font-medium text-gray-800 line-clamp-1">
+                        <p className="text-sm text-gray-800 line-clamp-1">
                           {item.name}
                         </p>
                         <p className="text-xs text-gray-500">
@@ -89,20 +64,35 @@ const AllOrders = () => {
                         </p>
                       </div>
                     </div>
-                  );
-                })}
-                {order.orderItems.length > 4 && (
-                  <div className="flex items-center justify-center bg-gray-100 rounded">
-                    <span className="text-sm font-medium text-gray-500">
-                      +{order.orderItems.length - 4} more
-                    </span>
-                  </div>
-                )}
-              </div>
-            </div>
+                  ))}
 
-            <div className="flex justify-end mt-6">
-              <NavItem to={`/order/${order._id}`} label="View Order Details" />
+                  {order.orderItems.length > 2 && (
+                    <div className="flex items-center pl-2 text-sm font-medium text-gray-500">
+                      +{order.orderItems.length - 2} more
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* Right side: Actions */}
+              <div className="flex flex-col items-stretch w-full gap-2 md:w-48">
+                {order.orderStatus.toLowerCase() === "dispatched" && (
+                  <button className="px-4 py-2 text-sm text-white bg-green-600 rounded hover:bg-green-700">
+                    Track order
+                  </button>
+                )}
+                <Button
+                  // to={`/order/${order._id}`}
+                  variant="outline"
+                  onClick={() => navigate(`/order/${order._id}`)}
+                  label="View order details"
+                  // className="text-gray-700 border border-black rounded "
+                />
+                <Button
+                  // className="text-sm text-blue-600 hover:underline"
+                  label="Track Order"
+                ></Button>
+              </div>
             </div>
           </div>
         ))}

@@ -115,6 +115,7 @@ const productSlice = createSlice({
       .addCase(fetchProducts.pending, setLoading)
       .addCase(fetchProducts.fulfilled, (state, action) => {
         const isPaginated = action.meta.arg.page > 1;
+        console.log(isPaginated, state.product);
         state.loading = false;
         state.products = action.payload.products || [];
         state.resultsPerPage = action.payload.resultsPerPage || 0;

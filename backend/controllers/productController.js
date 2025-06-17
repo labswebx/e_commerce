@@ -7,12 +7,9 @@ const ApiFeatures = require("../utils/apiFeatures");
 const cloudinary = require("cloudinary");
 
 // create product -- Admin
-// Create Product -- Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   let images = [];
   const imagesLink = [];
-
-  // ✅ CASE 1: Multi-part form-data (req.files.images)
   if (req.files && req.files.images) {
     const files = Array.isArray(req.files.images)
       ? req.files.images
@@ -29,10 +26,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
         url: result.secure_url,
       });
     }
-  }
-
-  // ✅ CASE 2: Base64 or URL via JSON (req.body.images)
-  else if (req.body.images) {
+  } else if (req.body.images) {
     if (typeof req.body.images === "string") {
       images = [req.body.images];
     } else if (Array.isArray(req.body.images)) {

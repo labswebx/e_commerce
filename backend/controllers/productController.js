@@ -7,40 +7,45 @@ const ApiFeatures = require("../utils/apiFeatures");
 const cloudinary = require("cloudinary");
 const CONSTANTS = require("../config/constants");
 
-// create product -- Admin
 // Create Product -- Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   let images = [];
-  const imagesLink = [];
-  for (let i = 0; i < images.length; ++i) {
-    const result = await cloudinary.v2.uploader.upload_large(images[i], {
-      folder: "products",
-    });
 
-        imagesLink.push({
-          public_id: result.public_id,
-          url: result.secure_url,
-        });
-      }
+  if (typeof req.body.images === "string") {
+    images.push(req.body.images);
+  } else if (Array.isArray(req.body.images)) {
+    images = req.body.images;
+  }
 
-      // Push pre-uploaded object
-      else if (image.public_id && image.url) {
-        imagesLink.push(image);
-      } else {
-        return next(
-          new ErrorHandler(`Invalid image format at index ${i}`, 400)
-        );
-      }
-    }
-  } else {
+  if (!images || images.length === 0) {
     return next(new ErrorHandler("Product images are required.", 400));
   }
 
-  // Attach images and user
+  const imagesLink = [];
+
+  for (let i = 0; i < images.length; ++i) {
+    const image = images[i];
+
+    if (typeof image === "string") {
+      const result = await cloudinary.v2.uploader.upload_large(image, {
+        folder: "products",
+      });
+
+      imagesLink.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    } else if (image.public_id && image.url) {
+      // Already uploaded object
+      imagesLink.push(image);
+    } else {
+      return next(new ErrorHandler(`Invalid image format at index ${i}`, 400));
+    }
+  }
+
   req.body.images = imagesLink;
   req.body.user = req.user?.id;
 
-  // Save Product
   const product = await Product.create(req.body);
 
   res.status(200).json({
@@ -48,6 +53,7 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     product,
   });
 });
+
 // get all products
 exports.getAllProducts = catchAsyncErrors(async (req, res) => {
   const resultsPerPage = 5;
@@ -175,6 +181,7 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     // Deleting existing images from cloudinary & adding new images (if any)
     if (req.body.images && req.body.images.length > 0) {
       let images = [];
+
       if (typeof req.body.images === "string") {
         images.push(req.body.images);
       } else if (Array.isArray(req.body.images)) {
@@ -183,26 +190,28 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
         return next(new ErrorHandler("Invalid images format", 400));
       }
 
-      // delete images from Cloudinary
-      for (let i = 0; i < product.images.length; ++i) {
-        if (product.images[i].public_id) {
-          await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+      // Delete old images
+      for (let img of product.images) {
+        if (img.public_id) {
+          await cloudinary.v2.uploader.destroy(img.public_id);
         }
       }
 
-      // Uploading new images
       const imagesLink = [];
-      for (let i = 0; i < images.length; ++i) {
-        const result = await cloudinary.v2.uploader.upload_large(images[i], {
-          folder: "products",
-        });
 
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+
+        if (typeof image === "string") {
+          const result = await cloudinary.v2.uploader.upload_large(image, {
+            folder: "products",
+          });
           imagesLink.push({
             public_id: result.public_id,
             url: result.secure_url,
           });
-        } else if (images[i] && images[i].public_id && images[i].url) {
-          imagesLink.push(images[i]);
+        } else if (image.public_id && image.url) {
+          imagesLink.push(image);
         } else {
           return next(
             new ErrorHandler(`Invalid image format at index ${i}`, 400)
@@ -214,17 +223,6 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     } else {
       req.body.images = product.images;
     }
-
-    product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, {
-      new: true,
-      runValidators: true,
-      useFindAndModify: false,
-    });
-
-    res.status(200).json({
-      success: true,
-      product,
-    });
   } catch (error) {
     return next(
       new ErrorHandler(error.message || "Error updating product", 500)

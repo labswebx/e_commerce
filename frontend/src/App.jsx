@@ -1,15 +1,24 @@
-import Header from "./pages/header/Header";
 import { BrowserRouter as Router } from "react-router-dom";
-import Footer from "./pages/Footer/Footer";
-import BannerPage from "./pages/Landing/BannerPage";
+
+import { Toaster } from "react-hot-toast";
+import MainRoutes from "./routes/MainRoutes";
+import "slick-carousel/slick/slick.css";
+import "slick-carousel/slick/slick-theme.css";
 
 const App = () => {
   return (
     <div>
       <Router>
-        <Header />
-        <BannerPage />
-        <Footer />
+        <Toaster
+          position="bottom-right"
+          reverseOrder={false}
+          toastOptions={{
+            style: {
+              fontSize: "14px",
+            },
+          }}
+        />
+        <MainRoutes />
       </Router>
     </div>
   );

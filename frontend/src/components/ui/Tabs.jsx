@@ -1,7 +1,6 @@
 import React from "react";
 import classNames from "classnames";
 import Icon from "./Icon";
-import theme from "../../theme";
 
 const Tabs = ({
   tabs,

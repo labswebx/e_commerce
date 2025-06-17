@@ -1,96 +1,57 @@
-# 🛠️ Project TODO
+# Basic setup
 
-## 1. Basic Setup
+# redux setup
 
----
+- [ ] cart
+- [x] user
+- [x] product
+- [x] order
+- [x] coupon
+- [x] category
+- [x] subcategory
+- [ ]
 
-## 2. Redux Setup
+# Api integration and setup
 
-- [ ] Cart
-- [x] User
-- [x] Product
-- [x] Order
-- [x] Coupon
-- [x] Category
-- [x] Subcategory
+# tailwindcss and ui config
 
----
+# Component
 
-## 3. API Integration & Setup
+- [x] Accordion
+- [x] Avatar
+- [x] Badge
+- [x] Breadcrumb
+- [x] Button
+- [x] Card
+- [ ] Carousel
+- [x] Divider
+- [x] GridWrapper
+- [x] Icon
+- [x] InputField
+- [x] Loader
+- [x] Logo
+- [x] Modal
+- [x] Pagination
+- [x] ProgressBar
+- [x] Rating
+- [x] SelectBox
+- [x] Tabs
+- [x] Timeline
+- [x] Toast
 
----
-
-## 4. TailwindCSS & UI Configuration
-
----
-
-## 5. Components
-
-| Component      | Status |
-| -------------- | :----: |
-| Accordion      |   ✅   |
-| Avatar         |   ✅   |
-| Badge          |   ✅   |
-| Breadcrumb     |   ✅   |
-| Button         |   ✅   |
-| Card           |   ✅   |
-| Carousel       |   ⬜   |
-| Divider        |   ✅   |
-| GridWrapper    |   ✅   |
-| Icon           |   ✅   |
-| InputField     |   ✅   |
-| Loader         |   ✅   |
-| Logo           |   ✅   |
-| Modal          |   ✅   |
-| Pagination     |   ✅   |
-| ProgressBar    |   ✅   |
-| Rating         |   ✅   |
-| SelectBox      |   ✅   |
-| Tabs           |   ✅   |
-| Timeline       |   ✅   |
-| Toast          |   ✅   |
-
----
-
-## 6. Pages
+# Pages
 
 - [x] Header
 - [ ] Home
 - [x] Footer
-- [ ] Product Detail Page
-- [ ] Shopping Cart Page
-- [ ] Order Page with Details
-- [ ] FAQ Section
 
----
+- [ ] Product detail page
+- [ ] shopping cart page
+- [ ] Order page with details
+- [ ] FAQ section
 
-## 7. Custom Hooks
+# custom hooks
 
----
+# routes setup
 
-## 8. Routes Setup
-
-- Faceted search
-
----
-
-## 📄 Pages Checklist
-
-- [ ] About
-- [ ] Contact
-- [ ] FAQ
-- [ ] Exchange & Return Policy
-- [ ] Shipping & Delivery Policy
-- [ ] Order Tracking
-- [ ] Cancellation Policy
-- [ ] Terms & Conditions
-- [ ] Privacy Policy
-- [ ] Warranty & Repairs
-- [ ] Payment Methods
-
----
-
-### 📌 Footer
-
-> Only include pages in the footer that have working routes/links.
-
+Faceted search,

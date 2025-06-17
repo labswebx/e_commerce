@@ -11,9 +11,8 @@ export default function Footer() {
             <Logo text="Cyber" image="/logo-icon.jpg" size="lg" />
           </div>
           <p className="footer-description">
-            Cyber is a leading online electronics store based in Delhi, offering
-            the latest gadgets, devices, and accessories to enhance your digital
-            lifestyle.
+            We are a residential interior design firm located in Portland. Our
+            boutique-studio offers more than
           </p>
           <div className="footer-icons">
             <VenetianMask className="w-5 h-5 transition hover:text-white" />
@@ -40,6 +39,7 @@ export default function Footer() {
         <div className="footer-column">
           <h3 className="footer-title">Assistance to the buyer</h3>
           <ul className="footer-list">
+            <li>Find an order</li>
             <li>Terms of delivery</li>
             <li>Exchange and return of goods</li>
             <li>Guarantee</li>

@@ -1,0 +1,12 @@
+@import url("https://fonts.cdnfonts.com/css/sf-pro-display");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /* Base font styles */
+  input::placeholder, button {
+    font-family: "SF Pro Display", sans-serif;
+  }
+}

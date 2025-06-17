@@ -1,0 +1,26 @@
+@layer components {
+  /* === Modal Styles === */
+  .modal-overlay {
+    @apply fixed inset-0 z-50 flex items-center justify-center bg-black/50;
+  }
+
+  .modal-container {
+    @apply relative w-full max-w-lg mx-4 bg-white rounded-lg shadow-lg animate-fade-in;
+  }
+
+  .modal-header {
+    @apply p-4 text-lg font-semibold border-b;
+  }
+
+  .modal-body {
+    @apply p-4 text-sm text-gray-700;
+  }
+
+  .modal-footer {
+    @apply flex justify-end gap-2 p-4 border-t;
+  }
+
+  .modal-close-btn {
+    @apply absolute text-xl text-gray-500 cursor-pointer top-3 right-3 hover:text-gray-700;
+  }
+}

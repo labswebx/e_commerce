@@ -1,0 +1,67 @@
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 font-medium transition duration-200 rounded-md;
+    font-family: "SF Pro Display", sans-serif;
+  }
+
+  /* Sizes */
+  .btn-sm {
+    @apply px-4 py-2 text-sm;
+  }
+
+  .btn-md {
+    @apply px-6 py-3 text-base;
+  }
+
+  .btn-lg {
+    @apply px-8 py-4 text-lg;
+  }
+
+  /* Filled */
+  .btn-filled {
+    @apply text-white bg-black border border-transparent;
+  }
+
+  .btn-filled-hover:hover {
+    @apply opacity-90;
+  }
+
+  .btn-filled-disabled {
+    @apply text-white bg-black cursor-not-allowed opacity-20;
+  }
+
+  /* Outline */
+  .btn-outline {
+    @apply text-black bg-transparent border border-black;
+  }
+
+  .btn-outline-hover:hover {
+    @apply text-white bg-black;
+  }
+
+  .btn-outline-disabled {
+    @apply text-black bg-white border border-black cursor-not-allowed opacity-40;
+  }
+
+  /* Ghost */
+  .btn-ghost {
+    @apply text-black bg-transparent border border-transparent;
+  }
+
+  .btn-ghost-hover:hover {
+    @apply text-white bg-gray-550;
+  }
+
+  .btn-ghost-disabled {
+    @apply text-black cursor-not-allowed opacity-30;
+  }
+
+  /* Extras */
+  .btn-rounded {
+    @apply rounded-full;
+  }
+
+  .btn-full {
+    @apply w-full;
+  }
+}

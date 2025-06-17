@@ -1,0 +1,25 @@
+@layer components {
+  .breadcrumb-nav {
+    @apply text-sm text-gray-600;
+  }
+
+  .breadcrumb-list {
+    @apply flex flex-wrap items-center gap-1;
+  }
+
+  .breadcrumb-item {
+    @apply flex items-center gap-1;
+  }
+
+  .breadcrumb-link {
+    @apply transition rounded hover:underline hover:text-black focus:outline-none focus:ring-2 focus:ring-gray-400;
+  }
+
+  .breadcrumb-current {
+    @apply font-semibold text-gray-800;
+  }
+
+  .breadcrumb-separator {
+    @apply w-4 h-4 text-gray-400;
+  }
+}

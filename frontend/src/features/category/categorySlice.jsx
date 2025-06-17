@@ -20,6 +20,7 @@ const categorySlice = createSlice({
   name: "category",
   initialState: {
     categories: [],
+    categoryCount: 0,
     currentCategory: null,
     loading: false,
     error: null,
@@ -39,7 +40,9 @@ const categorySlice = createSlice({
       .addCase(fetchCategories.pending, setLoading)
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.loading = false;
-        state.categories = action.payload;
+        state.categories = action.payload.categories;
+        state.categoryCount = action.payload.categoryCount;
+        state.success = action.payload.success;
       })
       .addCase(fetchCategories.rejected, setError)
       // featch categroy details

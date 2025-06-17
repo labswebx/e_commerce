@@ -92,6 +92,8 @@ const userSlice = createSlice({
       state.isAuthenticated = false;
       localStorage.removeItem("user");
       localStorage.removeItem("token");
+      localStorage.removeItem("cart");
+      localStorage.removeItem("cartUserId");
     },
     resetUser: fullUserReset,
   },

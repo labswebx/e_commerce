@@ -1,5 +1,36 @@
-@import url("https://fonts.cdnfonts.com/css/sf-pro-display");
+/* Base styles */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
+@import "./styles/base.css";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* Utilities */
+@import "./styles/utilities/_animations.css";
+@import "./styles/utilities/_scrollbars.css";
+
+/* components */
+@import "./styles/components/_accordion.css";
+@import "./styles/components/_avatar.css";
+@import "./styles/components/_badge.css";
+@import "./styles/components/_breadcrumb.css";
+@import "./styles/components/_buttons.css";
+@import "./styles/components/_card.css";
+@import "./styles/components/_divider.css";
+@import "./styles/components/_form.css";
+@import "./styles/components/_grid.css";
+@import "./styles/components/_inputs.css";
+@import "./styles/components/_loader.css";
+@import "./styles/components/_logo.css";
+@import "./styles/components/_modal.css";
+@import "./styles/components/_pagination.css";
+@import "./styles/components/_progressbar.css";
+@import "./styles/components/_rating.css";
+@import "./styles/components/_selectbox.css";
+@import "./styles/components/_tab.css";
+@import "./styles/components/_timeline.css";
+@import "./styles/components/_toast.css";
+@import "./styles/components/_nav-tab.css";
+@import "./styles/pages/_footer.css";
+@import "./styles/pages/_header.css";
+/* @import "./styles/components"; */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+}

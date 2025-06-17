@@ -1,23 +1,24 @@
 const Category = require("../models/categoryModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const cloudinary = require('cloudinary');
-const CONSTANTS = require("../config/constants");
+const cloudinary = require('cloudinary')
 
-// create category -- Admin
+// Create Category -- Admin
 exports.createCategory = catchAsyncErrors(async (req, res, next) => {
-  req.body.user = req.user.id;
+  // req.body.user = req.user.id;
 
   let image = {};
   const result = await cloudinary.v2.uploader.upload_large(req.body.image, {
-    folder: CONSTANTS.CLOUDINARY_FOLDERS.CATEGORIES,
+    folder: "categories",
   });
 
-  image.public_id = result.public_id;
-  image.url = result.secure_url;
-  req.body.image = image;
+  req.body.image = {
+    public_id: result.public_id,
+    url: result.secure_url,
+  };
 
   const category = await Category.create(req.body);
+
   res.status(200).json({
     success: true,
     category,
@@ -27,7 +28,7 @@ exports.createCategory = catchAsyncErrors(async (req, res, next) => {
 // get all categories
 exports.getAllCategories = catchAsyncErrors(async (req, res) => {
   const categoryCount = await Category.countDocuments();
-  const categories = await Category.find().sort({"order": 1});
+  const categories = await Category.find().sort({ order: 1 });
 
   return res.status(200).json({
     success: true,

@@ -1,0 +1,39 @@
+@layer components{
+    /* Avatar */
+  .avatar {
+    @apply relative inline-block;
+  }
+  .avatar-img {
+    @apply object-cover;
+  }
+  .avatar-rounded {
+    @apply rounded-full;
+  }
+  .avatar-sm {
+    @apply w-8 h-8;
+  }
+  .avatar-md {
+    @apply w-10 h-10;
+  }
+  .avatar-lg {
+    @apply w-12 h-12;
+  }
+  .avatar-xl {
+    @apply w-16 h-16;
+  }
+  .avatar-status {
+    @apply absolute bottom-0 right-0 block w-2.5 h-2.5 rounded-full ring-2 ring-white;
+  }
+  .status-online {
+    @apply bg-green-500;
+  }
+  .status-offline {
+    @apply bg-gray-500;
+  }
+  .status-busy {
+    @apply bg-red-500;
+  }
+  .status-away {
+    @apply bg-yellow-500;
+  }
+}

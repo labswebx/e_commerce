@@ -1,0 +1,42 @@
+@layer components {
+  /* === Logo Component Styles === */
+  .logo-base {
+    @apply flex items-center gap-2 select-none;
+  }
+
+  .logo-text {
+    @apply font-semibold;
+  }
+
+  .logo-size-sm {
+    @apply h-6 text-sm;
+  }
+
+  .logo-size-md {
+    @apply h-10 text-base;
+  }
+
+  .logo-size-lg {
+    @apply h-16 text-lg;
+  }
+
+  .logo-image {
+    @apply object-contain;
+  }
+
+  .logo-row {
+    @apply flex-row;
+  }
+
+  .logo-col {
+    @apply flex-col;
+  }
+
+  .logo-text-order-first {
+    @apply order-first;
+  }
+
+  .logo-text-order-last {
+    @apply order-last;
+  }
+}

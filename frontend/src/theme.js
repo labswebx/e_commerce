@@ -4,23 +4,22 @@ const COLORS = {
   black: "#000000",
 
   gray: {
-    100: "#E7E7E7",
-    200: "#E4E4E4",
-    300: "#D9D9D9",
-    400: "#D4D4D4",
-    450: "#D3D3D3",
-    500: "#CECECE",
-    550: "#CFCFCF",
-    600: "#AEAEAE",
-    650: "#A7A7A7",
-    700: "#A4A4A4",
-    750: "#9F9F9F",
-    800: "#989898",
-    850: "#979797",
-    900: "#929292",
-    950: "#909090",
+    100: "#F2F2F2", // Very light
+    200: "#E0E0E0", // Light background
+    300: "#C6C6C6", // Card borders
+    400: "#AFAFAF", // Placeholder
+    450: "#9C9C9C", // Secondary text
+    500: "#8A8A8A", // Muted text
+    550: "#787878", // Tertiary emphasis
+    600: "#666666", // Body text
+    650: "#555555", // Active text
+    700: "#444444", // Strong headings
+    750: "#333333", // UI dark border
+    800: "#222222", // Strong background
+    850: "#1A1A1A", // Overlay / drawer
+    900: "#121212", // Modal / dark mode bg
+    950: "#0A0A0A", // True black-like
   },
-
   offWhite: "#FAFAFA",
   lightGray: "#F6F6F6",
   softGray: "#F5F5F5",
@@ -42,6 +41,7 @@ const COLORS = {
   darkIndigo: "#17183B",
 
   softOrange: "#FFB547",
+
   orange: "#F9A000",
   brightOrange: "#FF5E00",
 
@@ -158,12 +158,14 @@ const TYPOGRAPHY = {
     display: "48px",
   },
   fontWeight: {
-    light: 300,
-    regular: 400,
-    medium: 500,
-    semiBold: 600,
-    bold: 700,
-    extraBold: 800,
+    thin: "100",
+    extralight: "200",
+    light: "300",
+    regular: "400",
+    medium: "500",
+    semiBold: "600",
+    bold: "700",
+    extraBold: "800",
   },
   lineHeight: {
     tight: "1.2",
@@ -178,9 +180,10 @@ const TYPOGRAPHY = {
   },
 };
 
-const ICON_SIZE = {
+export const ICON_SIZE = {
   xs: 16,
   sm: 24,
+  sd: 28,
   md: 32,
   lg: 40,
   xl: 48,
@@ -221,3 +224,97 @@ const theme = {
 };
 
 export default theme;
+
+export const BUTTON_THEME = {
+  sizes: {
+    sm: "text-sm py-2 px-4",
+    md: "text-base py-3 px-6",
+    lg: "text-lg py-4 px-8",
+  },
+  variants: {
+    filled: {
+      base: {
+        styles: "bg-black text-white border border-transparent",
+        iconColor: "#FFFFFF",
+      },
+      hover: {
+        styles: "hover:opacity-90",
+        iconColor: "#FFFFFF", // Same as base or different if needed
+      },
+      disabled: {
+        styles: "bg-black opacity-20 text-white cursor-not-allowed",
+        iconColor: "#FFFFFF80", // 50% opacity
+      },
+    },
+    outline: {
+      base: {
+        styles: "bg-transparent text-black border border-black",
+        iconColor: "#000000",
+      },
+      hover: {
+        styles: "hover:bg-black hover:text-white",
+        iconColor: "#FFFFFF", // Changes on hover
+      },
+      disabled: {
+        styles:
+          "bg-white opacity-40 text-black border border-black cursor-not-allowed",
+        iconColor: "#00000066", // 40% opacity
+      },
+    },
+    ghost: {
+      base: {
+        styles: "bg-transparent text-black border border-transparent",
+        iconColor: "#0f0f0f",
+      },
+      hover: {
+        styles: "hover:bg-black hover:text-white",
+        iconColor: "#FFFFFF",
+      },
+      disabled: {
+        styles: "opacity-30 text-black cursor-not-allowed",
+        iconColor: "#0f0f0f4D",
+      },
+    },
+  },
+};
+
+export const INPUT_THEME = {
+  base: {
+    borderColor: COLORS.gray[750],
+    borderWidth: "0.5px",
+    borderStyle: "solid",
+    borderRadius: "7px",
+    backgroundColor: COLORS.white,
+    outline: "none",
+    fontSize: "14px",
+    lineHeight: "20px",
+    color: COLORS.charcoal,
+    fontFamily: "SF Pro Display",
+  },
+  label: {
+    fontFamily: "SF Pro Display",
+    fontSize: "14px",
+    lineHeight: "16px",
+    fontWeight: 500,
+    color: COLORS.gray[750],
+  },
+  button: {
+    backgroundColor: COLORS.black,
+    color: COLORS.white,
+    paddingX: "24px",
+    paddingY: "10px",
+    borderRadius: "6px",
+    fontWeight: 500,
+    fontFamily: "SF Pro Display",
+  },
+};
+
+export const TOAST_THEME = {
+  borderRadius: "8px",
+  padding: "8px 10px",
+  fontWeight: 500,
+  minWidth: "240px",
+  border: "1px solid",
+  display: "flex",
+  alignItems: "center",
+};

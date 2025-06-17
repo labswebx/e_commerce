@@ -1,0 +1,13 @@
+@layer components {
+  /* === Rating Utility Classes === */
+  .rating-wrapper {
+    @apply flex items-center space-x-1;
+  }
+
+  .rating-star {
+    @apply w-6 h-6 cursor-pointer;
+  }
+  .rating-star {
+    @apply transition-transform duration-200 hover:scale-110;
+  }
+}

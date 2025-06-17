@@ -32,6 +32,7 @@ const constantsApi = {
       const res = await axiosInstance.get(
         CONSTANTS_API_ENDPOINTS.GET_ALL_BANNERS
       );
+
       return res.data;
     } catch (err) {
       handleError(err);

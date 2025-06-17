@@ -1,0 +1,45 @@
+@layer components {
+  .selectbox-container {
+    @apply relative w-64;
+  }
+
+  .selectbox-input-wrapper {
+    @apply flex items-center justify-between p-2 bg-white border rounded cursor-pointer;
+  }
+
+  .selectbox-multi-selected-item {
+    @apply flex items-center px-2 py-1 space-x-1 bg-gray-200 rounded cursor-default;
+  }
+
+  .selectbox-multi-selected-remove {
+    @apply text-gray-600 cursor-pointer hover:text-red-600;
+  }
+
+  .selectbox-placeholder {
+    @apply text-gray-400;
+  }
+
+  .selectbox-chevron {
+    @apply w-4 h-4 ml-2 transition-transform duration-300;
+  }
+
+  .selectbox-dropdown {
+    @apply absolute z-10 w-full mt-2 overflow-y-auto bg-white border rounded shadow max-h-60;
+  }
+
+  .selectbox-search-input {
+    @apply w-full p-2 text-sm border-b outline-none;
+  }
+
+  .selectbox-option {
+    @apply flex items-center justify-between p-2 cursor-pointer hover:bg-gray-100;
+  }
+
+  .selectbox-option-selected {
+    @apply font-medium bg-gray-100;
+  }
+
+  .selectbox-no-options {
+    @apply p-2 text-sm text-gray-500;
+  }
+}

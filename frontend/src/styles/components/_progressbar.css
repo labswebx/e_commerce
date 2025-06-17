@@ -1,0 +1,71 @@
+@layer components {
+  .progressbar-wrapper {
+    @apply w-full space-y-1 text-sm;
+  }
+
+  .progressbar-label {
+    @apply font-medium;
+  }
+
+  .progressbar-description {
+    @apply text-xs text-gray-500;
+  }
+
+  .progressbar-bar-bg {
+    @apply flex-1 w-full overflow-hidden bg-gray-200 rounded-full dark:bg-gray-700;
+  }
+
+  .progressbar-bar {
+    @apply transition-all duration-500 ease-in-out rounded-full;
+  }
+
+  /* Heights for size variants */
+  .progressbar-sm {
+    @apply h-2;
+  }
+  .progressbar-md {
+    @apply h-3;
+  }
+  .progressbar-lg {
+    @apply h-4;
+  }
+
+  /* Status colors */
+  .progressbar-success {
+    @apply bg-green-500;
+  }
+  .progressbar-error {
+    @apply bg-red-500;
+  }
+  .progressbar-loading {
+    @apply bg-blue-500;
+  }
+  .progressbar-paused {
+    @apply bg-yellow-400;
+  }
+  .progressbar-default {
+    @apply bg-orange-300;
+  }
+
+  /* Striped background */
+  .progressbar-striped {
+    @apply bg-repeat bg-gradient-to-r from-white/10 via-white/20 to-white/10;
+    background-size: 20px 20px;
+  }
+  /* Buttons */
+  .progressbar-btn {
+    @apply px-2 py-1 text-xs transition-colors duration-150 border rounded cursor-pointer select-none;
+  }
+  .progressbar-btn-pause {
+    @apply hover:bg-gray-100;
+  }
+  .progressbar-btn-cancel {
+    @apply text-red-500 hover:bg-red-50;
+  }
+
+  @screen sm {
+    .progressbar-wrapper {
+      @apply text-base;
+    }
+  }
+}

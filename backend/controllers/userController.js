@@ -10,13 +10,14 @@ const Enums = require("../utils/enums");
 
 // Register a User
 exports.registerUser = catchAsyncErrors(async (req, res, next) => {
-  const { name, email, password, contactNumber } = req.body;
+  const { name, email, password, contactNumber, pincode } = req.body;
 
   const user = await User.create({
     name,
     email,
     password,
     contactNumber,
+    pincode,
   });
   sendToken(user, 201, res);
 });
@@ -64,10 +65,11 @@ exports.forgotPassword = catchAsyncErrors(async (req, res, next) => {
   // get resetPasswordToken
   const resetToken = user.getResetPasswordToken();
   await user.save({ validateBeforeSave: false });
-
+  console.log(resetToken);
   const resetPasswordUrl = `${req.protocol}://${req.get(
     "host"
   )}/password/reset/${resetToken}`;
+  console.log(resetPasswordUrl);
   const message = `Your password reset token is:- \n\n ${resetPasswordUrl} \n\nIf you haven't requested this email, then please ignore it.`;
 
   try {
@@ -284,9 +286,9 @@ exports.deleteUser = catchAsyncErrors(async (req, res, next) => {
 // send OTP for registration
 exports.sendOTPForRegistration = catchAsyncErrors(async (req, res, next) => {
   const { contactNumber } = req.body;
-  const user = await User.findOne({ 
-    contactNumber, 
-    $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }] 
+  const user = await User.findOne({
+    contactNumber,
+    $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
   });
 
   if (user) {
@@ -315,31 +317,33 @@ exports.sendOTPForRegistration = catchAsyncErrors(async (req, res, next) => {
 });
 
 // authenticate the OTP for registration
-exports.authenticateUserViaOTPForRegistration = catchAsyncErrors(async (req, res, next) => {
-  const { contactNumber, otp } = req.body;
-  let hash = otpHash(otp);
+exports.authenticateUserViaOTPForRegistration = catchAsyncErrors(
+  async (req, res, next) => {
+    const { contactNumber, otp } = req.body;
+    let hash = otpHash(otp);
 
-  const queriedOTPs = await SignupOTP.find({ contactNumber });
-  let queriedOTP = null;
-  for (let i = 0; i < queriedOTPs.length; i++) {
-    if (queriedOTPs[i]["otpHash"] === hash) {
-      queriedOTP = queriedOTPs[i];
-      break;
+    const queriedOTPs = await SignupOTP.find({ contactNumber });
+    let queriedOTP = null;
+    for (let i = 0; i < queriedOTPs.length; i++) {
+      if (queriedOTPs[i]["otpHash"] === hash) {
+        queriedOTP = queriedOTPs[i];
+        break;
+      }
     }
+
+    if (!queriedOTP) {
+      return next(new ErrorHandler("Incorrect OTP. Please try again.", 400));
+    }
+
+    queriedOTP.event = Enums.OTP.AUTHENTICATION;
+    await queriedOTP.save();
+
+    res.status(200).json({
+      success: true,
+      message: "OTP verified successfully",
+    });
   }
-
-  if (!queriedOTP) {
-    return next(new ErrorHandler("Incorrect OTP. Please try again.", 400));
-  }
-
-  queriedOTP.event = Enums.OTP.AUTHENTICATION;
-  await queriedOTP.save();
-
-  res.status(200).json({
-    success: true,
-    message: "OTP verified successfully",
-  });
-});
+);
 
 // register user via OTP
 exports.registerUserViaOTP = catchAsyncErrors(async (req, res, next) => {
@@ -357,11 +361,18 @@ exports.registerUserViaOTP = catchAsyncErrors(async (req, res, next) => {
     );
   }
 
+  const serviceablePincodes = JSON.parse(process.env.SERVICEABLE_PINCODES)
+  if (!serviceablePincodes.includes(pincode)) {
+    return next(
+      new ErrorHandler("The entered pincode is not serviceable right now.", 400)
+    );
+  }
+
   const user = await User.create({
     name,
     email,
     contactNumber,
-    pincode
+    pincode,
     // avatar: {
     //   public_id: "This is a sample id",
     //   url: "This is a sample url",
@@ -374,9 +385,9 @@ exports.registerUserViaOTP = catchAsyncErrors(async (req, res, next) => {
 // send OTP for Login
 exports.sendOTPForLogin = catchAsyncErrors(async (req, res, next) => {
   const { contactNumber } = req.body;
-  const user = await User.findOne({ 
-    contactNumber, 
-    $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }] 
+  const user = await User.findOne({
+    contactNumber,
+    $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
   });
   if (!user) {
     return next(
@@ -389,7 +400,7 @@ exports.sendOTPForLogin = catchAsyncErrors(async (req, res, next) => {
 
   let otp = generateOTP();
   if (contactNumber === "8307747802") {
-    otp = "123456"
+    otp = "123456";
   }
 
   sendOTP(otp, contactNumber);
@@ -408,39 +419,46 @@ exports.sendOTPForLogin = catchAsyncErrors(async (req, res, next) => {
 });
 
 // authenticate the OTP for Login
-exports.authenticateUserViaOTPForLogin = catchAsyncErrors(async (req, res, next) => {
-  const { contactNumber, otp } = req.body;
-  let hash = otpHash(otp);
+exports.authenticateUserViaOTPForLogin = catchAsyncErrors(
+  async (req, res, next) => {
+    const { contactNumber, otp } = req.body;
+    let hash = otpHash(otp);
 
-  const queriedOTPs = await SignupOTP.find({ contactNumber });
-  let queriedOTP = null;
-  for (let i = 0; i < queriedOTPs.length; i++) {
-    if (queriedOTPs[i]["otpHash"] === hash) {
-      queriedOTP = queriedOTPs[i];
-      break;
+    const queriedOTPs = await SignupOTP.find({ contactNumber });
+    let queriedOTP = null;
+    for (let i = 0; i < queriedOTPs.length; i++) {
+      if (queriedOTPs[i]["otpHash"] === hash) {
+        queriedOTP = queriedOTPs[i];
+        break;
+      }
     }
+
+    if (!queriedOTP) {
+      return next(new ErrorHandler("Incorrect OTP. Please try again.", 400));
+    }
+
+    const user = await User.findOne({
+      contactNumber,
+      $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }],
+    });
+
+    if (!user) {
+      return next(
+        new ErrorHandler(
+          "OTP verified, but no user found for the given Contact Number.",
+          400
+        )
+      );
+    }
+
+    await SignupOTP.deleteMany({ contactNumber });
+    sendToken(user, 201, res);
   }
-
-  if (!queriedOTP) {
-    return next(new ErrorHandler("Incorrect OTP. Please try again.", 400));
-  }
-
-  const user = await User.findOne({ 
-    contactNumber, 
-    $or: [{ isDeleted: false }, { isDeleted: { $exists: false } }] 
-  });
-
-  if (!user) {
-    return next(new ErrorHandler("OTP verified, but no user found for the given Contact Number.", 400))
-  }
-
-  await SignupOTP.deleteMany({ contactNumber });
-  sendToken(user, 201, res);
-});
+);
 
 // delete user account
 exports.deleteUserAccount = catchAsyncErrors(async (req, res, next) => {
-  const userId = req.body.id
+  const userId = req.body.id;
   const user = await User.findById(userId);
 
   if (!user) {
@@ -449,11 +467,15 @@ exports.deleteUserAccount = catchAsyncErrors(async (req, res, next) => {
     );
   }
 
-  await User.findByIdAndUpdate(userId, { isDeleted: true }, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
+  await User.findByIdAndUpdate(
+    userId,
+    { isDeleted: true },
+    {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    }
+  );
 
   res.status(200).json({
     message: "User Deleted",

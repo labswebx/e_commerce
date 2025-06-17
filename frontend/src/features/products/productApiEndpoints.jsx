@@ -11,6 +11,6 @@ export const PRODUCTS_API_ENDPOINTS = {
   GET_CATEGORY_PRODUCTS: (id) => `${apiVersion}/product/category/${id}`,
 
   // Reviews
-  CREATE_REVIEW: `${apiVersion}/review`,
-  GET_REVIEWS: (productId) => `${apiVersion}/reviews?id=${productId}`,
+  CREATE_REVIEW: "/review",
+  GET_REVIEWS: "/reviews",
 };

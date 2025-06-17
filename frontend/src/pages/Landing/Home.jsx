@@ -16,6 +16,7 @@ import LandingPage, { Section } from "./LandingSection";
 import Loader from "../../components/ui/Loader";
 // import { Section } from "lucide-react";
 import { useConstants } from "../../features/constants/constantsHooks";
+import Carousel from "../../components/ui/Carousel";
 
 const CategoryCarousel = () => {
   const { categories, loading, error } = useCategory();
@@ -116,6 +117,8 @@ const Home = () => {
     mostOrderedProducts,
     loading: productsLoading,
   } = useSelector((state) => state.products);
+  console.log(products);
+  console.log(trendingProducts);
   useEffect(() => {
     dispatch(fetchProducts({ page, limit }));
     dispatch(fetchTrendingProducts());
@@ -131,7 +134,7 @@ const Home = () => {
     { key: "favourite", label: "Featured Products" },
   ];
 
-  const visibleProducts = products.slice(0, 12);
+  const visibleProducts = products.slice(0, 4);
   const getProductsByTab = () => {
     switch (activeTab) {
       case "trending":
@@ -190,17 +193,28 @@ const Home = () => {
             </button>
           </div>
         )}
-        {/* Extra Visible Products */}
-        <div className="flex flex-wrap justify-center gap-4">
-          {visibleProducts.map((item) => (
-            <div key={item._id} className="m-2">
-              <ProductCard data={item} variant="compact" />
-            </div>
-          ))}
+      </div>
+
+      {/* carousel */}
+      <Carousel
+        gap="gap-0"
+        items={visibleProducts}
+        className="lg:w-screen"
+        itemWidth="min-w-[320px]"
+        renderItem={(item) => <ProductCard data={item} variant="feature" />}
+      />
+      <div className="px-4 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8 ">
+        <div className="space-y-4">
+          <h2 className="text-xl font-semibold">Discounts up to -50%</h2>
+          <ProductGrid
+            products={trendingProducts}
+            loading={productsLoading}
+            title={`Trending Products`}
+          />
         </div>
       </div>
-      {/* bottom banner */}
 
+      {/* bottom banner */}
       <div className="relative w-full my-8 md:h-96 ">
         {/* Mobile Image (shown on small screens) */}
         <img

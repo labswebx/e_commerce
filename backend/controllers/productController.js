@@ -163,7 +163,9 @@ exports.getTrendingProducts = catchAsyncErrors(async (req, res) => {
 
   const skip = (page - 1) * limit;
 
-  const totalProducts = await Product.countDocuments();
+  const totalTrendingProducts = await Product.countDocuments({
+    trending: true,
+  });
   const products = await Product.find({ trending: true })
     .sort({
       createdAt: -1,
@@ -175,9 +177,10 @@ exports.getTrendingProducts = catchAsyncErrors(async (req, res) => {
     success: true,
     products,
     productsCount: products.length,
-    productsCount,
-    resultsPerPage,
-    currentPage,
+    totalTrendingProducts,
+    resultsPerPage: limit,
+    currentPage: page,
+    totalPages: Math.ceil(totalTrendingProducts / limit),
   });
 });
 

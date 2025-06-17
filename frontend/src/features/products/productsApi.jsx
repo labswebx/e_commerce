@@ -20,8 +20,10 @@ const productsApi = {
       const res = await axiosInstance.get(
         PRODUCTS_API_ENDPOINTS.GET_TRENDING_PRODUCTS
       );
+      console.log(res.data);
       return res.data;
     } catch (err) {
+      console.log(err);
       handleError(err);
     }
   },

@@ -25,6 +25,8 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
         return "w-full h-32";
       case "highlight":
         return "w-full h-60";
+      case "feature":
+        return "w-full  h-44 sm:h-56 md:h-64 object-contain";
       default:
         return "mx-auto w-full h-40 sm:h-48 md:h-52";
     }
@@ -44,6 +46,26 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
               variant="outline"
               onClick={() => onAddToCart(data)}
               label="Shop Now"
+            />
+          </>
+        );
+      case "feature":
+        return (
+          <>
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-4 text-xl font-semibold">{data.name}</h3>
+            </Link>
+
+            <p className="mt-2 text-sm text-gray-600">
+              {data.description ||
+                "iPad combines a magnificent 10.2-inch Retina display, incredible performance, multitasking and ease of use."}
+            </p>
+
+            <Button
+              variant="outline"
+              onClick={() => onAddToCart(data)}
+              label="Shop Now"
+              className="mt-4"
             />
           </>
         );
@@ -103,7 +125,11 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
   return (
     <div
       className={`relative card-base h-full flex flex-col justify-between text-center ${
-        variant === "highlight" ? "w-full p-4" : "w-72"
+        variant === "highlight"
+          ? "w-full p-4"
+          : variant === "feature"
+          ? "w-full max-w-[324px] bg-white p-6 rounded-md shadow-md"
+          : "w-72"
       }`}
     >
       <Link to={`/product/${data._id}`}>

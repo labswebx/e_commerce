@@ -41,6 +41,6 @@
   }
 
   .mobile-nav-inner {
-    @apply flex items-center justify-between px-4 py-4 border-b;
+    @apply flex items-center justify-between px-4 py-3 border-b;
   }
 }

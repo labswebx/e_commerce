@@ -18,11 +18,11 @@ const Icon = ({
         width: dimension,
         height: dimension,
         backgroundColor: fill ? bgColor : "transparent",
-        borderRadius: fill ? borderRadius : 0,
+        borderRadius: borderRadius || 8,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
-        padding: fill ? 4 : 0,
+        padding: 4,
       }}
     >
       <IconComponent

@@ -1,5 +1,7 @@
 import React from "react";
 
+// product card
+// data: fetch from product
 const ProductCard = ({ data, onAddToCart }) => (
   <div className="card-base w-72">
     <img src={data.image} alt={data.title} className="card-product-img" />
@@ -12,6 +14,7 @@ const ProductCard = ({ data, onAddToCart }) => (
   </div>
 );
 
+// category card
 const CategoryCard = ({ data }) => (
   <div className="card-category">
     <div className="flex flex-col items-center gap-2 p-4">
@@ -23,6 +26,7 @@ const CategoryCard = ({ data }) => (
   </div>
 );
 
+// review card
 const ReviewCard = ({ data }) => (
   <div className="card-review">
     <div className="flex items-center gap-3 mb-2">
@@ -55,6 +59,8 @@ const ReviewCard = ({ data }) => (
     )}
   </div>
 );
+
+// cart item card
 const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => (
   <div className="card-cart-item">
     <div className="flex gap-4">
@@ -85,6 +91,7 @@ const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => (
   </div>
 );
 
+// card
 const Card = ({ type, data, ...handlers }) => {
   switch (type) {
     case "product":

@@ -189,7 +189,7 @@ const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => {
       {/* Image and Info */}
       <div className="flex items-start gap-4">
         <img
-          src={data?.images?.[0]?.public_id || "/logo-icon.jpg"}
+          src={data?.images?.[0]?.url || "/logo-icon.jpg"}
           alt={data?.name || data?.title}
           className="object-cover w-20 h-20 rounded-lg"
         />

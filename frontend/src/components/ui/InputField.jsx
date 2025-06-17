@@ -1,5 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import Icon from "./Icon";
+import { Eye, EyeOff } from "lucide-react";
 
 const InputField = ({
   id,
@@ -15,14 +16,32 @@ const InputField = ({
   onButtonClick,
   autoFocus = false,
   disabled = false,
+  error = "",
   className = "",
+  name,
+  size,
+  iconsize = "sm",
+  iconColor = "#989898",
   ...props
 }) => {
+  const [showPassword, setShowPassword] = useState(false);
   const inputId = id || `input-${label?.replace(/\s+/g, "-").toLowerCase()}`;
 
+  const getInputClass = () => {
+    if (type === "radio") return "input-radio";
+    if (type === "checkbox") return "input-checkbox";
+    return "input-text";
+  };
+
+  const isPasswordField = type === "password";
+  // #989898"
   return (
     <div
-      className={`${type === "radio" ? "" : "w-full"} space-y-1 md:space-y-2`}
+      className={`${
+        type === "radio" || type === "checkbox"
+          ? "flex items-center gap-3"
+          : "w-full space-y-1 md:space-y-2"
+      }`}
     >
       {label && (
         <label htmlFor={inputId} className="input-label">
@@ -30,29 +49,38 @@ const InputField = ({
         </label>
       )}
 
-      <div className="input-wrapper">
+      <div className="relative input-wrapper">
+        {showIcon && icon && (
+          <div className="absolute transform -translate-y-1/2 left-3 top-1/2">
+            <Icon icon={icon} size={iconsize} color={iconColor} />
+          </div>
+        )}
+
         <input
           id={inputId}
-          type={type}
+          name={name}
+          type={isPasswordField && showPassword ? "text" : type}
           placeholder={placeholder}
           value={value}
           onChange={onChange}
           autoFocus={autoFocus}
           disabled={disabled}
-          className={` ${className} ${
-            type === "radio"
-              ? "input-radio"
-              : type === "checkbox"
-              ? "input-checkbox"
-              : "input-text"
-          }`}
+          className={`${getInputClass()} ${className} ${
+            showIcon ? "pl-10" : ""
+          } ${isPasswordField ? "pr-10" : ""}   ${size ? `size-${size}` : ""}`}
           {...props}
         />
 
-        {showIcon && Icon && (
-          <div className="absolute right-4">
-            <Icon icon={icon} size="sm" color="#989898" />
-          </div>
+        {/* Toggle password visibility */}
+        {isPasswordField && (
+          <button
+            type="button"
+            onClick={() => setShowPassword((prev) => !prev)}
+            className="absolute text-gray-500 transform -translate-y-1/2 right-3 top-1/2"
+            tabIndex={-1}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </button>
         )}
 
         {buttonLabel && (
@@ -66,6 +94,12 @@ const InputField = ({
           </button>
         )}
       </div>
+
+      {error && (
+        <p className="mt-1 text-sm text-red-600" id={`${inputId}-error`}>
+          {error}
+        </p>
+      )}
     </div>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   Smartphone,
   Monitor,
@@ -8,34 +8,47 @@ import {
   Gamepad2,
 } from "lucide-react";
 import Tabs from "../../components/ui/Tabs";
+import { useCategory } from "../../features/category/categoryHooks";
+// import { useCategory } from "../../features/category/categoryHooks";
 
-const categoryTabs = [
-  { key: "phones", label: "Phones", icon: Smartphone },
-  { key: "computers", label: "Computers", icon: Monitor },
-  { key: "watches", label: "Smart Watches", icon: Watch },
-  { key: "cameras", label: "Cameras", icon: Camera },
-  { key: "headphones", label: "Headphones", icon: Headphones },
-  { key: "gaming", label: "Gaming", icon: Gamepad2 },
-  { key: "gaming2", label: "Console", icon: Gamepad2 },
-  { key: "gaming3", label: "VR", icon: Gamepad2 },
-  { key: "gaming4", label: "Arcade", icon: Gamepad2 },
-  { key: "gaming5", label: "PC", icon: Gamepad2 },
-];
 const SubNav = () => {
-  const [selected, setSelected] = useState("phones");
+  const { categories, loading } = useCategory();
+  const [selected, setSelected] = useState(null);
+  const [categoryTabs, setCategoryTabs] = useState([]);
+
+  useEffect(() => {
+    if (!loading && categories.length) {
+      const mapped = categories.map((cat, index) => {
+        // Convert category name to a simple key
+        const key = cat._id;
+        return {
+          key,
+          label: cat.name,
+          image: cat?.image?.url,
+        };
+      });
+
+      setCategoryTabs(mapped);
+      setSelected(mapped[0]?.key || null);
+    }
+  }, [categories, loading]);
 
   return (
     <div className="subnav-container">
-      <div className="subnav-wrapper ">
+      <div className="subnav-wrapper">
         <div className="whitespace-nowrap">
-          <Tabs
-            tabs={categoryTabs}
-            selected={selected}
-            onSelect={setSelected}
-            minimal={true}
-            size="sm"
-            showBottomLine={false}
-          />
+          {loading ? (
+            <p className="text-sm text-gray-500">Loading categories...</p>
+          ) : (
+            <Tabs
+              tabs={categoryTabs}
+              selected={selected}
+              onSelect={setSelected}
+              minimal={true}
+              size="sm"
+              showBottomLine={false}
+            />
+          )}
         </div>
       </div>
     </div>

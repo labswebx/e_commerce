@@ -59,6 +59,7 @@ export default {
       borderStyle: theme.BORDER.style,
       fontFamily: {
         sfpro: [theme.TYPOGRAPHY.fontFamily.sfpro],
+        figtree: ["Figtree"],
         sans: [theme.TYPOGRAPHY.fontFamily.primary, "sans-serif"],
         display: [theme.TYPOGRAPHY.fontFamily.secondary, "sans-serif"],
         mono: [theme.TYPOGRAPHY.fontFamily.monospace, "monospace"],
@@ -92,5 +93,6 @@ export default {
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/aspect-ratio"),
+    require("tailwind-scrollbar-hide"),
   ],
 };

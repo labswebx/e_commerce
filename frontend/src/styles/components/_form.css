@@ -1,0 +1,46 @@
+@layer components {
+  /* Form Container */
+  .form-container {
+    @apply flex items-center justify-center min-h-screen px-4 py-12 bg-gray-50 sm:px-6 lg:px-8;
+  }
+
+  /* Form Card */
+  .form-card {
+    @apply w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md;
+  }
+
+  /* Form Header */
+  .form-header {
+    @apply text-center;
+  }
+  .form-title {
+    @apply mt-6 text-3xl font-extrabold text-black;
+  }
+  .form-subtitle {
+    @apply mt-2 text-sm text-gray-600;
+  }
+
+  /* Form Elements */
+  .form {
+    @apply mt-8 space-y-6;
+  }
+  .form-fields {
+    @apply space-y-4 rounded-md shadow-sm;
+  }
+  .form-actions {
+    @apply flex flex-col space-y-4;
+  }
+  .form-error {
+    @apply text-sm text-center text-red-500;
+  }
+  .form-link {
+    @apply text-sm font-medium text-black hover:text-zinc-500;
+  }
+  .form-footer {
+    @apply mt-6 space-y-2 text-sm text-center text-gray-600;
+  }
+
+  .form-link {
+    @apply text-sm font-medium text-black underline hover:text-zinc-500;
+  }
+}

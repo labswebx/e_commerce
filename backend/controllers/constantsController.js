@@ -10,15 +10,107 @@ const CONSTANTS = require("../config/constants");
 
 // create Constant
 exports.createConstant = catchAsyncErrors(async (req, res, next) => {
-  req.body.user = req.user.id;
+  // req.body.user = req.user.id;
 
-  const constants = await Constants.create(req.body);
-  if (!constants) {
-    return next(
-      new ErrorHandler("Cannot create constant. Please try later.", 400)
-    );
+  if (req.body.name === CONSTANTS.CONSTANTS.BANNERS) {
+    let imageLinks = [];
+
+    try {
+      // 💡 Case 1: Handling file uploads via form-data
+      if (req.files && req.files.images) {
+        const files = Array.isArray(req.files.images)
+          ? req.files.images
+          : [req.files.images];
+
+        for (let i = 0; i < files.length; i++) {
+          const file = files[i];
+          console.log("file", file);
+          const title = req.body[`titles[${i}]`] || `Banner ${i + 1}`;
+          console.log("title", title);
+          const id =
+            req.body[`ids[${i}]`] ||
+            (Array.isArray(req.body.ids)
+              ? req.body.ids[i]
+              : `banner_${Date.now()}_${i}`);
+          console.log("id", id);
+          const result = await cloudinary.v2.uploader.upload(
+            file.tempFilePath,
+            {
+              folder: CONSTANTS.CLOUDINARY_FOLDERS.BANNERS,
+              resource_type: "auto",
+              quality: "auto",
+              fetch_format: "auto",
+            }
+          );
+
+          imageLinks.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+            title,
+            id,
+            width: result.width,
+            height: result.height,
+            format: result.format,
+            created_at: result.created_at,
+          });
+        }
+      }
+
+      // 💡 Case 2: Handling JSON-based images (url, base64)
+      else if (req.body.images) {
+        let images;
+        try {
+          // Parse if it's a JSON string (from frontend/curl)
+          images =
+            typeof req.body.images === "string"
+              ? JSON.parse(req.body.images)
+              : req.body.images;
+        } catch (e) {
+          return next(new ErrorHandler("Invalid image format", 400));
+        }
+
+        for (let i = 0; i < images.length; i++) {
+          const image = images[i];
+          if (!image || typeof image !== "object") continue;
+
+          if (image.image) {
+            const result = await cloudinary.v2.uploader.upload(image.image, {
+              folder: CONSTANTS.CLOUDINARY_FOLDERS.BANNERS,
+              resource_type: "auto",
+              quality: "auto",
+              fetch_format: "auto",
+            });
+
+            imageLinks.push({
+              public_id: result.public_id,
+              url: result.secure_url,
+              title: image.title || `Banner ${i + 1}`,
+              id: image.id || `banner_${Date.now()}_${i}`,
+              width: result.width,
+              height: result.height,
+              format: result.format,
+              created_at: result.created_at,
+            });
+          } else if (image.public_id && image.url) {
+            imageLinks.push({
+              ...image,
+              title: image.title || `Banner ${i + 1}`,
+              id: image.id || `banner_${Date.now()}_${i}`,
+            });
+          }
+        }
+      }
+
+      req.body.metadata = { banners: imageLinks };
+    } catch (error) {
+      return next(
+        new ErrorHandler(`Error uploading images: ${error.message}`, 500)
+      );
+    }
   }
 
+  const constants = await Constants.create(req.body);
+  console.log("banners created successfully", constants);
   res.status(200).json({
     success: true,
     constants,
@@ -27,12 +119,13 @@ exports.createConstant = catchAsyncErrors(async (req, res, next) => {
 
 // get all banners
 exports.getAllBanners = catchAsyncErrors(async (req, res, next) => {
-  const banners = await Constants.findOne({
+  const banners = await Constants.find({
     name: CONSTANTS.CONSTANTS.BANNERS,
   });
+  console.log(banners);
   return res.status(200).json({
     success: true,
-    banners: banners?.metadata?.banners || [],
+    banners: banners || [],
   });
 });
 
@@ -42,39 +135,83 @@ exports.updateBanners = catchAsyncErrors(async (req, res, next) => {
   let banners = await Constants.findOne({ name: CONSTANTS.CONSTANTS.BANNERS });
   banners = banners?.metadata?.banners || [];
 
-  let images = req.body.images;
-  let imageLinks = [];
-  for (let i = 0; i < images.length; ++i) {
-    let image = images[i];
-
-    if (typeof image === "string") {
-      // deleting existing image from cloudinary
-      await cloudinary.v2.uploader.destroy(banners[i].public_id);
-
-      // uploading new image to cloudinary
-      let result = await cloudinary.v2.uploader.upload_large(image, {
-        folder: CONSTANTS.CLOUDINARY_FOLDERS.BANNERS,
-      });
-      imageLinks.push({ public_id: result.public_id, url: result.secure_url });
-    } else {
-      imageLinks.push(image);
-    }
+  if (!req.body.images || !Array.isArray(req.body.images)) {
+    return next(new ErrorHandler("Please provide valid images array", 400));
   }
 
-  let constants = await Constants.findOneAndUpdate(
-    { name: CONSTANTS.CONSTANTS.BANNERS },
-    { metadata: { banners: imageLinks } },
-    {
-      new: true,
-      runValidators: true,
-      useFindAndModify: false,
-    }
-  );
+  let images = req.body.images;
+  let imageLinks = [];
 
-  res.status(200).json({
-    success: true,
-    constants,
-  });
+  try {
+    // First, delete all existing banners from cloudinary
+    for (let i = 0; i < banners.length; ++i) {
+      if (banners[i] && banners[i].public_id) {
+        try {
+          await cloudinary.v2.uploader.destroy(banners[i].public_id);
+        } catch (error) {
+          console.error(`Error deleting banner ${i}:`, error);
+        }
+      }
+    }
+
+    // Then upload new images
+    for (let i = 0; i < images.length; ++i) {
+      let image = images[i];
+
+      if (typeof image === "object" && image.image) {
+        // uploading new image to cloudinary
+        let result = await cloudinary.v2.uploader.upload(image.image, {
+          folder: CONSTANTS.CLOUDINARY_FOLDERS.BANNERS,
+          resource_type: "auto",
+          quality: "auto",
+          fetch_format: "auto",
+        });
+
+        imageLinks.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+          title: image.title || `Banner ${i + 1}`,
+          id: image.id || `banner_${Date.now()}_${i}`,
+        });
+      } else if (image && image.public_id && image.url) {
+        // If it's already a cloudinary image object
+        imageLinks.push({
+          ...image,
+          title: image.title || `Banner ${i + 1}`,
+          id: image.id || `banner_${Date.now()}_${i}`,
+        });
+      } else {
+        return next(
+          new ErrorHandler(`Invalid image format at index ${i}`, 400)
+        );
+      }
+    }
+
+    let constants = await Constants.findOneAndUpdate(
+      { name: CONSTANTS.CONSTANTS.BANNERS },
+      {
+        metadata: {
+          banners: imageLinks,
+        },
+        name: CONSTANTS.CONSTANTS.BANNERS,
+      },
+      {
+        new: true,
+        runValidators: true,
+        useFindAndModify: false,
+        upsert: true,
+      }
+    );
+
+    res.status(200).json({
+      success: true,
+      constants,
+    });
+  } catch (error) {
+    return next(
+      new ErrorHandler(error.message || "Error uploading images", 500)
+    );
+  }
 });
 
 // Get All Stats -- Admin
@@ -88,18 +225,17 @@ exports.getStats = catchAsyncErrors(async (req, res, next) => {
     {
       $match: {
         createdAt: {
-          $gte: new Date(new Date().setDate(new Date().getDate() - 30))
-        }
-      }
+          $gte: new Date(new Date().setDate(new Date().getDate() - 30)),
+        },
+      },
     },
     {
       $group: {
         _id: null,
-        totalAmount: { $sum: "$totalPrice" }
-      }
-    }
-  ])
-  
+        totalAmount: { $sum: "$totalPrice" },
+      },
+    },
+  ]);
 
   return res.status(200).json({
     success: true,

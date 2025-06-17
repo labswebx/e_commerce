@@ -12,7 +12,7 @@
   }
 
   .nav-item.disabled {
-    @apply text-gray-400 cursor-not-allowed pointer-events-none opacity-60;
+    @apply text-gray-800 cursor-not-allowed pointer-events-none opacity-60;
   }
 
   .nav-item-icon {

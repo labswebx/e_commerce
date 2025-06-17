@@ -13,7 +13,7 @@ export const createOrder = createAsyncThunkHandler(
 );
 
 export const fetchMyOrders = createAsyncThunkHandler(
-  ORDER_ACTION_TYPES.FETCH_MY_ORDER,
+  ORDER_ACTION_TYPES.FETCH_MY_ORDERS,
   async () => orderApi.getMyOrders()
 );
 
@@ -33,7 +33,6 @@ const initialState = {
   error: null,
   order: null,
   myOrders: [],
-  allOrders: [],
   paymentStatus: null,
   success: false,
 };
@@ -65,7 +64,8 @@ const orderSlice = createSlice({
       .addCase(fetchMyOrders.pending, setLoading)
       .addCase(fetchMyOrders.fulfilled, (state, action) => {
         state.loading = false;
-        state.myOrders = action.payload;
+        state.myOrders = action.payload.orders;
+        state.success = action.payload.success;
       })
       .addCase(fetchMyOrders.rejected, setError);
 

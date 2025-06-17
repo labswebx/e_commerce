@@ -11,7 +11,8 @@ import productsApi from "./productsApi";
 // ALl products
 export const fetchProducts = createAsyncThunkHandler(
   PRODUCT_ACTION_TYPES.FETCH_PRODUCTS,
-  async () => await productsApi.getAllProducts()
+  async ({ page = 1, limit = 5 }) =>
+    await productsApi.getAllProducts(page, limit)
 );
 
 // fetch trending products
@@ -46,7 +47,7 @@ export const fetchProductDetails = createAsyncThunkHandler(
 
 // 	Category-wise products
 export const fetchCategoryProducts = createAsyncThunkHandler(
-  PRODUCT_ACTION_TYPES.FETCH_CATEGORY,
+  PRODUCT_ACTION_TYPES.FETCH_CATEGORY_PRODUCTS,
   async (id) => productsApi.getCategoryProducts(id)
 );
 
@@ -59,13 +60,13 @@ export const createReview = createAsyncThunkHandler(
 //  fetch review
 export const fetchReviews = createAsyncThunkHandler(
   PRODUCT_ACTION_TYPES.FETCH_REVIEWS,
-  async () => productsApi.getReviews()
+  async (id) => productsApi.getReviews(id)
 );
 
 const initialState = {
   // product lists
   products: [],
-  resultsPerPage: 0,
+  resultsPerPage: 10,
   productsCount: 0,
 
   // Single product details
@@ -84,9 +85,10 @@ const initialState = {
 
   // reviews
   reviews: [],
+  message: "",
 
   // general
-  loading: false,
+  loading: true,
   error: null,
 };
 
@@ -113,10 +115,16 @@ const productSlice = createSlice({
       // fetchProducts
       .addCase(fetchProducts.pending, setLoading)
       .addCase(fetchProducts.fulfilled, (state, action) => {
+        const isPaginated = action.meta.arg.page > 1;
         state.loading = false;
         state.products = action.payload.products || [];
-        state.resultsPerPage = action.payload.resultsPerPage || 0;
+        state.resultsPerPage = action.payload.resultsPerPage || 10;
         state.productsCount = action.payload.productsCount || 0;
+        if (isPaginated) {
+          state.products = [...state.products, ...action.payload.products];
+        } else {
+          state.products = action.payload.products;
+        }
       })
       .addCase(fetchProducts.rejected, setError)
 
@@ -176,7 +184,7 @@ const productSlice = createSlice({
       .addCase(createReview.pending, setLoading)
       .addCase(createReview.fulfilled, (state, action) => {
         state.loading = false;
-        state.reviews = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(createReview.rejected, setError)
 

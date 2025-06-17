@@ -5,7 +5,9 @@ import { CATEGORY_API_ENDPOINTS } from "./categoryApiEndpoints";
 const categoryApi = {
   getAllCategories: async () => {
     try {
-      const res = await axiosInstance.get(CATEGORY_API_ENDPOINTS.GET_ALL);
+      const res = await axiosInstance.get(
+        CATEGORY_API_ENDPOINTS.GET_ALL_CATEGORIES
+      );
       return res.data;
     } catch (err) {
       handleError(err);
@@ -15,7 +17,7 @@ const categoryApi = {
   getCategoryDetails: async (id) => {
     try {
       const res = await axiosInstance.get(
-        CATEGORY_API_ENDPOINTS.GET_DETAILS(id)
+        CATEGORY_API_ENDPOINTS.GET_DETAILS_CATEGORIES(id)
       );
       return res.data;
     } catch (err) {

@@ -5,32 +5,49 @@ const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const ApiFeatures = require("../utils/apiFeatures");
 const cloudinary = require("cloudinary");
+const CONSTANTS = require("../config/constants");
 
-// create product -- Admin
+// Create Product -- Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   let images = [];
+
   if (typeof req.body.images === "string") {
     images.push(req.body.images);
-  } else {
+  } else if (Array.isArray(req.body.images)) {
     images = req.body.images;
   }
 
-  const imagesLink = [];
-  for (let i = 0; i < images.length; ++i) {
-    const result = await cloudinary.v2.uploader.upload_large(images[i], {
-      folder: "products",
-    });
+  if (!images || images.length === 0) {
+    return next(new ErrorHandler("Product images are required.", 400));
+  }
 
-    imagesLink.push({
-      public_id: result?.public_id,
-      url: result?.secure_url,
-    });
+  const imagesLink = [];
+
+  for (let i = 0; i < images.length; ++i) {
+    const image = images[i];
+
+    if (typeof image === "string") {
+      const result = await cloudinary.v2.uploader.upload_large(image, {
+        folder: "products",
+      });
+
+      imagesLink.push({
+        public_id: result.public_id,
+        url: result.secure_url,
+      });
+    } else if (image.public_id && image.url) {
+      // Already uploaded object
+      imagesLink.push(image);
+    } else {
+      return next(new ErrorHandler(`Invalid image format at index ${i}`, 400));
+    }
   }
 
   req.body.images = imagesLink;
-  req.body.user = req.user.id;
+  req.body.user = req.user?.id;
 
   const product = await Product.create(req.body);
+
   res.status(200).json({
     success: true,
     product,
@@ -41,11 +58,14 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
 exports.getAllProducts = catchAsyncErrors(async (req, res) => {
   const resultsPerPage = 5;
   const productsCount = await Product.countDocuments();
-
-  const apiFeature = new ApiFeatures(Product.find().sort({"order": 1}), req.query)
+  const currentPage = Number(req.query.page) || 1;
+  const apiFeature = new ApiFeatures(
+    Product.find().sort({ order: 1, createdAt: -1 }),
+    req.query
+  )
     .search()
-    .filter();
-  // .pagination(resultsPerPage);
+    .filter()
+    .pagination(resultsPerPage);
   const products = await apiFeature.query;
 
   return res.status(200).json({
@@ -53,27 +73,24 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
     products,
     productsCount,
     resultsPerPage,
+    currentPage,
   });
 });
 
 // get all products -- Admin
 exports.getAdminProducts = catchAsyncErrors(async (req, res) => {
-  const page = parseInt(req.query.page, 10) || 1; // Default to page 1
-  const limit = parseInt(req.query.limit, 10) || 20; // Default to 20 products per page
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 20;
 
-  // Calculate the starting index
   const skip = (page - 1) * limit;
 
-  // Get the total count of products for pagination metadata
   const totalProducts = await Product.countDocuments();
 
-  // Fetch products with pagination
   const products = await Product.find()
     .populate("subCategory")
     .skip(skip)
     .limit(limit);
 
-  // Calculate total pages
   const totalPages = Math.ceil(totalProducts / limit);
 
   return res.status(200).json({
@@ -88,31 +105,51 @@ exports.getAdminProducts = catchAsyncErrors(async (req, res) => {
   });
 });
 
-
 // search products -- Admin
 exports.searchAdminProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find({ name: { $regex: req.query.name, $options: "i" } }).populate("subCategory")
+  const products = await Product.find({
+    name: { $regex: req.query.name, $options: "i" },
+  }).populate("subCategory");
 
   return res.status(200).json({
     success: true,
-    products
+    products,
   });
-})
+});
 
 // get trending products
 exports.getTrendingProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find({ trending: true });
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 20;
+
+  const skip = (page - 1) * limit;
+
+  const totalTrendingProducts = await Product.countDocuments({
+    trending: true,
+  });
+  const products = await Product.find({ trending: true })
+    .sort({
+      createdAt: -1,
+    })
+    .skip(skip)
+    .limit(limit);
 
   return res.status(200).json({
     success: true,
     products,
     productsCount: products.length,
+    totalTrendingProducts,
+    resultsPerPage: limit,
+    currentPage: page,
+    totalPages: Math.ceil(totalTrendingProducts / limit),
   });
 });
 
 // get favourite products
 exports.getFavouriteProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find({ favourite: true });
+  const products = await Product.find({ favourite: true }).sort({
+    createdAt: -1,
+  });
 
   return res.status(200).json({
     success: true,
@@ -123,7 +160,7 @@ exports.getFavouriteProducts = catchAsyncErrors(async (req, res) => {
 
 // get most ordered products
 exports.getMostOrderedProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find({}).sort({ count: -1 });
+  const products = await Product.find({}).sort({ count: -1, createdAt: -1 });
 
   return res.status(200).json({
     success: true,
@@ -140,50 +177,57 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Product Not Found", 404));
   }
 
-  // Deleting existing images from cloudinary & adding new images (if any)
-  if (req.body.images.length > 0) {
-    let images = [];
-    if (typeof req.body.images === "string") {
-      images.push(req.body.images);
-    } else {
-      images = req.body.images;
-    }
+  try {
+    // Deleting existing images from cloudinary & adding new images (if any)
+    if (req.body.images && req.body.images.length > 0) {
+      let images = [];
 
-    if (images !== undefined) {
-      // delete images from Cloudinary
-      for (let i = 0; i < product.images.length; ++i) {
-        await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+      if (typeof req.body.images === "string") {
+        images.push(req.body.images);
+      } else if (Array.isArray(req.body.images)) {
+        images = req.body.images;
+      } else {
+        return next(new ErrorHandler("Invalid images format", 400));
       }
 
-      // Uploading new images
-      const imagesLink = [];
-      for (let i = 0; i < images.length; ++i) {
-        const result = await cloudinary.v2.uploader.upload_large(images[i], {
-          folder: "products",
-        });
+      // Delete old images
+      for (let img of product.images) {
+        if (img.public_id) {
+          await cloudinary.v2.uploader.destroy(img.public_id);
+        }
+      }
 
-        imagesLink.push({
-          public_id: result.public_id,
-          url: result.secure_url,
-        });
+      const imagesLink = [];
+
+      for (let i = 0; i < images.length; i++) {
+        const image = images[i];
+
+        if (typeof image === "string") {
+          const result = await cloudinary.v2.uploader.upload_large(image, {
+            folder: "products",
+          });
+          imagesLink.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        } else if (image.public_id && image.url) {
+          imagesLink.push(image);
+        } else {
+          return next(
+            new ErrorHandler(`Invalid image format at index ${i}`, 400)
+          );
+        }
       }
 
       req.body.images = imagesLink;
+    } else {
+      req.body.images = product.images;
     }
-  } else {
-    req.body.images = product.images
+  } catch (error) {
+    return next(
+      new ErrorHandler(error.message || "Error updating product", 500)
+    );
   }
-
-  product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
-
-  res.status(200).json({
-    success: true,
-    product,
-  });
 });
 
 // get product details
@@ -207,7 +251,9 @@ exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Category Not Found", 404));
   }
 
-  const products = await Product.find({ category: category.name }).sort({"order": 1});
+  const products = await Product.find({ category: category.name }).sort({
+    order: 1,
+  });
   if (!products) {
     return next(new ErrorHandler("Products Not Found", 404));
   }
@@ -295,13 +341,15 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    product: product,
+    review: product.reviews,
     message: "Product rating added successfully",
   });
 });
 
 // get all reviews of a product
 exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
-  const product = await Product.findById(req.query.id);
+  const product = await Product.findById(req.params.id);
   if (!product) {
     return next(new ErrorHandler("Product Not Found.", 404));
   }

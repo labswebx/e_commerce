@@ -5,7 +5,10 @@ const Product = require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const enums = require("../utils/enums");
-const { sendOrderCreateSMS, sendRatingSMS } = require("../utils/sendNotification");
+const {
+  sendOrderCreateSMS,
+  sendRatingSMS,
+} = require("../utils/sendNotification");
 
 // Create new order
 exports.newOrder = catchAsyncErrors(async (req, res, next) => {
@@ -57,7 +60,8 @@ exports.newOrder = catchAsyncErrors(async (req, res, next) => {
 exports.getSingleOrder = catchAsyncErrors(async (req, res, next) => {
   const order = await Order.findById(req.params.id)
     .populate("user", "name email")
-    .populate("shippingAddress");
+    .populate("shippingAddress")
+    .populate("orderItems.product");
 
   if (!order) {
     return next(new ErrorHandler("Order not found with the given Id.", 404));
@@ -71,11 +75,14 @@ exports.getSingleOrder = catchAsyncErrors(async (req, res, next) => {
 
 // My Orders for a logged in user
 exports.myOrders = catchAsyncErrors(async (req, res, next) => {
+  console.log("req.body data", req.user, req.body);
   const orders = await Order.find({
     user: req.user._id,
-    orderStatus: { $ne: enums.ORDER_STATUS.PLACED },
-  }).sort({ createdAt: -1 });
-
+    // orderStatus: { $ne: enums.ORDER_STATUS.PLACED },
+  })
+    .sort({ createdAt: -1 })
+    .populate("orderItems.product");
+  console.log("get my orders", orders);
   res.status(200).json({
     success: true,
     orders,
@@ -86,7 +93,7 @@ exports.myOrders = catchAsyncErrors(async (req, res, next) => {
 exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
   const page = parseInt(req.query.page, 10) || 1; // Default to page 1
   const limit = parseInt(req.query.limit, 10) || 20; // Default to 20 products per page
-  
+
   const skip = (page - 1) * limit;
   const totalOrders = await Order.countDocuments();
   const totalPages = Math.ceil(totalOrders / limit);
@@ -94,10 +101,10 @@ exports.getAllOrders = catchAsyncErrors(async (req, res, next) => {
   const orders = await Order.find({
     orderStatus: { $ne: enums.ORDER_STATUS.PLACED },
   })
-  .sort({ createdAt: -1 })
-  .populate("user")
-  .skip(skip)
-  .limit(limit);
+    .sort({ createdAt: -1 })
+    .populate("user", "product")
+    .skip(skip)
+    .limit(limit);
 
   res.status(200).json({
     success: true,
@@ -133,7 +140,7 @@ exports.updateOrder = catchAsyncErrors(async (req, res, next) => {
   order.orderStatus = req.body.status;
 
   if (req.body.status === enums.ORDER_STATUS.DELIVERED) {
-    sendRatingSMS({contactNumber: order.user.contactNumber})
+    sendRatingSMS({ contactNumber: order.user.contactNumber });
     order.deliveredAt = Date.now();
     if (order.paymentInfo.status === enums.PAYMENT_STATUS.FAILED) {
       order.paymentInfo.status = enums.PAYMENT_STATUS.SUCCEEDED;

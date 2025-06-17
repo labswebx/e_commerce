@@ -3,7 +3,10 @@ const CONSTANTS = {
         BANNERS: 'banners'
     },
     CLOUDINARY_FOLDERS: {
-        BANNERS: 'banners'
+        BANNERS: "banners",
+        CATEGORIES: "categories",
+        PRODUCTS: "products",
+        SUB_CATEGORIES: "sub_categories"
     }
 }
 

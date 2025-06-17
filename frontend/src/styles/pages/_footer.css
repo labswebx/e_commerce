@@ -1,0 +1,37 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer components {
+  .footer-container {
+    @apply px-6 py-12 text-white bg-black;
+  }
+
+  .footer-grid {
+    @apply grid grid-cols-1 mx-auto max-w-7xl gap-y-10 gap-x-6 sm:grid-cols-3;
+  }
+
+  .footer-column {
+    @apply text-center sm:text-start;
+  }
+
+  .footer-title {
+    @apply mb-4 text-base font-semibold text-white;
+  }
+
+  .footer-list {
+    @apply space-y-2 text-sm text-gray-400;
+  }
+
+  .footer-description {
+    @apply text-sm leading-relaxed text-gray-400 sm:text-start;
+  }
+
+  .footer-icons {
+    @apply flex justify-center gap-4 mt-6 text-lg text-gray-300 sm:justify-start;
+  }
+
+  .footer-bottom {
+    @apply pt-6 mt-10 text-sm text-center text-gray-600 border-t border-gray-800;
+  }
+}

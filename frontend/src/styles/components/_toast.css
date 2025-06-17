@@ -1,6 +1,6 @@
 @layer components {
   .toast-base {
-    @apply flex items-center gap-2 p-2 rounded-md shadow-lg cursor-pointer text-md;
+    @apply flex items-center gap-2 p-2 text-base rounded-md shadow-lg cursor-pointer;
   }
 
   .toast-success {

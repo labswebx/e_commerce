@@ -1,9 +1,9 @@
 @layer components {
   .tab-base {
-    @apply relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-150 cursor-pointer no-scrollbar shrink-0;
+    @apply relative flex items-center gap-2 px-4 py-2 text-sm font-medium transition-all duration-150 no-scrollbar shrink-0;
   }
 
-  /* Bottom line mode */
+  /* ---------------- Bottom line style ---------------- */
   .tab-underline {
     @apply whitespace-nowrap;
   }
@@ -13,24 +13,33 @@
   }
 
   .tab-underline-unselected {
-    @apply text-gray-700 hover:text-black;
+    @apply text-zinc-400 hover:text-gray-800;
   }
 
-  /* Box mode */
+  /* ---------------- Box style ---------------- */
   .tab-box {
-    @apply border rounded-md whitespace-nowrap;
+    @apply border rounded-md border-zinc-500 whitespace-nowrap;
   }
 
   .tab-box-selected {
-    @apply text-black border-black;
+    @apply text-white border-white bg-zinc-800;
   }
 
   .tab-box-unselected {
-    @apply text-gray-700 border-gray-300 hover:border-black hover:text-black;
+    @apply text-zinc-400 hover:text-white hover:border-white;
   }
 
-  /* Disabled state */
+  /* ---------------- Minimal style ---------------- */
+  .tab-base.minimal {
+    @apply px-3 py-2 text-zinc-400 hover:text-white;
+  }
+
+  .tab-base.minimal.selected {
+    @apply font-semibold text-white;
+  }
+
+  /* ---------------- Disabled state ---------------- */
   .tab-disabled {
-    @apply text-gray-400 opacity-50 cursor-not-allowed;
+    @apply opacity-50 cursor-not-allowed text-zinc-500;
   }
 }

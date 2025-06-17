@@ -43,7 +43,7 @@ router
 
 router.route("/review").put(isAuthenticatedUser, createProductReview);
 router
-  .route("/reviews")
+  .route("/product/:id/reviews")
   .get(getProductReviews)
   .delete(isAuthenticatedUser, authorizeRoles("admin"), deleteReview);
 

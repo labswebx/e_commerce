@@ -7,12 +7,12 @@ import CATEGORY_ACTION_TYPES from "./categoryActionTypes";
 import categoryApi from "./categoryApi";
 
 export const fetchCategories = createAsyncThunkHandler(
-  CATEGORY_ACTION_TYPES.FETCH_ALL,
+  CATEGORY_ACTION_TYPES.FETCH_ALL_CATEGORIES,
   async () => categoryApi.getAllCategories()
 );
 
 export const fetchCategoryDetails = createAsyncThunkHandler(
-  CATEGORY_ACTION_TYPES.FETCH_DETAILS,
+  CATEGORY_ACTION_TYPES.FETCH_CATEGORY_DETAILS,
   async (id) => categoryApi.getCategoryDetails(id)
 );
 
@@ -20,6 +20,7 @@ const categorySlice = createSlice({
   name: "category",
   initialState: {
     categories: [],
+    categoryCount: 0,
     currentCategory: null,
     loading: false,
     error: null,
@@ -30,6 +31,7 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = null;
       state.success = false;
+      state.categories = [];
       state.currentCategory = null;
     },
   },
@@ -38,7 +40,9 @@ const categorySlice = createSlice({
       .addCase(fetchCategories.pending, setLoading)
       .addCase(fetchCategories.fulfilled, (state, action) => {
         state.loading = false;
-        state.categories = action.payload;
+        state.categories = action.payload.categories;
+        state.categoryCount = action.payload.categoryCount;
+        state.success = action.payload.success;
       })
       .addCase(fetchCategories.rejected, setError)
       // featch categroy details

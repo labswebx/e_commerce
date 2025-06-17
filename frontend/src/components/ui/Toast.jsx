@@ -1,16 +1,12 @@
-// utils/toastUtils.js
 import { toast } from "react-hot-toast";
 import theme, { TOAST_THEME } from "../../theme";
-import { Info, TriangleAlert, X, CheckCircle } from "lucide-react";
+import { Info, TriangleAlert, X, CheckCircle, AlertCircle } from "lucide-react";
 
 const { COLORS } = theme;
 
-const defaultDuration = {
-  duration: 10000,
-};
+const defaultDuration = 4000;
 
 const CustomToast = ({ icon: Icon, message, toastId, type }) => {
-  // Map type to class names
   const typeClass = {
     success: "toast-success",
     error: "toast-error",

@@ -4,23 +4,22 @@ const COLORS = {
   black: "#000000",
 
   gray: {
-    100: "#E7E7E7",
-    200: "#E4E4E4",
-    300: "#D9D9D9",
-    400: "#D4D4D4",
-    450: "#D3D3D3",
-    500: "#CECECE",
-    550: "#CFCFCF",
-    600: "#AEAEAE",
-    650: "#A7A7A7",
-    700: "#A4A4A4",
-    750: "#9F9F9F",
-    800: "#989898",
-    850: "#979797",
-    900: "#929292",
-    950: "#909090",
+    100: "#F2F2F2", // Very light
+    200: "#E0E0E0", // Light background
+    300: "#C6C6C6", // Card borders
+    400: "#AFAFAF", // Placeholder
+    450: "#9C9C9C", // Secondary text
+    500: "#8A8A8A", // Muted text
+    550: "#787878", // Tertiary emphasis
+    600: "#666666", // Body text
+    650: "#555555", // Active text
+    700: "#444444", // Strong headings
+    750: "#333333", // UI dark border
+    800: "#222222", // Strong background
+    850: "#1A1A1A", // Overlay / drawer
+    900: "#121212", // Modal / dark mode bg
+    950: "#0A0A0A", // True black-like
   },
-
   offWhite: "#FAFAFA",
   lightGray: "#F6F6F6",
   softGray: "#F5F5F5",
@@ -159,12 +158,14 @@ const TYPOGRAPHY = {
     display: "48px",
   },
   fontWeight: {
-    light: 300,
-    regular: 400,
-    medium: 500,
-    semiBold: 600,
-    bold: 700,
-    extraBold: 800,
+    thin: "100",
+    extralight: "200",
+    light: "300",
+    regular: "400",
+    medium: "500",
+    semiBold: "600",
+    bold: "700",
+    extraBold: "800",
   },
   lineHeight: {
     tight: "1.2",
@@ -182,6 +183,7 @@ const TYPOGRAPHY = {
 export const ICON_SIZE = {
   xs: 16,
   sm: 24,
+  sd: 28,
   md: 32,
   lg: 40,
   xl: 48,

@@ -1,12 +1,11 @@
 @layer components {
   .input-wrapper {
-    @apply relative flex items-center gap-2;
+    @apply relative flex items-center;
   }
 
   .input-text {
-    @apply w-full px-4 py-4 text-sm leading-5 placeholder-gray-500 bg-white border border-gray-400 rounded-md text-charcoal focus:outline-none focus:ring-2 focus:ring-gray-600;
-    font-size: 14px;
-    line-height: 20px;
+    @apply w-full px-4 py-3 text-sm leading-5 placeholder-gray-500 bg-white border border-gray-400 rounded-md text-charcoal focus:outline-none focus:ring-2 focus:ring-gray-600 focus:border-transparent;
+    font-family: "SF Pro Display", sans-serif;
     border-width: 0.5px;
   }
 
@@ -17,6 +16,7 @@
   }
 
   .input-text::placeholder {
+    @apply opacity-100;
     font-family: "SF Pro Display", sans-serif;
     font-size: 14px;
     line-height: 24px;
@@ -35,6 +35,15 @@
   }
 
   .input-button {
-    @apply px-4 py-2 text-sm text-white transition bg-black rounded-md hover:bg-gray-800;
+    @apply px-4 py-2 text-sm text-white transition bg-black rounded-md hover:bg-gray-800 focus:outline-none focus:ring-2 focus:ring-gray-600 focus:ring-offset-2;
+  }
+  .size-sm {
+    @apply px-3 py-2 text-sm;
+  }
+  .size-md {
+    @apply py-2.5 px-4 text-base;
+  }
+  .size-lg {
+    @apply px-5 py-3 text-lg;
   }
 }

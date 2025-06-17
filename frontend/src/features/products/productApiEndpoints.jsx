@@ -1,14 +1,15 @@
+import { apiVersion } from "../../config/api";
+
 export const PRODUCTS_API_ENDPOINTS = {
   //   products related
-  GET_PRODUCTS: "/products",
-  GET_TRENDING_PRODUCTS: "/products/trending",
-  GET_FAVOURITE_PRODUCTS: "/products/favourite",
-  GET_MOST_ORDERED_PRODUCTS: "/products/mostOrdered",
-  GET_SUGGESTED_PRODUCTS: "/products/suggested",
-  GET_PRODUCT_DETAILS: (id) => `/product/${id}`,
-  GET_CATEGORY_PRODUCTS: (id) => `/product/category/${id}`,
+  GET_PRODUCTS: `${apiVersion}/products`,
+  GET_TRENDING_PRODUCTS: `${apiVersion}/products/trending`,
+  GET_FAVOURITE_PRODUCTS: `${apiVersion}/products/favourite`,
+  GET_MOST_ORDERED_PRODUCTS: `${apiVersion}/products/mostOrdered`,
+  GET_SUGGESTED_PRODUCTS: `${apiVersion}/products/suggested`,
+  GET_PRODUCT_DETAILS: (id) => `${apiVersion}/product/${id}`,
+  GET_CATEGORY_PRODUCTS: (id) => `${apiVersion}/product/category/${id}`,
 
-  // Reviews
-  CREATE_REVIEW: "/review",
-  GET_REVIEWS: "/reviews",
+  CREATE_REVIEW: `${apiVersion}/review`,
+  GET_REVIEWS: (productId) => `${apiVersion}/reviews?id=${productId}`,
 };

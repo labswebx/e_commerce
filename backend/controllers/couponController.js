@@ -88,10 +88,11 @@ exports.deleteCoupon = catchAsyncErrors(async (req, res, next) => {
 exports.validateCoupon = catchAsyncErrors(async (req, res, next) => {
   const { code, cartValue } = req.body;
   const coupon = await Coupon.findOne({ code });
-
-  if (!cartValue) {
-    return next(new ErrorHandler("Invalid cart value", 400));
-  } else if (!coupon) {
+  console.log(coupon, code, cartValue);
+  // if (!cartValue) {
+  //   return next(new ErrorHandler("Invalid cart value", 400));
+  // }
+  if (!coupon) {
     return next(new ErrorHandler("Coupon Not Found", 404));
   } else if (coupon.expires < Date.now()) {
     return next(
@@ -118,6 +119,7 @@ exports.validateCoupon = catchAsyncErrors(async (req, res, next) => {
     discount = (cartValue * coupon.value) / 100;
     finalPrice = cartValue - discount;
   }
+  console.log("coupon code", coupon);
 
   return res.status(200).json({
     success: true,

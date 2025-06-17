@@ -41,9 +41,9 @@
 
 # Pages
 
-- [ ] Header
+- [x] Header
 - [ ] Home
-- [ ] Footer
+- [x] Footer
 
 - [ ] Product detail page
 - [ ] shopping cart page
@@ -53,3 +53,5 @@
 # custom hooks
 
 # routes setup
+
+Faceted search,

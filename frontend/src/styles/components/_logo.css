@@ -13,11 +13,11 @@
   }
 
   .logo-size-md {
-    @apply h-8 text-base;
+    @apply h-10 text-base;
   }
 
   .logo-size-lg {
-    @apply h-10 text-lg;
+    @apply h-16 text-lg;
   }
 
   .logo-image {

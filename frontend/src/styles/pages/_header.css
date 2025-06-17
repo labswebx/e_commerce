@@ -1,0 +1,46 @@
+@layer components {
+  .header-container {
+    @apply z-50 w-full px-4 py-3 bg-white shadow-sm sm:px-6 lg:px-10;
+    /* fixed top-0 left-0 */
+  }
+
+  .header-grid {
+    @apply grid items-center max-w-screen-xl grid-cols-12 gap-4 mx-auto;
+  }
+
+  .header-logo {
+    @apply flex items-center col-span-6 md:col-span-2;
+  }
+
+  .header-search {
+    @apply hidden col-span-3 md:flex;
+  }
+
+  .header-nav {
+    @apply justify-center hidden col-span-5 gap-2 text-sm font-medium md:flex;
+  }
+
+  .header-icons {
+    @apply justify-end hidden col-span-2 gap-6 md:flex;
+  }
+
+  .header-mobile-toggle {
+    @apply flex justify-end col-span-6 md:hidden;
+  }
+
+  .subnav-container {
+    @apply hidden w-full bg-[#2E2E2E] border-t md:block;
+  }
+
+  .subnav-wrapper {
+    @apply w-full py-2 overflow-x-auto lg:px-28 sm:px-10;
+  }
+
+  .mobile-nav {
+    @apply fixed top-0 left-0 z-30 w-full bg-white border-t shadow-md md:hidden;
+  }
+
+  .mobile-nav-inner {
+    @apply flex items-center justify-between px-4 py-3 border-b;
+  }
+}

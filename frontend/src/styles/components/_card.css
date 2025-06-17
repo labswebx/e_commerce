@@ -1,0 +1,38 @@
+@layer components {
+  .card-base {
+    @apply w-full max-w-xs p-4 mx-auto transition bg-white border shadow sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm rounded-2xl hover:shadow-lg;
+  }
+
+  .card-product-img {
+    @apply object-cover w-full h-40 rounded-md sm:h-48 md:h-52;
+  }
+
+  .card-category {
+    @apply w-full max-w-[100px] sm:max-w-[100px] md:max-w-[100px] lg:max-w-[100px] bg-pink-200 border shadow rounded-xl hover:shadow-md transition duration-300  flex flex-col items-center justify-center;
+    aspect-ratio: 1 / 1;
+  }
+
+  .card-category-title {
+    @apply text-xs font-semibold sm:text-[8px] md:text-[10px] line-clamp-2 text-center;
+  }
+
+  .btn-cart {
+    @apply w-full px-4 py-2 mt-3 text-sm font-medium text-white bg-black rounded-lg hover:bg-gray-800;
+  }
+
+  .btn-qty {
+    @apply w-6 h-6 text-lg border rounded hover:bg-gray-200;
+  }
+
+  .card-review {
+    @apply w-full max-w-md p-4 bg-white border shadow rounded-xl;
+  }
+
+  .card-cart-item {
+    @apply flex flex-col items-start justify-between w-full max-w-2xl gap-4 p-4 bg-gray-100 shadow-sm sm:flex-row rounded-xl;
+  }
+
+  .carousel-item {
+    @apply w-24 mr-4 last:mr-0 sm:w-32 md:w-44;
+  }
+}

@@ -4,7 +4,7 @@ import theme from "./src/theme";
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
-  darkMode: "class", // or 'media' for system preference
+  darkMode: "class",
   safelist: [
     "btn",
     "btn-sm",
@@ -59,11 +59,11 @@ export default {
       borderStyle: theme.BORDER.style,
       fontFamily: {
         sfpro: [theme.TYPOGRAPHY.fontFamily.sfpro],
+        figtree: ["Figtree"],
         sans: [theme.TYPOGRAPHY.fontFamily.primary, "sans-serif"],
         display: [theme.TYPOGRAPHY.fontFamily.secondary, "sans-serif"],
         mono: [theme.TYPOGRAPHY.fontFamily.monospace, "monospace"],
       },
-      fontSize: theme.TYPOGRAPHY.fontSize,
       fontWeight: theme.TYPOGRAPHY.fontWeight,
       lineHeight: theme.TYPOGRAPHY.lineHeight,
       letterSpacing: theme.TYPOGRAPHY.letterSpacing,
@@ -93,5 +93,6 @@ export default {
     require("@tailwindcss/forms"),
     require("@tailwindcss/typography"),
     require("@tailwindcss/aspect-ratio"),
+    require("tailwind-scrollbar-hide"),
   ],
 };

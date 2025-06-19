@@ -17,7 +17,7 @@ import {
 import useAddress from "../../features/address/addressHooks";
 
 // reusable modal form for: Adding a new address and Editing an existing address
-const AddAddressModal = ({ isOpen, onClose, isEdit, initialData }) => {
+const AddressModal = ({ isOpen, onClose, isEdit, initialData }) => {
   const { createNewAddress, updateExistingAddress, fetchAddresses } =
     useAddress();
   const actionLabel = isEdit ? "Update Address" : "Save Address";
@@ -47,7 +47,7 @@ const AddAddressModal = ({ isOpen, onClose, isEdit, initialData }) => {
         }
 
         await fetchAddresses().unwrap();
-        onClose(true);
+        onClose();
         resetForm(initialAddressState);
       } catch (err) {
         // Show server or validation error
@@ -62,7 +62,7 @@ const AddAddressModal = ({ isOpen, onClose, isEdit, initialData }) => {
                 : toastMessage.ADDRESS_CREATE.ERROR)
           );
         }
-        onClose(false);
+        onClose();
       }
     },
     addressSchema
@@ -116,4 +116,4 @@ const AddAddressModal = ({ isOpen, onClose, isEdit, initialData }) => {
   );
 };
 
-export default AddAddressModal;
+export default AddressModal;

@@ -20,7 +20,7 @@
   }
 
   .modal-close-btn {
-    @apply absolute text-xl text-gray-500 cursor-pointer top-3 right-3 hover:text-gray-700;
+    @apply absolute z-50 text-xl text-gray-500 cursor-pointer top-3 right-3 hover:text-gray-700;
   }
 
   /* Address modal */

@@ -22,7 +22,7 @@ export const deleteAddress = createAsyncThunkHandler(
   async (id) => addressApi.deleteAddress(id)
 );
 
-export const getMyAddress = createAsyncThunkHandler(
+export const getMyAddresses = createAsyncThunkHandler(
   addressActionTypes.GET_MY,
   async () => addressApi.getMyAddresses()
 );
@@ -72,12 +72,12 @@ const addressSlice = createSlice({
       .addCase(deleteAddress.rejected, setError)
 
       // get my
-      .addCase(getMyAddress.pending, setLoading)
-      .addCase(getMyAddress.fulfilled, (state, action) => {
+      .addCase(getMyAddresses.pending, setLoading)
+      .addCase(getMyAddresses.fulfilled, (state, action) => {
         state.loading = false;
         state.addresses = action.payload.addresses;
       })
-      .addCase(getMyAddress.rejected, setError)
+      .addCase(getMyAddresses.rejected, setError)
 
       // get details
       .addCase(getAddressDetails.pending, setLoading)

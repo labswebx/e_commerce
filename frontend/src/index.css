@@ -1,4 +1,5 @@
 /* Base styles */
+@import url("https://fonts.googleapis.com/css2?family=Figtree:ital,wght@0,300..900;1,300..900&display=swap");
 @import "./styles/base.css";
 
 /* Utilities */
@@ -30,3 +31,6 @@
 @import "./styles/pages/_footer.css";
 @import "./styles/pages/_header.css";
 /* @import "./styles/components"; */
+.scrollbar-thin::-webkit-scrollbar {
+  height: 6px;
+}

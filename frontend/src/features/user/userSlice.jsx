@@ -39,7 +39,7 @@ export const loginUser = createAsyncThunkHandler(
 
 export const getProfile = createAsyncThunkHandler(
   USER_ACTION_TYPES.GET_USER_PROFILE,
-  async () => userApi.getProfile()
+  async () => userApi.getUserProfile()
 );
 
 export const updateProfile = createAsyncThunkHandler(

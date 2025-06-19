@@ -1,13 +1,30 @@
-import { Cross, Edit, Pencil, X } from "lucide-react";
-import React from "react";
+import { Pencil, X } from "lucide-react";
 import InputField from "./InputField";
 import Icon from "./Icon";
 import DatePicker from "./DatePicker";
 import Button from "./Button";
 import AddToCartButton from "./AddToCartButton";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Heart, HeartOff } from "lucide-react";
+import { formatPrice } from "../../utils/formatter";
 
-export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
-  const imageUrl = data.images?.[0]?.public_id || "/logo-icon.jpg";
+// Product card
+export const ProductCard = ({
+  data,
+  onAddToCart,
+  variant = "default",
+  className,
+}) => {
+  // state
+  const [liked, setLiked] = useState(false);
+
+  const imageUrl = data.images?.[0]?.url || "/logo-icon.jpg";
+
+  // event handler for like
+  const toggleLike = () => {
+    setLiked(!liked);
+  };
 
   const getImageClasses = () => {
     switch (variant) {
@@ -17,17 +34,24 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
         return "w-full h-32";
       case "highlight":
         return "w-full h-60";
+      case "feature":
+        return "w-full  h-44 sm:h-56 md:h-64 object-contain";
       default:
         return "mx-auto w-full h-40 sm:h-48 md:h-52";
     }
   };
 
+  // product card with variant
   const renderContent = () => {
     switch (variant) {
       case "compact":
         return (
           <>
-            <h3 className="mt-2 text-base font-semibold">{data.title}</h3>
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-2 text-base font-semibold hover:underline">
+                {data.name}
+              </h3>
+            </Link>
             <Button
               variant="outline"
               onClick={() => onAddToCart(data)}
@@ -35,20 +59,50 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
             />
           </>
         );
+      case "feature":
+        return (
+          <>
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-4 text-xl font-semibold">{data.name}</h3>
+            </Link>
+
+            <p className="mt-2 text-sm text-gray-600">
+              {data.description ||
+                "iPad combines a magnificent 10.2-inch Retina display, incredible performance, multitasking and ease of use."}
+            </p>
+
+            <div className="flex items-start">
+              <Button
+                variant="outline"
+                onClick={() => onAddToCart(data)}
+                label="Shop Now"
+                className="mt-4 px-14"
+              />
+            </div>
+          </>
+        );
 
       case "minimal":
         return (
           <>
-            <h3 className="mt-2 text-sm font-medium">{data.title}</h3>
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-2 text-sm font-medium hover:underline">
+                {data.name}
+              </h3>
+            </Link>
           </>
         );
 
       case "highlight":
         return (
           <>
-            <h3 className="mt-4 text-xl font-bold">{data.title}</h3>
-            <p className="text-sm text-gray-600">{data.description}</p>
-            <p className="mt-1 text-lg font-semibold">${data.price}</p>
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-4 text-xl font-bold hover:underline">
+                {data.name}
+              </h3>
+              <p className="mt-1 text-lg font-semibold">${data.price}</p>
+            </Link>
+
             <Button
               variant="outline"
               onClick={() => onAddToCart(data)}
@@ -61,11 +115,19 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
       default: // "default"
         return (
           <>
-            <h3 className="mt-2 text-lg font-medium">{data.title}</h3>
-            <p className="text-sm text-gray-500">{data.description}</p>
-            <p className="mt-2 text-xl font-semibold">${data.price}</p>
-            <div className="w-full mt-2">
-              <AddToCartButton product={data} />
+            <Link to={`/product/${data._id}`}>
+              <h3 className="mt-2 text-lg font-medium hover:underline">
+                {data.name}
+              </h3>
+            </Link>
+            <p className="mt-2 text-xl font-semibold">
+              {formatPrice(data.price)}
+            </p>
+
+            <div className="flex justify-center w-full px-4 mt-auto">
+              <div className="w-full lg:max-w-[127px]">
+                <AddToCartButton product={data} className="w-full" />
+              </div>
             </div>
           </>
         );
@@ -74,20 +136,50 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
 
   return (
     <div
-      className={`card-base text-center ${
-        variant === "highlight" ? "w-full p-4" : "w-72"
+      className={`relative card-base h-full flex flex-col justify-between text-center ${className} ${
+        variant === "highlight"
+          ? "w-full p-4"
+          : variant === "feature"
+          ? "w-full md:max-w-[400px] bg-white p-6 border-none  "
+          : "w-72"
       }`}
     >
-      <img
-        src={imageUrl}
-        alt={data.title}
-        className={`rounded-md object-cover ${getImageClasses()}`}
-      />
-      {renderContent()}
+      <Link to={`/product/${data._id}`}>
+        <div
+          className={`relative overflow-hidden bg-white rounded-md ${getImageClasses()}`}
+        >
+          <img
+            src={imageUrl}
+            alt={data.name}
+            loading="lazy"
+            className="absolute top-0 left-0 object-contain w-full h-full "
+          />
+        </div>
+      </Link>
+
+      {variant === "feature" ? (
+        ""
+      ) : (
+        <button
+          onClick={toggleLike}
+          className="absolute top-4 right-4 p-[6px] bg-white rounded-full shadow-md hover:bg-gray-100 transition"
+        >
+          {liked ? (
+            <Heart className="w-6 h-6 text-red-500" fill="red" />
+          ) : (
+            <Heart className="w-6 h-6" />
+          )}
+        </button>
+      )}
+
+      <div className="flex flex-col justify-between flex-1 mt-4">
+        {renderContent()}
+      </div>
     </div>
   );
 };
 
+// categoryCard
 const CategoryCard = ({ data }) => {
   return (
     <div className="card-category ">
@@ -101,6 +193,7 @@ const CategoryCard = ({ data }) => {
   );
 };
 
+// review card
 const ReviewCard = ({ data }) => (
   <div className="card-review">
     <div className="flex items-center gap-3 mb-2">
@@ -140,7 +233,7 @@ const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => {
       {/* Image and Info */}
       <div className="flex items-start gap-4">
         <img
-          src={data?.images?.[0]?.public_id || "/logo-icon.jpg"}
+          src={data?.images?.[0]?.url || "/logo-icon.jpg"}
           alt={data?.name || data?.title}
           className="object-cover w-20 h-20 rounded-lg"
         />
@@ -154,28 +247,6 @@ const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => {
 
       {/* Quantity and Price Controls */}
       <div className="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap sm:gap-4">
-        {/* <div className="flex items-center gap-2 px-2 py-1 border rounded">
-          <button
-            onClick={() => onDecrement(data || data._id)}
-            className="text-xl font-medium"
-          >
-            −
-          </button>
-          <span className="text-sm font-semibold">{data?.quantity}</span>
-          <button
-            onClick={() => onIncrement(data || data._id)}
-            className="text-xl font-medium"
-          >
-            +
-          </button>
-        </div> */}
-        {/* <p className="text-lg font-bold text-gray-800">₹{data?.price}</p>
-        <button
-          onClick={() => onRemove(data?._id)}
-          className="text-xl text-gray-500 hover:text-red-600"
-        >
-          ✕
-        </button> */}
         <AddToCartButton product={data} />
       </div>
     </div>
@@ -233,6 +304,7 @@ const AddressCard = ({
   );
 };
 
+// shipping card
 const ShippingCard = ({
   data,
   selectedId,
@@ -273,6 +345,8 @@ const ShippingCard = ({
     ))}
   </div>
 );
+
+// Dynamically renders different card components (product, category, review, etc.) based on the 'type' prop
 
 const Card = ({ type, data, imageOnly, ...handlers }) => {
   switch (type) {

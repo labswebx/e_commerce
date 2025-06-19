@@ -23,7 +23,7 @@ const CheckoutStep1 = () => {
     error,
   } = useAddress();
   const { next, back } = useCheckout();
-
+  
   const [selectedId, setSelectedId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editData, setEditData] = useState(null);

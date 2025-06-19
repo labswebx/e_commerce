@@ -7,7 +7,7 @@ mongoose.ObjectId.cast((v) => (v === "" ? v : castObjectId(v)));
 const productSchema = new mongoose.Schema(
   {
     name: {
-      type: "String",
+      type: String,
       required: [true, "Please enter product name"],
       trim: true,
     },
@@ -54,22 +54,24 @@ const productSchema = new mongoose.Schema(
       {
         public_id: {
           type: String,
-          // required: true,
+          required: true,
         },
         url: {
           type: String,
-          // required: true,
+          required: true,
         },
       },
     ],
     category: {
-      type: String,
-      // requred: [true, "Please enter valid product category"],
+      type: mongoose.Schema.ObjectId,
+      ref: "Category",
+      requred: [true, "Please enter valid product category"],
+      default: null,
     },
     subCategory: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
       ref: "SubCategory",
-      // default: "",
+      default: null,
     },
     stock: {
       type: Number,
@@ -93,27 +95,27 @@ const productSchema = new mongoose.Schema(
       {
         name: {
           type: String,
-          // required: true,
+          required: true,
         },
         rating: {
           type: Number,
-          // required: true,
+          required: true,
         },
         comment: {
           type: String,
-          // required: true,
+          required: true,
         },
         user: {
           type: mongoose.Schema.ObjectId,
           ref: "User",
-          // required: true,
+          required: true,
         },
       },
     ],
     user: {
       type: mongoose.Schema.ObjectId,
       ref: "User",
-      // required: true,
+      required: true,
     },
     createdAt: {
       type: Date,

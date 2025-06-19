@@ -10,9 +10,13 @@ const AddToCartButton = ({ product }) => {
   const quantity = cartItem?.quantity || 0;
 
   return (
-    <div className="flex items-center w-full gap-2">
+    <div className="flex items-center w-full gap-2 max-sm:justify-between">
       {quantity === 0 ? (
-        <Button onClick={() => addToCart(product)} label="Add to cart" />
+        <Button
+          onClick={() => addToCart(product)}
+          label="Add to cart"
+          className="max-sm:w-full"
+        />
       ) : (
         <>
           <Button

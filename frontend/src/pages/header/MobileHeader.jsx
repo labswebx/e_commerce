@@ -9,7 +9,9 @@ const MobileHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
   return (
     <div className="mobile-nav">
       <div className="mobile-nav-inner">
-        <span className="text-lg font-semibold">Menu</span>
+        <span className="text-lg font-semibold">
+          <img src="/logo-icon.jpg" className="logo-image logo-size-lg" />
+        </span>
         <button onClick={() => setMobileMenuOpen(false)}>
           <Icon icon={X} variant="ghost" />
         </button>

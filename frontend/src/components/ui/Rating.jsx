@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Star } from "lucide-react";
+import theme from "../../theme";
 
 const Rating = ({ rating = 0, outOf = 5, editable = false, onChange }) => {
   const [hovered, setHovered] = useState(null);
@@ -23,11 +24,11 @@ const Rating = ({ rating = 0, outOf = 5, editable = false, onChange }) => {
       {[...Array(outOf)].map((_, i) => {
         const fillPercentage = displayRating - i;
 
-        let fillColor = "#d1d5db";
+        let fillColor = theme.COLORS.gray[550];
         let fill = "none";
 
         if (fillPercentage >= 1) {
-          fillColor = "#facc15";
+          fillColor = theme.COLORS.warning.main;
           fill = fillColor;
         } else if (fillPercentage > 0) {
           // Partial fill using gradient
@@ -49,13 +50,19 @@ const Rating = ({ rating = 0, outOf = 5, editable = false, onChange }) => {
           >
             <defs>
               <linearGradient id={`grad${i}`}>
-                <stop offset={`${fillPercentage * 100}%`} stopColor="#facc15" />
-                <stop offset={`${fillPercentage * 100}%`} stopColor="#fff" />
+                <stop
+                  offset={`${fillPercentage * 100}%`}
+                  stopColor={theme.COLORS.warning.main}
+                />
+                <stop
+                  offset={`${fillPercentage * 100}%`}
+                  stopColor={theme.COLORS.gray[550]}
+                />
               </linearGradient>
             </defs>
             <path
               d="M12 .587l3.668 7.431 8.2 1.193-5.934 5.778 1.402 8.183L12 18.896l-7.336 3.856 1.402-8.183L.132 9.211l8.2-1.193z"
-              stroke="#facc15"
+              stroke={theme.COLORS.warning.main}
               strokeWidth="1"
             />
           </svg>

@@ -4,7 +4,7 @@ import Icon from "./Icon";
 import classNames from "classnames";
 
 const Button = ({
-  label = "Label",
+  label = "",
   onClick,
   size = "md", // sm | md | lg
   variant = "filled", // filled | outline | ghost

@@ -1,28 +1,16 @@
 const Category = require("../models/categoryModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
-const cloudinary = require("cloudinary");
+const cloudinary = require('cloudinary')
 
 // Create Category -- Admin
 exports.createCategory = catchAsyncErrors(async (req, res, next) => {
   // req.body.user = req.user.id;
 
-  let result;
-
-  // ✅ Case 1: File upload from form-data
-  if (req.files && req.files.image) {
-    result = await cloudinary.v2.uploader.upload(req.files.image.tempFilePath, {
-      folder: "categories",
-    });
-  }
-  // ✅ Case 2: base64 or image URL from JSON body
-  else if (req.body.image) {
-    result = await cloudinary.v2.uploader.upload(req.body.image, {
-      folder: "categories",
-    });
-  } else {
-    return next(new ErrorHandler("Image is required", 400));
-  }
+  let image = {};
+  const result = await cloudinary.v2.uploader.upload_large(req.body.image, {
+    folder: "categories",
+  });
 
   req.body.image = {
     public_id: result.public_id,
@@ -62,7 +50,7 @@ exports.updateCategory = catchAsyncErrors(async (req, res, next) => {
 
     const imagesLink = {};
     const result = await cloudinary.v2.uploader.upload_large(image, {
-      folder: "categories",
+      folder: CONSTANTS.CLOUDINARY_FOLDERS.CATEGORIES,
     });
 
     imagesLink.public_id = result.public_id;

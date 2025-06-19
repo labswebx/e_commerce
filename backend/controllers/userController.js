@@ -389,7 +389,7 @@ exports.registerUserViaOTP = catchAsyncErrors(async (req, res, next) => {
     );
   }
 
-  const serviceablePincodes = JSON.parse(process.env.SERVICEABLE_PINCODES);
+  const serviceablePincodes = JSON.parse(process.env.SERVICEABLE_PINCODES)
   if (!serviceablePincodes.includes(pincode)) {
     return next(
       new ErrorHandler("The entered pincode is not serviceable right now.", 400)

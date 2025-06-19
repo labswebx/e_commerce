@@ -47,7 +47,10 @@ export const userApi = {
 
   updateProfile: async (data) => {
     try {
-      const res = await axiosInstance.put(USER_API_ENDPOINTS.UPDATE_ME, data);
+      const res = await axiosInstance.put(
+        USER_API_ENDPOINTS.UPDATE_USER_PROFILE,
+        data
+      );
       return res.data;
     } catch (err) {
       handleError(err);

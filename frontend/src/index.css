@@ -30,6 +30,7 @@
 @import "./styles/components/_nav-tab.css";
 @import "./styles/pages/_footer.css";
 @import "./styles/pages/_header.css";
+@import "./styles/components/_sidebar.css";
 /* @import "./styles/components"; */
 .scrollbar-thin::-webkit-scrollbar {
   height: 6px;

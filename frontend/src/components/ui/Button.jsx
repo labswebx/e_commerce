@@ -16,12 +16,14 @@ const Button = ({
   iconLeft: IconLeft,
   iconRight: IconRight,
   className = "",
+  ariaLabel,
   ref,
   ...props
 }) => {
   return (
     <button
       ref={ref}
+      aria-label={ariaLabel}
       onClick={onClick}
       disabled={disabled || loading}
       className={classNames(

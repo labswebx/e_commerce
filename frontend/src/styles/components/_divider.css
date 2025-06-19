@@ -1,19 +1,39 @@
-@layer components{
-    /* Divider */
+@layer components {
+  /* Divider */
   .divider {
     @apply relative;
   }
-  .divider-line {
-    @apply w-full border-t border-gray-300;
-  }
-  .divider-vertical {
-    @apply w-px h-full mx-2 bg-gray-300;
-  }
+
   .divider-content {
     @apply absolute flex justify-center;
   }
+
+  .divider-line {
+    @apply w-full border-t border-gray-300;
+  }
+
+  .divider-vertical {
+    @apply w-px h-6 mx-2 bg-gray-300;
+  }
+
   .divider-text {
     @apply px-2 text-sm text-gray-500 bg-white;
   }
 
+  /* Address divider */
+  .address-divider {
+    @apply relative w-full mt-6 mb-2 text-center;
+  }
+
+  .address-divider-line {
+    @apply w-full border-2 border-gray-900 border-dashed;
+  }
+
+  .address-divider-btn {
+    @apply absolute flex items-center justify-center w-6 h-6 text-white transform -translate-x-1/2 bg-black rounded-full left-1/2 -top-3;
+  }
+
+  .address-divider-text {
+    @apply mt-2 text-sm text-gray-600;
+  }
 }

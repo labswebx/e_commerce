@@ -47,7 +47,7 @@ const categorySlice = createSlice({
       // featch categroy details
       .addCase(fetchCategoryDetails.pending, setLoading)
       .addCase(fetchCategoryDetails.fulfilled, (state, action) => {
-        state.currentCategory = action.payload;
+        state.currentCategory = action.payload.category;
       })
       .addCase(fetchCategoryDetails.rejected, setError);
   },

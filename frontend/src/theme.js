@@ -158,12 +158,14 @@ const TYPOGRAPHY = {
     display: "48px",
   },
   fontWeight: {
-    light: 300,
-    regular: 400,
-    medium: 500,
-    semiBold: 600,
-    bold: 700,
-    extraBold: 800,
+    thin: "100",
+    extralight: "200",
+    light: "300",
+    regular: "400",
+    medium: "500",
+    semiBold: "600",
+    bold: "700",
+    extraBold: "800",
   },
   lineHeight: {
     tight: "1.2",
@@ -276,6 +278,13 @@ export const BUTTON_THEME = {
   },
 };
 
+// used in category
+export const bgColors = [
+  "bg-[#E6EFE4]",
+  "bg-[#E6EFE4]",
+  "bg-[#ECE4EF]",
+  "bg-[#EFE4E4]",
+];
 export const INPUT_THEME = {
   base: {
     borderColor: COLORS.gray[750],

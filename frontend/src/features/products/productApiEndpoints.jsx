@@ -10,5 +10,5 @@ export const PRODUCTS_API_ENDPOINTS = {
 
   // Reviews
   CREATE_REVIEW: "/review",
-  GET_REVIEWS: "/reviews",
+  GET_REVIEWS: (id) => `/product/${id}/reviews`,
 };

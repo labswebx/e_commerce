@@ -1,13 +1,12 @@
 // features/address/addressHooks.js
 import { useDispatch, useSelector } from "react-redux";
 import {
-  getMyAddress,
+  getMyAddresses,
   createAddress,
   updateAddress,
   deleteAddress,
   getAddressDetails,
 } from "./addressSlice";
-import { useEffect } from "react";
 
 const useAddress = () => {
   const dispatch = useDispatch();
@@ -15,7 +14,7 @@ const useAddress = () => {
     (state) => state.address
   );
 
-  const fetchAddresses = () => dispatch(getMyAddress());
+  const fetchAddresses = () => dispatch(getMyAddresses());
   const fetchAddressDetails = (id) => dispatch(getAddressDetails(id));
   const createNewAddress = (data) => dispatch(createAddress(data));
   const updateExistingAddress = ({ id, data }) =>

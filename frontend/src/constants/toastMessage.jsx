@@ -77,6 +77,45 @@ const toastMessage = {
     SUCCESS: "Cart cleared",
     ERROR: "Failed to clear cart",
   },
+  // Product Messages
+  PRODUCT_CREATE: {
+    SUCCESS: "Product created successfully",
+    ERROR: "Failed to create product",
+  },
+  PRODUCT_UPDATE: {
+    SUCCESS: "Product updated successfully",
+    ERROR: "Failed to update product",
+  },
+  PRODUCT_DELETE: {
+    SUCCESS: "Product deleted successfully",
+    ERROR: "Failed to delete product",
+  },
+  PRODUCT_LOAD: {
+    ERROR: "Failed to load product(s)",
+    EMPTY: "No product found",
+  },
+  REVIEW_SUBMIT: {
+    SUCCESS: "Review submitted successfully",
+    ERROR: "Failed to submit review",
+  },
+
+  // Category messages
+  CATEGORY_CREATE: {
+    SUCCESS: "Category created successfully",
+    ERROR: "Failed to create category",
+  },
+  CATEGORY_UPDATE: {
+    SUCCESS: "Category updated successfully",
+    ERROR: "Failed to update category",
+  },
+  CATEGORY_DELETE: {
+    SUCCESS: "Category deleted successfully",
+    ERROR: "Failed to delete category",
+  },
+  CATEGORY_LOAD: {
+    ERROR: "Failed to load categories",
+    EMPTY: "No categories found",
+  },
 
   // General Fallback
   GENERAL: {

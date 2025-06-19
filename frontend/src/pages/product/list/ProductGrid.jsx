@@ -1,53 +1,66 @@
-import React, { useState } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Card from "../../../components/ui/Card";
-import Button from "../../../components/ui/Button";
+import Loader from "../../../components/ui/Loader";
 
-const ProductGrid = ({ products = [], loading = false, title = "" }) => {
-  const [visibleCount, setVisibleCount] = useState(8); // initial product count
+const getInitialCount = () => {
+  const width = window.innerWidth;
+  if (width >= 1280) return 16; // xl
+  if (width >= 1024) return 12; // lg
+  if (width >= 768) return 8; // md
+  return 4; // sm and below
+};
 
-  const handleLoadMore = () => {
-    setVisibleCount((prev) => prev + 8);
-  };
+const ProductGrid = ({ products = [], loading, title = "" }) => {
+  const [visibleCount, setVisibleCount] = useState(getInitialCount());
+  const observerRef = useRef(null);
 
-  const visibleProducts = products.slice(0, visibleCount);
+  const lastProductRef = useCallback(
+    (node) => {
+      if (loading || !node) return;
 
+      if (observerRef.current) observerRef.current.disconnect();
+
+      observerRef.current = new IntersectionObserver((entries) => {
+        if (entries[0].isIntersecting && visibleCount < products.length) {
+          setVisibleCount((prev) => prev + 8);
+        }
+      });
+
+      observerRef.current.observe(node);
+    },
+    [loading, visibleCount, products.length]
+  );
+
+  console.log(products);
   return (
     <div className="space-y-4">
-      {/* {title && <h2 className="text-xl font-semibold">{title}</h2>} */}
-
-      <div className="grid gap-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
+      {/* Grid layout */}
+      <div className="grid gap-4 grid-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
         {loading
-          ? Array.from({ length: 8 }).map((_, idx) => (
+          ? Array.from({ length: getInitialCount() }).map((_, idx) => (
               <div
                 key={idx}
                 className="flex flex-col gap-3 p-4 bg-white border shadow rounded-xl animate-pulse"
               >
-                {/* Image placeholder */}
-                <div className="w-full h-40 bg-gray-200 rounded-md" />
-
-                {/* Text placeholders */}
+                <div className="w-full h-40 bg-gray-500 rounded-md" />
                 <div className="w-3/4 h-4 bg-gray-200 rounded" />
                 <div className="w-1/2 h-4 bg-gray-200 rounded" />
-
-                {/* Button placeholder */}
                 <div className="w-full h-8 mt-2 bg-gray-300 rounded" />
               </div>
             ))
-          : visibleProducts.map((product) => (
-              <Card key={product._id} type="product" data={product} />
-            ))}
+          : products.map((product, index) => {
+              const isLast = index === products.length - 1;
+              return (
+                <div
+                  key={product._id}
+                  ref={isLast ? lastProductRef : null}
+                  className="h-full"
+                >
+                  <Card type="product" data={product} />
+                </div>
+              );
+            })}
       </div>
-
-      {!loading && visibleCount < products.length && (
-        <div className="flex justify-center mt-4">
-          <Button
-            label="   Load More"
-            onClick={handleLoadMore}
-            variant="ghost"
-            aria-label=""
-          ></Button>
-        </div>
-      )}
     </div>
   );
 };

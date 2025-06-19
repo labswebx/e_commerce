@@ -15,7 +15,14 @@ app.use(bodyParser.urlencoded({ extended: true, limit: "10mb" }));
 
 app.use(express.json());
 app.use(cookieParser());
-app.use(fileUpload());
+app.use(
+  fileUpload({
+    useTempFiles: true,
+    tempFileDir: "/tmp/",
+    limits: { fileSize: 50 * 1024 * 1024 }, // 50MB max file size
+    abortOnLimit: true,
+  })
+);
 app.use(cors());
 
 const errorMiddleware = require("./middleware/error");
@@ -28,7 +35,7 @@ const categoryRoutes = require("./routes/categoryRoutes");
 const subCategoryRoutes = require("./routes/subCategoryRoutes");
 const addressRoutes = require("./routes/addressRoute");
 const couponRoutes = require("./routes/couponRoutes");
-const constantsRoutes = require("./routes/constantsRoute")
+const constantsRoutes = require("./routes/constantsRoute");
 
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", userRoutes);
@@ -41,9 +48,9 @@ app.use("/api/v1", constantsRoutes);
 
 app.get("/ping", (req, res) => {
   res.status(200).json({
-    message:"Server is running."
-  })
-})
+    message: "Server is running.",
+  });
+});
 
 // This is the static frontend file. Whenever anychange in frontend is made, u need to generate build file &then run server again.
 // IMPORTANT - make sure that this static frontend route is after all the backend routes otherwise all API calls will fail.

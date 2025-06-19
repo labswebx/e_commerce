@@ -1,6 +1,6 @@
 @layer components {
   .header-container {
-    @apply z-50 w-full px-4 py-3 bg-white shadow-sm sm:px-6 lg:px-10;
+    @apply z-50 w-full px-4 py-1 bg-white shadow-sm sm:px-6 lg:px-10;
     /* fixed top-0 left-0 */
   }
 
@@ -33,7 +33,7 @@
   }
 
   .subnav-wrapper {
-    @apply w-full py-2 overflow-x-auto;
+    @apply w-full py-2 overflow-x-auto lg:px-28 sm:px-10;
   }
 
   .mobile-nav {
@@ -41,6 +41,6 @@
   }
 
   .mobile-nav-inner {
-    @apply flex items-center justify-between px-4 py-4 border-b;
+    @apply flex items-center justify-between px-4 py-3 border-b;
   }
 }

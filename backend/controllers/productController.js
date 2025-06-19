@@ -9,61 +9,77 @@ const cloudinary = require("cloudinary");
 // create product -- Admin
 exports.createProduct = catchAsyncErrors(async (req, res, next) => {
   let images = [];
-
-  if (!req.body.images) {
-    return res.status(400).json({
-      success: false,
-      message: "Product images are required.",
-    });
-  }
-
-  if (typeof req.body.images === "string") {
-    images = [req.body.images];
-  } else if (Array.isArray(req.body.images)) {
-    images = req.body.images;
-  } else if (
-    typeof req.body.images === "object" &&
-    req.body.images.public_id &&
-    req.body.images.url
-  ) {
-    images = [req.body.images];
-  } else {
-    return res.status(400).json({
-      success: false,
-      message:
-        "Invalid image format. Must be a string, array of strings, or array of public_id/url objects.",
-    });
-  }
-
   const imagesLink = [];
+  if (req.files && req.files.images) {
+    const files = Array.isArray(req.files.images)
+      ? req.files.images
+      : [req.files.images];
 
-  for (let i = 0; i < images.length; i++) {
-    if (typeof images[i] === "string") {
-      const result = await cloudinary.v2.uploader.upload_large(images[i], {
+    for (const file of files) {
+      const result = await cloudinary.v2.uploader.upload(file.tempFilePath, {
         folder: "products",
+        resource_type: "auto",
       });
 
       imagesLink.push({
-        public_id: result?.public_id,
-        url: result?.secure_url,
-      });
-    } else if (
-      typeof images[i] === "object" &&
-      images[i].public_id &&
-      images[i].url
-    ) {
-      imagesLink.push(images[i]);
-    } else {
-      return res.status(400).json({
-        success: false,
-        message: `Invalid image format at index ${i}.`,
+        public_id: result.public_id,
+        url: result.secure_url,
       });
     }
+  } else if (req.body.images) {
+    if (typeof req.body.images === "string") {
+      images = [req.body.images];
+    } else if (Array.isArray(req.body.images)) {
+      images = req.body.images;
+    } else if (
+      typeof req.body.images === "object" &&
+      req.body.images.public_id &&
+      req.body.images.url
+    ) {
+      images = [req.body.images];
+    } else {
+      return next(
+        new ErrorHandler(
+          "Invalid image format. Must be string, array of strings, or public_id/url object.",
+          400
+        )
+      );
+    }
+
+    for (let i = 0; i < images.length; i++) {
+      const image = images[i];
+
+      // Upload if it's a base64 or URL string
+      if (typeof image === "string") {
+        const result = await cloudinary.v2.uploader.upload(image, {
+          folder: "products",
+          resource_type: "auto",
+        });
+
+        imagesLink.push({
+          public_id: result.public_id,
+          url: result.secure_url,
+        });
+      }
+
+      // Push pre-uploaded object
+      else if (image.public_id && image.url) {
+        imagesLink.push(image);
+      } else {
+        return next(
+          new ErrorHandler(`Invalid image format at index ${i}`, 400)
+        );
+      }
+    }
+  } else {
+    return next(new ErrorHandler("Product images are required.", 400));
   }
 
+  // Attach images and user
   req.body.images = imagesLink;
   req.body.user = req.user?.id;
 
+  // Save Product
   const product = await Product.create(req.body);
 
   res.status(200).json({
@@ -71,20 +87,18 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     product,
   });
 });
-
 // get all products
 exports.getAllProducts = catchAsyncErrors(async (req, res) => {
   const resultsPerPage = 5;
   const productsCount = await Product.countDocuments();
-
+  const currentPage = Number(req.query.page) || 1;
   const apiFeature = new ApiFeatures(
-    Product.find().sort({ order: 1, createdAt: -1 }),
+    Product.find().populate("category").sort({ order: 1, createdAt: -1 }),
     req.query
   )
     .search()
-    .filter();
-
-  // .pagination(resultsPerPage);
+    .filter()
+    .pagination(resultsPerPage);
   const products = await apiFeature.query;
 
   return res.status(200).json({
@@ -92,27 +106,25 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
     products,
     productsCount,
     resultsPerPage,
+    currentPage,
   });
 });
 
 // get all products -- Admin
 exports.getAdminProducts = catchAsyncErrors(async (req, res) => {
-  const page = parseInt(req.query.page, 10) || 1; // Default to page 1
-  const limit = parseInt(req.query.limit, 10) || 20; // Default to 20 products per page
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 20;
 
-  // Calculate the starting index
   const skip = (page - 1) * limit;
 
-  // Get the total count of products for pagination metadata
   const totalProducts = await Product.countDocuments();
 
-  // Fetch products with pagination
   const products = await Product.find()
+    .populate("category")
     .populate("subCategory")
     .skip(skip)
     .limit(limit);
 
-  // Calculate total pages
   const totalPages = Math.ceil(totalProducts / limit);
 
   return res.status(200).json({
@@ -131,7 +143,9 @@ exports.getAdminProducts = catchAsyncErrors(async (req, res) => {
 exports.searchAdminProducts = catchAsyncErrors(async (req, res) => {
   const products = await Product.find({
     name: { $regex: req.query.name, $options: "i" },
-  }).populate("subCategory");
+  })
+    .populate("subCategory")
+    .populate("category");
 
   return res.status(200).json({
     success: true,
@@ -141,22 +155,40 @@ exports.searchAdminProducts = catchAsyncErrors(async (req, res) => {
 
 // get trending products
 exports.getTrendingProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find({ trending: true }).sort({
-    createdAt: -1,
+  const page = parseInt(req.query.page, 10) || 1;
+  const limit = parseInt(req.query.limit, 10) || 20;
+
+  const skip = (page - 1) * limit;
+
+  const totalTrendingProducts = await Product.countDocuments({
+    trending: true,
   });
+  const products = await Product.find({ trending: true })
+    .populate("category")
+    .sort({
+      createdAt: -1,
+    })
+    .skip(skip)
+    .limit(limit);
 
   return res.status(200).json({
     success: true,
     products,
     productsCount: products.length,
+    totalTrendingProducts,
+    resultsPerPage: limit,
+    currentPage: page,
+    totalPages: Math.ceil(totalTrendingProducts / limit),
   });
 });
 
 // get favourite products
 exports.getFavouriteProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find({ favourite: true }).sort({
-    createdAt: -1,
-  });
+  const products = await Product.find({ favourite: true })
+    .populate("category")
+    .sort({
+      createdAt: -1,
+    });
 
   return res.status(200).json({
     success: true,
@@ -167,7 +199,9 @@ exports.getFavouriteProducts = catchAsyncErrors(async (req, res) => {
 
 // get most ordered products
 exports.getMostOrderedProducts = catchAsyncErrors(async (req, res) => {
-  const products = await Product.find({}).sort({ count: -1, createdAt: -1 });
+  const products = await Product.find({})
+    .populate("category")
+    .sort({ count: -1, createdAt: -1 });
 
   return res.status(200).json({
     success: true,
@@ -184,55 +218,74 @@ exports.updateProduct = catchAsyncErrors(async (req, res, next) => {
     return next(new ErrorHandler("Product Not Found", 404));
   }
 
-  // Deleting existing images from cloudinary & adding new images (if any)
-  if (req.body.images.length > 0) {
-    let images = [];
-    if (typeof req.body.images === "string") {
-      images.push(req.body.images);
-    } else {
-      images = req.body.images;
-    }
+  try {
+    // Deleting existing images from cloudinary & adding new images (if any)
+    if (req.body.images && req.body.images.length > 0) {
+      let images = [];
+      if (typeof req.body.images === "string") {
+        images.push(req.body.images);
+      } else if (Array.isArray(req.body.images)) {
+        images = req.body.images;
+      } else {
+        return next(new ErrorHandler("Invalid images format", 400));
+      }
 
-    if (images !== undefined) {
       // delete images from Cloudinary
       for (let i = 0; i < product.images.length; ++i) {
-        await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+        if (product.images[i].public_id) {
+          await cloudinary.v2.uploader.destroy(product.images[i].public_id);
+        }
       }
 
       // Uploading new images
       const imagesLink = [];
       for (let i = 0; i < images.length; ++i) {
-        const result = await cloudinary.v2.uploader.upload_large(images[i], {
-          folder: "products",
-        });
+        if (typeof images[i] === "string") {
+          const result = await cloudinary.v2.uploader.upload(images[i], {
+            folder: "products",
+            resource_type: "auto",
+          });
 
-        imagesLink.push({
-          public_id: result.public_id,
-          url: result.secure_url,
-        });
+          imagesLink.push({
+            public_id: result.public_id,
+            url: result.secure_url,
+          });
+        } else if (images[i] && images[i].public_id && images[i].url) {
+          imagesLink.push(images[i]);
+        } else {
+          return next(
+            new ErrorHandler(`Invalid image format at index ${i}`, 400)
+          );
+        }
       }
 
       req.body.images = imagesLink;
+    } else {
+      req.body.images = product.images;
     }
-  } else {
-    req.body.images = product.images;
+
+    product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, {
+      new: true,
+      runValidators: true,
+      useFindAndModify: false,
+    });
+
+    res.status(200).json({
+      success: true,
+      product,
+    });
+  } catch (error) {
+    return next(
+      new ErrorHandler(error.message || "Error updating product", 500)
+    );
   }
-
-  product = await Product.findOneAndUpdate({ _id: req.params.id }, req.body, {
-    new: true,
-    runValidators: true,
-    useFindAndModify: false,
-  });
-
-  res.status(200).json({
-    success: true,
-    product,
-  });
 });
 
 // get product details
 exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
-  const product = await Product.findById(req.params.id).populate("subCategory");
+  const product = await Product.findById(req.params.id)
+    .populate("subCategory")
+    .populate("category");
 
   if (!product) {
     return next(new ErrorHandler("Product Not Found", 404));
@@ -245,38 +298,35 @@ exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
 });
 
 // get products of a category
+// Get products based only on category (no subcategory grouping)
 exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
+  console.log("🔍 Requested Category ID:", req.params.id);
+
   const category = await Category.findById(req.params.id);
+  console.log("📦 Fetched Category:", category);
+
   if (!category) {
+    console.log("❌ Category not found");
     return next(new ErrorHandler("Category Not Found", 404));
   }
 
-  const products = await Product.find({ category: category.name }).sort({
+  const products = await Product.find({ category: category._id }).sort({
     order: 1,
   });
-  if (!products) {
+  console.log("📦 Products matched:", products.length);
+
+  if (!products || products.length === 0) {
+    console.log("⚠️ No products found for this category");
     return next(new ErrorHandler("Products Not Found", 404));
   }
 
-  let subCategoryProducts = await Product.aggregate([
-    { $match: { category: category.name } }, // Filter by desired category
-    { $group: { _id: "$subCategory", products: { $push: "$$ROOT" } } }, // Group by subcategory
-  ]).exec();
-
-  // change _id to category name in the result
-  subCategoryProducts = subCategoryProducts.map(async ({ _id, products }) => {
-    let subCategory = await SubCategory.findById(_id);
-    return {
-      subCategory: subCategory?.name,
-      subCategoryImage: subCategory?.image,
-      products,
-    };
-  });
-
-  const results = await Promise.all(subCategoryProducts);
   res.status(200).json({
     success: true,
-    products: results,
+    category: {
+      id: category._id,
+      name: category.name,
+    },
+    products,
   });
 });
 
@@ -341,13 +391,15 @@ exports.createProductReview = catchAsyncErrors(async (req, res, next) => {
 
   res.status(200).json({
     success: true,
+    product: product,
+    review: product.reviews,
     message: "Product rating added successfully",
   });
 });
 
 // get all reviews of a product
 exports.getProductReviews = catchAsyncErrors(async (req, res, next) => {
-  const product = await Product.findById(req.query.id);
+  const product = await Product.findById(req.params.id);
   if (!product) {
     return next(new ErrorHandler("Product Not Found.", 404));
   }

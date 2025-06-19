@@ -65,7 +65,7 @@ const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
             icon={Heart}
             variant="ghost"
             size="sd"
-            onClick={() => navigate("/orders")}
+            onClick={() => navigate("/wishlist")}
           />
           <div className="relative w-fit">
             <Icon
@@ -90,7 +90,14 @@ const TopHeader = ({ mobileMenuOpen, setMobileMenuOpen }) => {
             size="sd"
             onClick={handleAuthClick}
           />
-          {isAuthenticated && <Icon icon={User} variant="ghost" size="sd" />}
+          {isAuthenticated && (
+            <Icon
+              icon={User}
+              onClick={() => navigate("/user/profile")}
+              variant="ghost"
+              size="sd"
+            />
+          )}
         </div>
 
         <div className="header-mobile-toggle">

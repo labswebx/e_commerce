@@ -3,6 +3,8 @@ import classNames from "classnames";
 import Icon from "./Icon";
 import { useNavigate } from "react-router-dom";
 
+import theme from "../../theme";
+
 const Tabs = ({
   tabs,
   selected,
@@ -96,7 +98,7 @@ const Tabs = ({
                 )}
               </div>
 
-              {/* ✅ Divider if image and not last */}
+              {/*  Divider if image and not last */}
               {tab.image && !isLast && (
                 <div className="self-center w-px h-6 bg-zinc-600"></div>
               )}

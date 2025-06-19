@@ -20,9 +20,7 @@ export const validateCoupons = createAsyncThunkHandler(
 const couponSlice = createSlice({
   name: "coupon",
   initialState: {
-    coupon: null,
-    discount: 0,
-    finalPrice: 0,
+    coupons: [],
     loading: false,
     error: null,
   },
@@ -39,9 +37,7 @@ const couponSlice = createSlice({
       .addCase(validateCoupons.pending, setLoading)
       .addCase(validateCoupons.fulfilled, (state, action) => {
         state.loading = false;
-        state.coupon = action.payload.coupon;
-        state.discount = action.payload.discount;
-        state.finalPrice = action.payload.finalPrice;
+        state.coupons = action.payload;
       })
       .addCase(validateCoupons.rejected, setError);
   },

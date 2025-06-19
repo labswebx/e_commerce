@@ -2,6 +2,7 @@ const SubCategory = require('../models/subCategoryModel');
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const cloudinary = require("cloudinary");
+const CONSTANTS = require('../config/constants');
 
 // create sub category -- Admin
 exports.createSubCategory = catchAsyncErrors(async (req, res, next) => {
@@ -9,7 +10,7 @@ exports.createSubCategory = catchAsyncErrors(async (req, res, next) => {
 
   let image = {};
   const result = await cloudinary.v2.uploader.upload_large(req.body.image, {
-    folder: "subcategories",
+    folder: CONSTANTS.CLOUDINARY_FOLDERS.SUB_CATEGORIES,
   });
 
   image.public_id = result.public_id;
@@ -59,7 +60,7 @@ exports.updateSubCategory = catchAsyncErrors(async (req, res, next) => {
 
     const imagesLink = {};
     const result = await cloudinary.v2.uploader.upload_large(image, {
-      folder: "subcategories",
+      folder: CONSTANTS.CLOUDINARY_FOLDERS.SUB_CATEGORIES,
     });
 
     imagesLink.public_id = result.public_id;

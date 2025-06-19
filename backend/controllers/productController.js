@@ -298,25 +298,22 @@ exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
 });
 
 // get products of a category
-// Get products based only on category (no subcategory grouping)
 exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
-  console.log("🔍 Requested Category ID:", req.params.id);
 
-  const category = await Category.findById(req.params.id);
-  console.log("📦 Fetched Category:", category);
+  const category = await Category.findById(req.params.id)
 
   if (!category) {
-    console.log("❌ Category not found");
+  
     return next(new ErrorHandler("Category Not Found", 404));
   }
 
   const products = await Product.find({ category: category._id }).sort({
     order: 1,
   });
-  console.log("📦 Products matched:", products.length);
+
 
   if (!products || products.length === 0) {
-    console.log("⚠️ No products found for this category");
+   
     return next(new ErrorHandler("Products Not Found", 404));
   }
 

@@ -24,6 +24,7 @@ export const deleteAddress = createAsyncThunkHandler(
 
 export const getMyAddresses = createAsyncThunkHandler(
   addressActionTypes.GET_MY,
+
   async () => addressApi.getMyAddresses()
 );
 

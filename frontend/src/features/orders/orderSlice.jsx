@@ -33,7 +33,6 @@ const initialState = {
   error: null,
   order: null,
   myOrders: [],
-  allOrders: [],
   paymentStatus: null,
   success: false,
   totalOrders: [],

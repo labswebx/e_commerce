@@ -24,9 +24,6 @@ import Wishlist from "../pages/wishlist/Wishlist";
 import ProductList from "../pages/product/list/ProductList";
 import ProductsByCategory from "../pages/product/ProductsByCategory";
 
-import AllCategory from "../pages/category/AllCategory";
-import CategoryDetails from "../pages/category/CategoryDetails";
-
 // Lazy-loaded pages
 const Home = lazy(() => import("../pages/Landing/Home"));
 const Cart = lazy(() => import("../pages/cart/Cart"));
@@ -37,6 +34,8 @@ const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
 const ProductDetails = lazy(() =>
   import("../pages/product/details/ProductDetails")
 );
+const AllCategory = lazy(() => import("../pages/category/AllCategory"));
+const CategoryDetails = lazy(() => import("../pages/category/CategoryDetails"));
 
 const MainRoutes = () => {
   return (

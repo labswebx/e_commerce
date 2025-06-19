@@ -1,44 +1,42 @@
-import { useState } from "react";
 import { Outlet } from "react-router-dom";
 import UserSidebar from "../../pages/user/UserSidebar";
+import useSidebarToggle from "../../hooks/useSidebarToggle";
+import { Menu } from "lucide-react";
 
+// layout wrap user-related pages.
 const UserLayout = () => {
-  const [isSidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarOpen, setSidebarOpen, toggleSidebar] = useSidebarToggle();
 
   return (
-    <div className="flex min-h-screen">
-      {/* Sidebar for Desktop and Mobile */}
-      <div
-        className={`fixed inset-y-0 left-0 z-30 transform bg-white border-r shadow-md transition-transform duration-300 ease-in-out md:relative md:translate-x-0 ${
-          isSidebarOpen ? "translate-x-0" : "-translate-x-full"
+    <div className="layout-base">
+      {/* Sidebar */}
+      <aside
+        className={`sidebar-base md:translate-x-0 ${
+          sidebarOpen ? "translate-x-0" : "-translate-x-full"
         }`}
+        aria-label="Sidebar"
+        role="navigation"
       >
-        <UserSidebar closeSidebar={() => setSidebarOpen(false)} />
-      </div>
+        <UserSidebar />
+      </aside>
 
-      {/* Mobile overlay */}
-      {isSidebarOpen && (
-        <div
-          onClick={() => setSidebarOpen(false)}
-          className="fixed inset-0 z-20 bg-black bg-opacity-40 md:hidden"
-        />
+      {/* Mobile Overlay */}
+      {!sidebarOpen && (
+        <div onClick={toggleSidebar} className="sidebar-overlay" />
       )}
 
-      {/* Main Content */}
-      <div className="flex-1 w-full overflow-y-auto">
+      {/* Main Area */}
+      <div className="main-content-area">
         {/* Topbar for Mobile */}
-        <header className="flex items-center justify-between p-4 border-b md:hidden">
-          <button
-            onClick={() => setSidebarOpen(!isSidebarOpen)}
-            className="text-2xl text-gray-600"
-          >
-            ☰
+        <header className="topbar-mobile">
+          <button onClick={toggleSidebar} className="sidebar-toggle-btn">
+            <Menu className="w-6 h-6" />
           </button>
           <h1 className="text-lg font-semibold text-gray-800">Account</h1>
         </header>
 
-        {/* Main Area */}
-        <main className="min-h-screen bg-gray-50">
+        {/* Page Content */}
+        <main className="main-inner">
           <Outlet />
         </main>
       </div>

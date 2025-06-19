@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-const UserSidebar = ({ closeSidebar }) => {
+const UserSidebar = () => {
   const linkClass = ({ isActive }) =>
     `block px-4 py-2 rounded ${
       isActive
@@ -9,10 +9,7 @@ const UserSidebar = ({ closeSidebar }) => {
     }`;
 
   return (
-    <aside
-      className="w-64 h-full p-4 space-y-2 bg-white border-r shadow-md"
-      onClick={closeSidebar} 
-    >
+    <div className="h-full p-4 space-y-2 ">
       <div className="pb-4 border-b">
         <h2 className="text-xl font-bold text-gray-800">My Account</h2>
       </div>
@@ -30,7 +27,7 @@ const UserSidebar = ({ closeSidebar }) => {
           Address
         </NavLink>
       </nav>
-    </aside>
+    </div>
   );
 };
 

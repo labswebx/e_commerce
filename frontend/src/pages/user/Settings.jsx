@@ -113,7 +113,7 @@ const Settings = () => {
   };
 
   return (
-    <div className="flex justify-center w-full px-4 py-8 bg-gray-50">
+    <div className="flex justify-start w-full px-4 py-8 bg-gray-50">
       <section className="w-full max-w-3xl p-6 bg-white">
         <header className="pb-4 mb-6 border-b">
           <h2 className="text-xl font-semibold text-gray-800">

@@ -1,22 +1,19 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { X } from "lucide-react";
+import useBodyScrollLock from "../../hooks/useBodyScrollLock";
 
+// reusable UI popup dialog
 const Modal = ({ isOpen, onClose, title, children, footer }) => {
+  useBodyScrollLock(isOpen);
   if (!isOpen) return null;
 
-  // Prevent background scroll when modal is open
-  useEffect(() => {
-    document.body.style.overflow = "hidden";
-    return () => (document.body.style.overflow = "auto");
-  }, []);
-
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center px-4 bg-black/50 backdrop-blur-sm">
-      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto bg-white  shadow-xl p-6">
+    <div className="modal-overlay">
+      <div className="modal-container">
         {/* Close Button */}
         <button
           onClick={onClose}
-          className="absolute text-gray-500 top-4 right-4 hover:text-gray-700"
+          className="modal-close-btn"
           aria-label="Close"
         >
           <X size={20} />
@@ -24,16 +21,22 @@ const Modal = ({ isOpen, onClose, title, children, footer }) => {
 
         {/* Title */}
         {title && (
-          <div className="mb-4 text-xl font-semibold text-gray-800">
+          <h2 className="modal-header" id="address-modal-title">
             {title}
-          </div>
+          </h2>
         )}
 
         {/* Body */}
-        <div className="">{children}</div>
+        <div className="modal-body" id="address-modal-body">
+          {children}
+        </div>
 
         {/* Footer */}
-        {footer && <div className="mt-6">{footer}</div>}
+        {footer && (
+          <div className="modal-footer" id="modal-footer">
+            {footer}
+          </div>
+        )}
       </div>
     </div>
   );

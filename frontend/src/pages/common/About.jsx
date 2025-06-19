@@ -7,8 +7,27 @@ import {
   Trophy,
   Truck,
 } from "lucide-react";
+import Accordion from "../../components/ui/Accordion";
 
 const About = () => {
+  const faqItems = [
+    {
+      title: "Do you offer Cash on Delivery?",
+      content:
+        "Yes, we offer Cash on Delivery in selected pin codes across India. You’ll see the option during checkout if available in your area.",
+    },
+    {
+      title: "How do I track my order?",
+      content:
+        "After placing an order, you will receive a tracking link via email and SMS. You can also track it from your account dashboard.",
+    },
+    {
+      title: "What if I receive a damaged product?",
+      content:
+        "We offer a 7-day return policy. Contact our support immediately with photos, and we will replace or refund the product.",
+    },
+  ];
+
   return (
     <div className="px-6 py-12 text-gray-900 bg-white md:px-20">
       <div className="max-w-6xl mx-auto space-y-16">
@@ -163,10 +182,7 @@ const About = () => {
         </section>
 
         {/*  Section 5: Stats */}
-        <section
-          className="p-8 bg-white "
-          data-aos="fade-up"
-        >
+        <section className="p-8 bg-white " data-aos="fade-up">
           <h2 className="mb-6 text-2xl font-semibold text-center text-gray-900">
             Cyber in Numbers
           </h2>
@@ -198,10 +214,10 @@ const About = () => {
           </h2>
           {/* <div className="w-12 h-1 mx-auto mb-8 bg-gray-800"></div> */}
 
-          <div className="relative max-w-6xl px-4 mx-auto">
+          <div className="relative max-w-6xl px-4 mx-auto sm:flex">
             {/* Timeline line */}
 
-            <div className="relative grid grid-cols-3 gap-4">
+            <div className="relative grid grid-cols-1 gap-4 sm:grid-cols-3">
               {/* Timeline Item 1 */}
               <div className="flex flex-col items-center" data-aos="fade-up">
                 <div className="">
@@ -259,10 +275,7 @@ const About = () => {
         </section>
 
         {/*  Section 7: Team */}
-        <section
-          className="p-8 "
-          data-aos="fade-up"
-        >
+        <section className="p-8 " data-aos="fade-up">
           <h2 className="mb-4 text-2xl font-semibold text-gray-900">
             Meet Our Team
           </h2>
@@ -423,6 +436,17 @@ const About = () => {
           >
             Start Shopping with Cyber
           </a>
+        </section>
+
+        {/* Section 10: FAQs Accordion */}
+        <section className="p-2 bg-white" data-aos="fade-up">
+          <h2 className="mb-6 text-2xl font-semibold text-center text-gray-900">
+            Frequently Asked Questions
+          </h2>
+          <div className="w-12 h-1 mx-auto mb-8 bg-gray-800"></div>
+          <div className="max-w-3xl mx-auto">
+            <Accordion items={faqItems} />
+          </div>
         </section>
       </div>
     </div>

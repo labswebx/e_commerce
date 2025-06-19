@@ -35,3 +35,6 @@
 .scrollbar-thin::-webkit-scrollbar {
   height: 6px;
 }
+.overflow-hidden-body {
+  overflow: hidden !important;
+}

@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import NavItem from "../../components/ui/NavItems";
 import NoData from "../../utils/NoData";
 import Loader from "../../components/ui/Loader";
@@ -15,12 +15,15 @@ import {
 } from "../../utils/formatter";
 import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
+import Pagination from "../../components/ui/Pagination";
 const AllOrders = () => {
-  const { myOrders, getMyOrders, loading, error } = useOrders();
+  const { myOrders, getMyOrders, loading, error, totalPages, } = useOrders();
+  const [currentPage, setCurrentPage] = useState(1);
+
   const navigate = useNavigate();
   useEffect(() => {
-    getMyOrders();
-  }, []);
+    getMyOrders(currentPage);
+  }, [currentPage]);
 
   if (loading) return <Loader />;
   if (error) return <ErrorMessage message={error} />;
@@ -84,19 +87,26 @@ const AllOrders = () => {
                 <Button
                   // to={`/order/${order._id}`}
                   variant="outline"
-                  onClick={() => navigate(`/order/${order._id}`)}
+                  onClick={() => navigate(`/user/order/${order._id}`)}
                   label="View order details"
+                  size="sm"
                   // className="text-gray-700 border border-black rounded "
                 />
                 <Button
                   // className="text-sm text-blue-600 hover:underline"
                   label="Track Order"
+                  size="sm"
                 ></Button>
               </div>
             </div>
           </div>
         ))}
       </div>
+      <Pagination
+        currentPage={currentPage}
+        totalPages={totalPages}
+        onPageChange={setCurrentPage}
+      />
     </div>
   );
 };

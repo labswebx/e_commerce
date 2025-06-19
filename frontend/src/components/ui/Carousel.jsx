@@ -6,6 +6,7 @@ const Carousel = ({
   renderItem,
   showDots = true,
   itemWidth = "min-w-[250px]",
+  itemHeight = "",
   className = "",
   gap = "4",
   snap = true,
@@ -24,7 +25,7 @@ const Carousel = ({
     const childWidth = child.getBoundingClientRect().width;
     const scrollLeft = container.scrollLeft;
 
-    const gapValue = parseInt(gap.split("-")[1] || "4") * 4; // 1rem = 16px
+    const gapValue = parseInt(gap.split("-")[1] || "4") * 4;
     const fullItemWidth = childWidth + gapValue;
 
     const index = Math.round(scrollLeft / fullItemWidth);
@@ -49,7 +50,9 @@ const Carousel = ({
         {items.map((item, idx) => (
           <div
             key={idx}
-            className={`${itemWidth} flex-shrink-0 ${snap ? "snap-start" : ""}`}
+            className={`${itemWidth} ${itemHeight} flex-shrink-0 ${
+              snap ? "snap-start" : ""
+            }`}
           >
             {renderItem(item, idx)}
           </div>
@@ -58,7 +61,7 @@ const Carousel = ({
 
       {/* Dots Indicator */}
       {showDots && (
-        <div className="flex justify-center mt-4 space-x-2">
+        <div className="flex justify-center mt-4 space-x-2 lg:hidden">
           {items.map((_, i) => (
             <span
               key={i}

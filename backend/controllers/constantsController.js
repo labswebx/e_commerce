@@ -24,15 +24,15 @@ exports.createConstant = catchAsyncErrors(async (req, res, next) => {
 
         for (let i = 0; i < files.length; i++) {
           const file = files[i];
-          console.log("file", file);
+       
           const title = req.body[`titles[${i}]`] || `Banner ${i + 1}`;
-          console.log("title", title);
+       
           const id =
             req.body[`ids[${i}]`] ||
             (Array.isArray(req.body.ids)
               ? req.body.ids[i]
               : `banner_${Date.now()}_${i}`);
-          console.log("id", id);
+       
           const result = await cloudinary.v2.uploader.upload(
             file.tempFilePath,
             {
@@ -110,7 +110,7 @@ exports.createConstant = catchAsyncErrors(async (req, res, next) => {
   }
 
   const constants = await Constants.create(req.body);
-  console.log("banners created successfully", constants);
+ 
   res.status(200).json({
     success: true,
     constants,
@@ -122,7 +122,6 @@ exports.getAllBanners = catchAsyncErrors(async (req, res, next) => {
   const banners = await Constants.find({
     name: CONSTANTS.CONSTANTS.BANNERS,
   });
-  console.log(banners);
   return res.status(200).json({
     success: true,
     banners: banners || [],

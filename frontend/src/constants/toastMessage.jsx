@@ -99,6 +99,24 @@ const toastMessage = {
     ERROR: "Failed to submit review",
   },
 
+  // Category messages
+  CATEGORY_CREATE: {
+    SUCCESS: "Category created successfully",
+    ERROR: "Failed to create category",
+  },
+  CATEGORY_UPDATE: {
+    SUCCESS: "Category updated successfully",
+    ERROR: "Failed to update category",
+  },
+  CATEGORY_DELETE: {
+    SUCCESS: "Category deleted successfully",
+    ERROR: "Failed to delete category",
+  },
+  CATEGORY_LOAD: {
+    ERROR: "Failed to load categories",
+    EMPTY: "No categories found",
+  },
+
   // General Fallback
   GENERAL: {
     ERROR: "Something went wrong",

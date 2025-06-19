@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
+
 import {
   fetchProducts,
   fetchMostOrderedProducts,
@@ -7,77 +8,16 @@ import {
   fetchTrendingProducts,
 } from "../../features/products/productsSlice";
 import { fetchCategories } from "../../features/category/categorySlice";
-
-import Card, { ProductCard } from "../../components/ui/Card";
-import Tabs from "../../components/ui/Tabs";
-import ProductGrid from "../product/list/ProductGrid";
-import { useCategory } from "../../features/category/categoryHooks";
-import LandingPage, { Section } from "./LandingSection";
-import Loader from "../../components/ui/Loader";
-// import { Section } from "lucide-react";
 import { useConstants } from "../../features/constants/constantsHooks";
+
+import { ProductCard } from "../../components/ui/Card";
+import Tabs from "../../components/ui/Tabs";
 import Carousel from "../../components/ui/Carousel";
 
-const CategoryCarousel = () => {
-  const { categories, loading, error } = useCategory();
+import ProductGrid from "../product/list/ProductGrid";
 
-  if (loading) {
-    return (
-      <div className="w-full px-4 py-6 ">
-        <h2 className="mb-4 text-base font-semibold">Browse Categories</h2>
-        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {Array.from({ length: 6 }).map((_, index) => (
-            <div
-              key={index}
-              className="h-[100px] bg-gray-200 animate-pulse rounded-xl shadow-md flex items-center justify-center text-center"
-            >
-              <div className="w-8 h-8 bg-gray-300 rounded-full" />
-            </div>
-          ))}
-        </div>
-      </div>
-    );
-  }
-
-  if (error)
-    return (
-      <p className="text-center text-red-500">Error loading categories.</p>
-    );
-
-  const bgColors = [
-    "bg-[#E6EFE4]",
-    "bg-[#E6EFE4]",
-    "bg-[#ECE4EF]",
-    "bg-[#EFE4E4]",
-  ];
-
-  return (
-    <div className="w-ful lg:pb-20 md:pb-10">
-      <h2 className="mb-4 text-base font-semibold">Browse Categories</h2>
-
-      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-        {categories.slice(0, 6).map((category, index) => (
-          <div
-            key={category._id}
-            className={`h-[100px] ${
-              bgColors[index % bgColors.length]
-            } rounded-xl shadow-md flex flex-col items-center justify-center px-4 py-3 text-center border hover:shadow-lg transition-all`}
-          >
-            <img
-              src={category?.image?.url}
-              alt={category.name}
-              className="object-contain w-12 h-12 mb-1 filter brightness-0 saturate-0"
-              loading="lazy"
-            />
-            <span className="text-[10px] font-medium text-gray-800">
-              {category.name}
-            </span>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
+import LandingPage, { Section } from "./LandingSection";
+import CategoryCarousel from "./CategoryCarousel";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -98,17 +38,7 @@ const Home = () => {
     (img) => img?.url || img?.public_id
   );
 
-  const bannerImages =
-    filteredBannerPairs.length >= 2
-      ? [
-          {
-            small: filteredBannerPairs[0].url,
-            large: filteredBannerPairs[1].url,
-            title: filteredBannerPairs[0].title || "Banner",
-          },
-        ]
-      : [];
-  // Fetch state
+  // Fetch product and category data from store
   const {
     products,
     productsCount,
@@ -117,8 +47,7 @@ const Home = () => {
     mostOrderedProducts,
     loading: productsLoading,
   } = useSelector((state) => state.products);
-  console.log(products);
-  console.log(trendingProducts);
+
   useEffect(() => {
     dispatch(fetchProducts({ page, limit }));
     dispatch(fetchTrendingProducts());
@@ -127,7 +56,7 @@ const Home = () => {
     dispatch(fetchCategories());
   }, [dispatch, page]);
 
-  const canLoadMore = products.length < productsCount;
+  // Tab options for filtering product types
   const tabOptions = [
     { key: "regular", label: "New Arrival" },
     { key: "mostOrdered", label: "Best Sellers" },
@@ -135,6 +64,8 @@ const Home = () => {
   ];
 
   const visibleProducts = products.slice(0, 4);
+
+  // Product display logic
   const getProductsByTab = () => {
     switch (activeTab) {
       case "trending":
@@ -148,11 +79,6 @@ const Home = () => {
         return products;
     }
   };
-  const handleLoadMore = () => {
-    if (canLoadMore) {
-      setPage((prev) => prev + 1);
-    }
-  };
 
   return (
     <div className="space-y-8 ">
@@ -161,7 +87,7 @@ const Home = () => {
       {/* Centered content with max width */}
       <div className="px-4 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8 ">
         {/* Category Carousel */}
-        <CategoryCarousel />
+        <CategoryCarousel title="Browse Categories" length="6" />
         {/* Product Tabs */}
         <div className="md:w-[450px]">
           <Tabs
@@ -176,33 +102,25 @@ const Home = () => {
         <div className="space-y-4">
           <h2 className="text-xl font-semibold"></h2>
           <ProductGrid
-            products={getProductsByTab()}
+            products={getProductsByTab().slice(0, 8)}
             loading={productsLoading}
             title={`${
               tabOptions.find((t) => t.key === activeTab)?.label
             } Products`}
           />
         </div>
-        {activeTab === "regular" && canLoadMore && (
-          <div className="flex justify-center">
-            <button
-              onClick={handleLoadMore}
-              className="px-6 py-2 mt-4 text-white bg-blue-600 rounded hover:bg-blue-700"
-            >
-              Load More
-            </button>
-          </div>
-        )}
       </div>
 
       {/* carousel */}
       <Carousel
         gap="gap-0"
         items={visibleProducts}
-        className="lg:w-screen"
-        itemWidth="min-w-[320px]"
-        renderItem={(item) => <ProductCard data={item} variant="feature" />}
+        className="lg:w-screen sm:min-w-[320px] md:min-w-[400px] p-0"
+        renderItem={(item) => (
+          <ProductCard data={item} variant="feature" className="p-8" />
+        )}
       />
+      {/* discount */}
       <div className="px-4 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8 ">
         <div className="space-y-4">
           <h2 className="text-xl font-semibold">Discounts up to -50%</h2>
@@ -218,14 +136,14 @@ const Home = () => {
       <div className="relative w-full my-8 md:h-96 ">
         {/* Mobile Image (shown on small screens) */}
         <img
-          src={filteredBannerPairs[10]?.url} // Replace with your mobile image path
+          src={filteredBannerPairs[10]?.url}
           alt="Summer Sale"
           className="object-contain w-full h-full md:hidden"
         />
 
         {/* Desktop Image (shown on medium screens and up) */}
         <img
-          src={filteredBannerPairs[11]?.url} // Replace with your desktop image path
+          src={filteredBannerPairs[11]?.url}
           alt="Summer Sale"
           className="hidden object-cover w-full h-full md:block"
         />

@@ -1,5 +1,4 @@
-import { Cross, Edit, Pencil, X } from "lucide-react";
-import React from "react";
+import { Pencil, X } from "lucide-react";
 import InputField from "./InputField";
 import Icon from "./Icon";
 import DatePicker from "./DatePicker";
@@ -9,10 +8,20 @@ import { Link } from "react-router-dom";
 import { useState } from "react";
 import { Heart, HeartOff } from "lucide-react";
 import { formatPrice } from "../../utils/formatter";
-export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
+
+// Product card
+export const ProductCard = ({
+  data,
+  onAddToCart,
+  variant = "default",
+  className,
+}) => {
+  // state
   const [liked, setLiked] = useState(false);
+
   const imageUrl = data.images?.[0]?.url || "/logo-icon.jpg";
 
+  // event handler for like
   const toggleLike = () => {
     setLiked(!liked);
   };
@@ -32,6 +41,7 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
     }
   };
 
+  // product card with variant
   const renderContent = () => {
     switch (variant) {
       case "compact":
@@ -61,12 +71,14 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
                 "iPad combines a magnificent 10.2-inch Retina display, incredible performance, multitasking and ease of use."}
             </p>
 
-            <Button
-              variant="outline"
-              onClick={() => onAddToCart(data)}
-              label="Shop Now"
-              className="mt-4"
-            />
+            <div className="flex items-start">
+              <Button
+                variant="outline"
+                onClick={() => onAddToCart(data)}
+                label="Shop Now"
+                className="mt-4 px-14"
+              />
+            </div>
           </>
         );
 
@@ -90,7 +102,7 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
               </h3>
               <p className="mt-1 text-lg font-semibold">${data.price}</p>
             </Link>
-            {/* <p className="text-sm text-gray-600">{data.description}</p> */}
+
             <Button
               variant="outline"
               onClick={() => onAddToCart(data)}
@@ -124,11 +136,11 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
 
   return (
     <div
-      className={`relative card-base h-full flex flex-col justify-between text-center ${
+      className={`relative card-base h-full flex flex-col justify-between text-center ${className} ${
         variant === "highlight"
           ? "w-full p-4"
           : variant === "feature"
-          ? "w-full max-w-[324px] bg-white p-6 rounded-md shadow-md"
+          ? "w-full md:max-w-[400px] bg-white p-6 border-none  "
           : "w-72"
       }`}
     >
@@ -145,16 +157,20 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
         </div>
       </Link>
 
-      <button
-        onClick={toggleLike}
-        className="absolute top-4 right-4 p-[6px] bg-white rounded-full shadow-md hover:bg-gray-100 transition"
-      >
-        {liked ? (
-          <Heart className="w-6 h-6 text-red-500" fill="red" />
-        ) : (
-          <Heart className="w-6 h-6" />
-        )}
-      </button>
+      {variant === "feature" ? (
+        ""
+      ) : (
+        <button
+          onClick={toggleLike}
+          className="absolute top-4 right-4 p-[6px] bg-white rounded-full shadow-md hover:bg-gray-100 transition"
+        >
+          {liked ? (
+            <Heart className="w-6 h-6 text-red-500" fill="red" />
+          ) : (
+            <Heart className="w-6 h-6" />
+          )}
+        </button>
+      )}
 
       <div className="flex flex-col justify-between flex-1 mt-4">
         {renderContent()}
@@ -163,6 +179,7 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
   );
 };
 
+// categoryCard
 const CategoryCard = ({ data }) => {
   return (
     <div className="card-category ">
@@ -176,6 +193,7 @@ const CategoryCard = ({ data }) => {
   );
 };
 
+// review card
 const ReviewCard = ({ data }) => (
   <div className="card-review">
     <div className="flex items-center gap-3 mb-2">
@@ -229,28 +247,6 @@ const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => {
 
       {/* Quantity and Price Controls */}
       <div className="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap sm:gap-4">
-        {/* <div className="flex items-center gap-2 px-2 py-1 border rounded">
-          <button
-            onClick={() => onDecrement(data || data._id)}
-            className="text-xl font-medium"
-          >
-            −
-          </button>
-          <span className="text-sm font-semibold">{data?.quantity}</span>
-          <button
-            onClick={() => onIncrement(data || data._id)}
-            className="text-xl font-medium"
-          >
-            +
-          </button>
-        </div> */}
-        {/* <p className="text-lg font-bold text-gray-800">₹{data?.price}</p>
-        <button
-          onClick={() => onRemove(data?._id)}
-          className="text-xl text-gray-500 hover:text-red-600"
-        >
-          ✕
-        </button> */}
         <AddToCartButton product={data} />
       </div>
     </div>
@@ -308,6 +304,7 @@ const AddressCard = ({
   );
 };
 
+// shipping card
 const ShippingCard = ({
   data,
   selectedId,
@@ -348,6 +345,8 @@ const ShippingCard = ({
     ))}
   </div>
 );
+
+// Dynamically renders different card components (product, category, review, etc.) based on the 'type' prop
 
 const Card = ({ type, data, imageOnly, ...handlers }) => {
   switch (type) {

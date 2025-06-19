@@ -59,8 +59,11 @@ const ProductDetails = () => {
           )}
 
           {/* Category */}
-          <p className="mb-2 text-sm text-gray-500">Category: {category}</p>
-
+          {category?.name && (
+            <p className="mb-2 text-sm text-gray-500">
+              Category: {category?.name}
+            </p>
+          )}
           {/* Add to Cart Button */}
           <div className="mb-4">
             <AddToCartButton product={id} className="w-full lg:w-auto" />

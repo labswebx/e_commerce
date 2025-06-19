@@ -26,6 +26,7 @@ const SingleOrder = () => {
 
   const orderData = order.order;
   const { shippingAddress, paymentInfo, orderItems } = orderData;
+  console.log(orderItems);
   const paymentMethod = paymentInfo?.paymentInstrument || "N/A";
   const maskedCard =
     paymentInfo?.paymentInstrument?.cardNumber?.replace(
@@ -107,7 +108,7 @@ const SingleOrder = () => {
                 <tr key={index} className="hover:bg-gray-50">
                   <td className="p-3 text-blue-600">
                     <NavItem
-                      to={`/product/${item.product}`}
+                      to={`/product/${item.product._id}`}
                       className="hover:underline"
                     >
                       {item.name}

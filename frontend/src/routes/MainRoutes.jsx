@@ -21,8 +21,13 @@ import UserProfile from "../pages/user/UserProfile";
 
 import Wishlist from "../pages/wishlist/Wishlist";
 
-import ProductList from "../pages/product/list/ProductList";
+
 import ProductsByCategory from "../pages/product/ProductsByCategory";
+import TermsAndConditions from "../pages/common/TermsAndConditions";
+import ReturnPolicy from "../pages/common/ReturnPolicy";
+import PrivacyPolicy from "../pages/common/PrivacyPolicy";
+import ShippingPolicy from "../pages/common/ShippingPolicy";
+import OrderTracking from "../pages/user/OrderTracking";
 
 // Lazy-loaded pages
 const Home = lazy(() => import("../pages/Landing/Home"));
@@ -31,6 +36,7 @@ const Login = lazy(() => import("../pages/auth/Login"));
 const Register = lazy(() => import("../pages/auth/Register"));
 const ForgotPassword = lazy(() => import("../pages/auth/ForgotPassword"));
 const ResetPassword = lazy(() => import("../pages/auth/ResetPassword"));
+const ProductList = lazy(() => import("../pages/product/list/ProductList"));
 const ProductDetails = lazy(() =>
   import("../pages/product/details/ProductDetails")
 );
@@ -44,6 +50,10 @@ const MainRoutes = () => {
         {/* Public Routes with Layout */}
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/term-and-condition" element={<TermsAndConditions />} />
+          <Route path="/return-policy" element={<ReturnPolicy />} />
+          <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+          <Route path="/shipping-policy" element={<ShippingPolicy />} />
           <Route path="/cart" element={<Cart />} />
           <Route path="/products" element={<ProductList />} />
           <Route path="/product/:id" element={<ProductDetails />} />
@@ -85,6 +95,7 @@ const MainRoutes = () => {
               <Route path="/user/address/:id" element={<EditAddress />} />
               <Route path="/user/orders" element={<AllOrders />} />
               <Route path="/user/order/:id" element={<SingleOrder />} />
+              <Route path="/user/order/track/:id" element={<OrderTracking />} />
             </Route>
           </Route>
         </Route>

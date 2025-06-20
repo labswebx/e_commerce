@@ -90,7 +90,6 @@ const ProductLayout = ({ children }) => {
                   placeholder="Sort By"
                   value={sort}
                   onChange={(val) => {
-                    console.log(val);
                     setSort(val);
                     setPage(1);
                     setLimit(12);

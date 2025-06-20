@@ -17,7 +17,7 @@ import Button from "../../components/ui/Button";
 import { useNavigate } from "react-router-dom";
 import Pagination from "../../components/ui/Pagination";
 const AllOrders = () => {
-  const { myOrders, getMyOrders, loading, error, totalPages, } = useOrders();
+  const { myOrders, getMyOrders, loading, error, totalPages } = useOrders();
   const [currentPage, setCurrentPage] = useState(1);
 
   const navigate = useNavigate();
@@ -93,6 +93,7 @@ const AllOrders = () => {
                   // className="text-gray-700 border border-black rounded "
                 />
                 <Button
+                  onClick={() => navigate(`/user/order/track/${order._id}`)}
                   // className="text-sm text-blue-600 hover:underline"
                   label="Track Order"
                   size="sm"

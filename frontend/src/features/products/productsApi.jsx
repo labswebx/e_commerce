@@ -28,8 +28,7 @@ const productsApi = {
         params.max = filters.price.max;
       }
 
-      console.log("getAllProducts params:", params);
-      console.log(params);
+     
       const res = await axiosInstance.get(PRODUCTS_API_ENDPOINTS.GET_PRODUCTS, {
         params,
       });

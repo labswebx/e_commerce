@@ -65,7 +65,6 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
     list.filter((item) =>
       item.toLowerCase().includes(searchTerm.toLowerCase())
     );
-  console.log(priceRange);
   const items = [
     {
       title: "Price",

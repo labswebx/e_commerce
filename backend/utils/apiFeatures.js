@@ -20,10 +20,12 @@ class ApiFeatures {
 
   filter() {
     const queryCopy = { ...this.queryStr };
-    const removeFields = ["keyword", "page", "limit"];
+
+    // Exclude fields that are NOT meant for filtering
+    const removeFields = ["keyword", "page", "limit", "sort"];
     removeFields.forEach((key) => delete queryCopy[key]);
 
-    // filter for price & ratings
+    // Advanced filter conversion (e.g., price[gte] => $gte)
     let queryStr = JSON.stringify(queryCopy);
     queryStr = queryStr.replace(/\b(gt|gte|lt|lte)\b/g, (key) => `$${key}`);
 
@@ -38,8 +40,33 @@ class ApiFeatures {
     this.query = this.query.limit(resultPerPage).skip(skip);
     return this;
   }
-  sort(sortBy = { createdAt: -1 }) {
-    this.query = this.query.sort(sortBy);
+  sort(defaultSort = { createdAt: -1 }) {
+    if (this.queryStr.sort) {
+      const sortField = this.queryStr.sort;
+      let sortQuery = {};
+
+      switch (sortField) {
+        case "price-asc":
+          sortQuery = { price: 1 };
+          break;
+        case "price-desc":
+          sortQuery = { price: -1 };
+          break;
+        case "name":
+          sortQuery = { name: 1 };
+          break;
+        case "rating":
+          sortQuery = { rating: -1 };
+          break;
+        default:
+          sortQuery = defaultSort;
+      }
+
+      this.query = this.query.sort(sortQuery);
+    } else {
+      this.query = this.query.sort(defaultSort);
+    }
+
     return this;
   }
 }

@@ -1,21 +1,11 @@
 import { useEffect } from "react";
 import Loader from "../../components/ui/Loader";
 import ErrorMessage from "../../utils/ErrorMessage";
-import useAddress from "../../features/address/addressHooks";
 import { useUser } from "../../features/user/userHooks";
-import CopyIcon from "../../components/ui/CopyIcon";
 import NavItem from "../../components/ui/NavItems";
 
 const UserProfile = () => {
   const { user, loading, error, fetchProfile } = useUser();
-  const { addresses, fetchAddresses } = useAddress();
-  console.log(addresses);
-  const address = addresses?.[0];
-  console.log(user);
-  useEffect(() => {
-    fetchProfile();
-    fetchAddresses();
-  }, []);
 
   if (loading) return <Loader />;
   if (error) return <ErrorMessage message={error} />;

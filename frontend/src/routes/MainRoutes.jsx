@@ -50,7 +50,7 @@ const MainRoutes = () => {
         {/* Public Routes with Layout */}
         <Route element={<DefaultLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/term-and-condition" element={<TermsAndConditions />} />
+          <Route path="/term-and-conditions" element={<TermsAndConditions />} />
           <Route path="/return-policy" element={<ReturnPolicy />} />
           <Route path="/privacy-policy" element={<PrivacyPolicy />} />
           <Route path="/shipping-policy" element={<ShippingPolicy />} />

@@ -1,7 +1,9 @@
 @layer components {
+  /* ========================
+     Desktop Header
+  ========================== */
   .header-container {
-    @apply z-50 w-full px-4 py-1 shadow-sm sm:px-6 lg:px-10;
-    /* fixed top-0 left-0 */
+    @apply z-50 w-full px-4 py-2 bg-white shadow-sm sm:px-6 lg:px-10;
   }
 
   .header-grid {
@@ -13,27 +15,64 @@
   }
 
   .header-search {
-    @apply hidden col-span-3 md:flex;
+    @apply relative hidden col-span-12 md:col-span-3 md:flex;
+  }
+
+  .search-dropdown {
+    @apply absolute z-50 w-full mt-2 overflow-y-auto bg-white rounded shadow-lg top-11 max-h-80;
   }
 
   .header-nav {
-    @apply justify-center hidden col-span-5 gap-2 text-sm font-medium md:flex;
+    @apply justify-center hidden col-span-5 gap-4 text-sm font-medium md:flex;
   }
 
   .header-icons {
     @apply justify-end hidden col-span-2 gap-6 md:flex;
   }
 
+  .header-icon-wrapper {
+    @apply relative w-fit;
+  }
+
+  .header-badge {
+    @apply !absolute -top-1 -right-1;
+  }
+
   .header-mobile-toggle {
     @apply flex justify-end col-span-6 md:hidden;
   }
 
+  /* ========================
+     Optional Subnav
+  ========================== */
   .subnav-container {
-    @apply hidden w-full bg-[#2E2E2E] border-t md:block;
+    @apply hidden w-full border-t bg-[#2E2E2E] md:block;
   }
 
   .subnav-wrapper {
     @apply w-full py-2 overflow-x-auto lg:px-28 sm:px-10;
+  }
+
+  /* ========================
+     Shared Search Result Items
+  ========================== */
+  .search-item {
+    @apply flex items-center p-2 border rounded cursor-pointer hover:bg-gray-100;
+  }
+
+  .search-image {
+    @apply object-cover w-12 h-12 border border-gray-200 rounded;
+  }
+
+  .search-text {
+    @apply ml-3 text-sm font-medium text-gray-800 truncate;
+  }
+
+  /* ========================
+     Mobile Header/Nav
+  ========================== */
+  .mobile-container {
+    @apply fixed top-0 left-0 z-30 w-full h-full pt-5 overflow-y-auto bg-white;
   }
 
   .mobile-nav {

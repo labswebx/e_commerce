@@ -94,7 +94,7 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
   const resultsPerPage = Number(req.query.limit) || 5;
 
   const currentPage = Number(req.query.page) || 1;
-
+  
   const brands = req.query.brands ? req.query.brands.split(",") : [];
   const memories = req.query.memories ? req.query.memories.split(",") : [];
 
@@ -118,17 +118,21 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
 
   const min = Number(req.query.min) || 0;
   const max = Number(req.query.max) || Number.MAX_SAFE_INTEGER;
+  const priceQuery = { price: { $gte: min, $lte: max } };
 
-  if (Object.keys(query).length > 0) {
-    query = {
-      $and: [query, { price: { $gte: min, $lte: max } }],
-    };
-  } else {
-    query.price = { $gte: min, $lte: max };
-  }
+  const searchQuery = req.query.search
+    ? { name: { $regex: req.query.search, $options: "i" } }
+    : {};
 
+  // Combine all filters
+  const combinedQuery = {
+    $and: [query, priceQuery, searchQuery].filter(
+      (q) => Object.keys(q).length > 0
+    ),
+  };
+
+  // Sort logic
   let sortValue = req.query.sort;
-
   if (typeof sortValue === "object" && sortValue?.value) {
     sortValue = sortValue.value;
   }
@@ -151,23 +155,24 @@ exports.getAllProducts = catchAsyncErrors(async (req, res) => {
       sortQuery = { order: 1, createdAt: -1 };
   }
 
-
+  // Clean up query object
   delete req.query.brands;
   delete req.query.memories;
   delete req.query.min;
   delete req.query.max;
   delete req.query.sort;
+  delete req.query.search;
+
   const apiFeature = new ApiFeatures(
-    Product.find(query).populate("category"),
+    Product.find(combinedQuery).populate("category"),
     req.query
   )
-    .search()
     .filter()
     .pagination(resultsPerPage);
 
   apiFeature.query = apiFeature.query.sort(sortQuery);
 
-  const productsCount = await Product.countDocuments(query);
+  const productsCount = await Product.countDocuments(combinedQuery);
   const totalCount = await Product.countDocuments();
   const products = await apiFeature.query;
 

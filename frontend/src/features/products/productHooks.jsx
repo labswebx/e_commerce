@@ -127,3 +127,16 @@ export const useProductReviews = (productId) => {
 
   return { reviews, loading, error };
 };
+
+export const useSearchProducts = () => {
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.products);
+
+  const search = (query) => {
+    const filters = { search: query };
+
+    dispatch(fetchProducts({ page: 1, limit: 5, filters }));
+  };
+
+  return { products, loading, error, search };
+};

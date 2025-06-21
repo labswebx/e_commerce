@@ -13,6 +13,9 @@ const productsApi = {
       if (sort) {
         params.sort = sort;
       }
+      if (filters.search) {
+        params.search = filters.search;
+      }
 
       if (filters.brands?.length) {
         params.brands = filters.brands.join(",");
@@ -27,8 +30,6 @@ const productsApi = {
       if (filters.price?.max !== undefined) {
         params.max = filters.price.max;
       }
-
-     
       const res = await axiosInstance.get(PRODUCTS_API_ENDPOINTS.GET_PRODUCTS, {
         params,
       });

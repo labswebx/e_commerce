@@ -18,6 +18,7 @@ import ProductGrid from "../product/list/ProductGrid";
 
 import LandingPage, { Section } from "./LandingSection";
 import CategoryCarousel from "./CategoryCarousel";
+import Button from "../../components/ui/Button";
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -85,7 +86,7 @@ const Home = () => {
       {/* banner page */}
       <LandingPage />
       {/* Centered content with max width */}
-      <div className="px-4 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8 ">
+      <div className="mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
         {/* Category Carousel */}
         <CategoryCarousel title="Browse Categories" length="6" />
         {/* Product Tabs */}
@@ -107,6 +108,7 @@ const Home = () => {
             title={`${
               tabOptions.find((t) => t.key === activeTab)?.label
             } Products`}
+            grid="grid sm:gap-4 gap-4 grid-2  sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center"
           />
         </div>
       </div>
@@ -115,7 +117,7 @@ const Home = () => {
       <Carousel
         gap="gap-0"
         items={visibleProducts}
-        className="lg:w-screen sm:min-w-[320px] md:min-w-[400px] p-0"
+        className=" sm:min-w-[320px] md:min-w-[400px] p-0"
         renderItem={(item) => (
           <ProductCard data={item} variant="feature" className="p-8" />
         )}
@@ -128,6 +130,7 @@ const Home = () => {
             products={trendingProducts}
             loading={productsLoading}
             title={`Trending Products`}
+            grid="grid gap-4 grid-2  sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 justify-center"
           />
         </div>
       </div>
@@ -151,18 +154,18 @@ const Home = () => {
         {/* Content Overlay */}
         <div className="absolute inset-0 flex items-center justify-center bg-black sm:p-6 bg-opacity-20 md:p-12">
           <div className="max-w-md text-center text-white">
-            <span className="block mb-1 text-sm font-medium">
-              8 euros, vacances
-            </span>
             <h2 className="mb-2 text-2xl font-bold md:text-4xl">
               Big Summer Sale
             </h2>
             <p className="mb-4 text-sm md:text-base">
-              Commodo fames vitae vitae leo mauris in. Eu consequat.
+              Comfortable living and vitality in abundance. For your
+              convenience.
             </p>
-            <button className="px-6 py-2 text-sm text-gray-900 transition-colors bg-white rounded-md hover:bg-gray-100 md:text-base">
-              Shop Now
-            </button>
+            <Button
+              label="Shop Now"
+              to="/shop"
+              className="px-6 py-2 text-sm text-gray-900 transition-colors bg-white rounded-md hover:bg-gray-100 md:text-base"
+            ></Button>
           </div>
         </div>
       </div>

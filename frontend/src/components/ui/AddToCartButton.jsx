@@ -17,7 +17,7 @@ const AddToCartButton = ({ product }) => {
           className="btn-full max-sm:btn-md"
         />
       ) : (
-        <>
+        <div className="flex items-center justify-between w-full">
           <Button
             onClick={() => removeFromCart(product._id)}
             variant="ghost"
@@ -37,7 +37,7 @@ const AddToCartButton = ({ product }) => {
             ariaLabel="Increase quantity"
             className="btn-cart-ghost"
           />
-        </>
+        </div>
       )}
     </div>
   );

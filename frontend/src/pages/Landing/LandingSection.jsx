@@ -14,7 +14,7 @@ export const Section = ({
 }) => {
   return (
     <section
-      className={`flex flex-col-reverse lg:flex-row items-center justify-between w-full gap-8 py-8 px-4 sm:px-1 lg:px-1 transition duration-300 ease-in-out ${
+      className={`flex flex-col-reverse lg:flex-row items-center justify-between w-full gap-8 md:py-2 py-8 px-4 sm:px-1 lg:px-1 transition duration-300 ease-in-out ${
         reverse ? "lg:flex-row-reverse" : ""
       } ${dark ? "text-white" : "text-black"}`}
       style={{ backgroundColor }}
@@ -40,7 +40,9 @@ export const Section = ({
       <div className="flex-1 space-y-4 text-center lg:text-left">
         {title && <h2 className="text-3xl font-bold">{title}</h2>}
         {subtitle && <p className="text-lg opacity-70">{subtitle}</p>}
-        {buttonText && <Button label={buttonText} variant="outline" />}
+        {buttonText && (
+          <Button label={buttonText} to="/shop" variant="outline" />
+        )}
       </div>
     </section>
   );
@@ -100,6 +102,7 @@ const LandingPage = () => {
             <Button
               label="Shop Now"
               variant="outline"
+              to="/shop"
               className="text-white border-white "
             />
           </div>

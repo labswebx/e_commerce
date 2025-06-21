@@ -29,15 +29,15 @@ export const ProductCard = ({
     switch (variant) {
       case "compact":
       case "default":
-        return "w-full h-48";
+        return "w-full sm:h-48 h-32";
       case "minimal":
-        return "w-full h-32";
+        return "w-full sm:h-32 h-28";
       case "highlight":
-        return "w-full h-60";
+        return "w-full sm:h-60 sm:52";
       case "feature":
-        return "w-full h-64 object-contain";
+        return "w-full sm:h-64 h-56 object-contain";
       default:
-        return "w-full h-48";
+        return "w-48 h-40 sm:h-48 sm:w-full";
     }
   };
   const truncate = (str, n = 20) =>
@@ -146,7 +146,7 @@ export const ProductCard = ({
           ? "w-full p-4"
           : variant === "feature"
           ? "w-full md:max-w-[400px] bg-white p-6 border-none  "
-          : "w-72 p-3"
+          : "w-48 sm:w-72 p-3"
       }`}
     >
       <Link to={`/product/${data._id}`}>

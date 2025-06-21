@@ -2,6 +2,7 @@ import React from "react";
 import { ChevronDown, Loader2 } from "lucide-react";
 import Icon from "./Icon";
 import classNames from "classnames";
+import { useNavigate } from "react-router-dom";
 
 const Button = ({
   label = "Label",
@@ -18,13 +19,27 @@ const Button = ({
   className = "",
   ariaLabel,
   ref,
+  to,
   ...props
 }) => {
+  const navigate = useNavigate();
+  const handleClick = (event) => {
+    // Prevent action if the button is disabled or loading
+    if (disabled || loading) return;
+
+    // If an onClick prop is provided, call it with the event
+    if (onClick) onClick(event);
+
+    // If a "to" prop is provided, perform navigation
+    if (to) {
+      navigate(to);
+    }
+  };
   return (
     <button
       ref={ref}
       aria-label={ariaLabel}
-      onClick={onClick}
+      onClick={handleClick}
       disabled={disabled || loading}
       className={classNames(
         "btn",

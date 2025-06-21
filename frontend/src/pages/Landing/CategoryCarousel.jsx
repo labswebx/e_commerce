@@ -30,7 +30,7 @@ const CategoryCarousel = ({ title = "", length }) => {
     return <ErrorMessage message={toastMessage.CATEGORY_LOAD.message} />;
 
   return (
-    <div className="w-ful lg:pb-20 md:pb-10">
+    <div className="px-4 w-ful lg:pb-20 md:pb-10 md:px-0">
       <h2 className="mb-4 text-base font-semibold">{title}</h2>
 
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">

@@ -5,7 +5,7 @@ import Footer from "../../pages/Footer/Footer";
 // layout wraps public or general pages
 const DefaultLayout = () => {
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col w-full min-h-screen">
       {/* Top Navigation Bar */}
       <Header />
 

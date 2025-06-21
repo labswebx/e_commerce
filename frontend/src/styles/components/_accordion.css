@@ -8,7 +8,7 @@
   }
 
   .accordion-button {
-    @apply flex items-center justify-between w-full p-4 font-medium text-left text-gray-800 bg-gray-100 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-gray-500;
+    @apply flex items-center justify-between w-full p-4 font-medium text-left text-gray-800 rounded-md hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500;
   }
 
   .accordion-icon {

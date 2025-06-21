@@ -1,6 +1,6 @@
 @layer components {
   .header-container {
-    @apply z-50 w-full px-4 py-1 bg-white shadow-sm sm:px-6 lg:px-10;
+    @apply z-50 w-full px-4 py-1 shadow-sm sm:px-6 lg:px-10;
     /* fixed top-0 left-0 */
   }
 

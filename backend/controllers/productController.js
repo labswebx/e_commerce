@@ -87,24 +87,96 @@ exports.createProduct = catchAsyncErrors(async (req, res, next) => {
     product,
   });
 });
+
 // get all products
 exports.getAllProducts = catchAsyncErrors(async (req, res) => {
-  const resultsPerPage = 5;
-  const productsCount = await Product.countDocuments();
+
+  const resultsPerPage = Number(req.query.limit) || 5;
+
   const currentPage = Number(req.query.page) || 1;
+
+  const brands = req.query.brands ? req.query.brands.split(",") : [];
+  const memories = req.query.memories ? req.query.memories.split(",") : [];
+
+  const brandRegex = brands.map((b) => ({
+    name: { $regex: b, $options: "i" },
+  }));
+  const memoryRegex = memories.map((m) => ({
+    name: { $regex: m, $options: "i" },
+  }));
+
+  let query = {};
+  if (brands.length && memories.length) {
+    query = {
+      $and: [{ $or: brandRegex }, { $or: memoryRegex }],
+    };
+  } else if (brands.length) {
+    query = { $or: brandRegex };
+  } else if (memories.length) {
+    query = { $or: memoryRegex };
+  }
+
+  const min = Number(req.query.min) || 0;
+  const max = Number(req.query.max) || Number.MAX_SAFE_INTEGER;
+
+  if (Object.keys(query).length > 0) {
+    query = {
+      $and: [query, { price: { $gte: min, $lte: max } }],
+    };
+  } else {
+    query.price = { $gte: min, $lte: max };
+  }
+
+  let sortValue = req.query.sort;
+
+  if (typeof sortValue === "object" && sortValue?.value) {
+    sortValue = sortValue.value;
+  }
+  let sortQuery = {};
+
+  switch (sortValue) {
+    case "price-asc":
+      sortQuery = { price: 1 };
+      break;
+    case "price-desc":
+      sortQuery = { price: -1 };
+      break;
+    case "name":
+      sortQuery = { name: 1 };
+      break;
+    case "rating":
+      sortQuery = { rating: -1 };
+      break;
+    default:
+      sortQuery = { order: 1, createdAt: -1 };
+  }
+
+
+  delete req.query.brands;
+  delete req.query.memories;
+  delete req.query.min;
+  delete req.query.max;
+  delete req.query.sort;
   const apiFeature = new ApiFeatures(
-    Product.find().populate("category").sort({ order: 1, createdAt: -1 }),
+    Product.find(query).populate("category"),
     req.query
   )
     .search()
     .filter()
     .pagination(resultsPerPage);
+
+  apiFeature.query = apiFeature.query.sort(sortQuery);
+
+  const productsCount = await Product.countDocuments(query);
+  const totalCount = await Product.countDocuments();
   const products = await apiFeature.query;
 
   return res.status(200).json({
     success: true,
     products,
     productsCount,
+    totalCount,
+    currentCount: products.length,
     resultsPerPage,
     currentPage,
   });
@@ -298,25 +370,19 @@ exports.getProductDetails = catchAsyncErrors(async (req, res, next) => {
 });
 
 // get products of a category
-// Get products based only on category (no subcategory grouping)
-exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
-  console.log("🔍 Requested Category ID:", req.params.id);
 
+exports.getCategoryProducts = catchAsyncErrors(async (req, res, next) => {
   const category = await Category.findById(req.params.id);
-  console.log("📦 Fetched Category:", category);
 
   if (!category) {
-    console.log("❌ Category not found");
     return next(new ErrorHandler("Category Not Found", 404));
   }
 
   const products = await Product.find({ category: category._id }).sort({
     order: 1,
   });
-  console.log("📦 Products matched:", products.length);
 
   if (!products || products.length === 0) {
-    console.log("⚠️ No products found for this category");
     return next(new ErrorHandler("Products Not Found", 404));
   }
 

@@ -1,56 +1,89 @@
-import { useEffect } from "react";
-
-import Timeline from "../../components/ui/Timeline";
-import Loader from "../../components/ui/Loader";
-
-import NoData from "../../utils/NoData";
-import ErrorMessage from "../../utils/ErrorMessage";
-
-import toastMessage from "../../constants/toastMessage";
-
-import { useOrders } from "../../features/orders/orderHooks";
+// pages/cart/OrderStatus.js
+import React from "react";
 import {
-  ORDER_STEP_MAP,
-  ORDER_TIMELINE_STEPS,
-} from "../../features/orders/orderConstants";
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
+import { FaCheckCircle, FaBox, FaShippingFast } from "react-icons/fa";
+import Button from "../../components/ui/Button";
 
 const OrderStatus = () => {
-  const { myOrders, loading, error, getMyOrders } = useOrders();
-
-  useEffect(() => {
-    getMyOrders();
-  }, []);
-
-  const latestOrder = myOrders?.[myOrders.length - 1];
-
-  const currentStep = latestOrder?.status
-    ? ORDER_STEP_MAP[latestOrder.status] ?? 0
-    : 0;
-
-  if (loading) return <Loader />;
-  if (error) return <ErrorMessage message={error} />;
-  if (!latestOrder) return <NoData message={toastMessage.ORDER_LOAD.EMPTY} />;
-
+  const location = useLocation();
+  const { state } = location;
+  const orderId = state?.orderId || "N/A";
+  const navigate = useNavigate();
   return (
-    <div className="max-w-4xl px-4 py-8 mx-auto space-y-6">
-      <h1 className="text-2xl font-semibold text-center">Order Status</h1>
+    <div className="max-w-2xl px-4 py-12 mx-auto text-center">
+      <div className="p-8 bg-white rounded-lg shadow-sm">
+        {/* Success Icon */}
+        <div className="flex justify-center mb-6">
+          <FaCheckCircle className="w-16 h-16 text-green-500" />
+        </div>
 
-      <Timeline
-        steps={ORDER_TIMELINE_STEPS}
-        currentStep={currentStep}
-        orientation="horizontal"
-      />
+        {/* Success Message */}
+        <h1 className="mb-4 text-2xl font-bold text-gray-800 md:text-3xl">
+          Order Placed Successfully!
+        </h1>
+        <p className="mb-6 text-gray-600">
+          Thank you for your purchase. Your order has been received and is being
+          processed.
+        </p>
 
-      <div className="mt-6 text-center">
-        <p className="text-sm text-gray-500">
-          Tracking Order: <strong>{latestOrder._id}</strong>
-        </p>
-        <p className="text-sm text-gray-500">
-          Payment Method: {latestOrder.paymentInfo?.paymentInstrument}
-        </p>
-        <p className="text-sm text-gray-500">
-          Total: ₹{latestOrder.totalPrice}
-        </p>
+        {/* Order ID */}
+        <div className="p-4 mb-8 rounded-lg bg-gray-50">
+          <p className="font-medium text-gray-700">Order Number:</p>
+          <p className="text-lg font-bold text-gray-600">{orderId}</p>
+        </div>
+
+        {/* Next Steps */}
+        <div className="p-6 mb-8 text-left bg-gray-100 rounded-lg">
+          <h2 className="flex items-center mb-3 text-lg font-semibold text-gray-800">
+            <FaBox className="mr-2" />
+            What happens next?
+          </h2>
+          <ul className="space-y-2 text-sm text-gray-700 list-disc list-inside">
+            <li>You'll receive an order confirmation email shortly</li>
+            <li>We'll notify you when your items ship</li>
+            <li>Estimated delivery: 3-5 business days</li>
+          </ul>
+        </div>
+
+        {/* Tracking Info */}
+        <div className="p-6 mb-8 text-left bg-gray-100 rounded-lg">
+          <h2 className="flex items-center mb-3 text-lg font-semibold text-gray-800">
+            <FaShippingFast className="mr-2" />
+            Track Your Order
+          </h2>
+          <p className="mb-4 text-sm text-gray-700">
+            You can track your order in your account or using the link below:
+          </p>
+          <Button
+            variant="primary"
+            label="Track Order"
+            onClick={() => navigate(`/user/order/track/${orderId}`)}
+            className="w-full"
+          />
+        </div>
+
+        {/* Action Buttons */}
+        <div className="flex flex-col space-y-3 sm:flex-row sm:space-y-0 sm:space-x-4">
+          <Button
+            type="button"
+            variant="outline"
+            label="Continue Shopping"
+            to="/products"
+            className="w-full"
+          />
+          <Button
+            type="button"
+            variant="primary"
+            label="View Order Details"
+            onClick={() => navigate(`/user/order/${orderId}`)}
+            className="w-full"
+          />
+        </div>
       </div>
     </div>
   );

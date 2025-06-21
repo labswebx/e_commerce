@@ -20,7 +20,6 @@ export const ProductCard = ({
   const [liked, setLiked] = useState(false);
 
   const imageUrl = data.images?.[0]?.url || "/logo-icon.jpg";
-
   // event handler for like
   const toggleLike = () => {
     setLiked(!liked);
@@ -29,17 +28,20 @@ export const ProductCard = ({
   const getImageClasses = () => {
     switch (variant) {
       case "compact":
-        return "w-full h-40 sm:h-48 md:h-52";
+      case "default":
+        return "w-full h-48";
       case "minimal":
         return "w-full h-32";
       case "highlight":
         return "w-full h-60";
       case "feature":
-        return "w-full  h-44 sm:h-56 md:h-64 object-contain";
+        return "w-full h-64 object-contain";
       default:
-        return "mx-auto w-full h-40 sm:h-48 md:h-52";
+        return "w-full h-48";
     }
   };
+  const truncate = (str, n = 20) =>
+    str?.length > n ? str.substr(0, n - 1) + "..." : str;
 
   // product card with variant
   const renderContent = () => {
@@ -49,7 +51,7 @@ export const ProductCard = ({
           <>
             <Link to={`/product/${data._id}`}>
               <h3 className="mt-2 text-base font-semibold hover:underline">
-                {data.name}
+                {truncate(data.name)}
               </h3>
             </Link>
             <Button
@@ -63,7 +65,10 @@ export const ProductCard = ({
         return (
           <>
             <Link to={`/product/${data._id}`}>
-              <h3 className="mt-4 text-xl font-semibold">{data.name}</h3>
+              <h3 className="mt-4 text-xl font-semibold">
+                {" "}
+                {truncate(data.name)}
+              </h3>
             </Link>
 
             <p className="mt-2 text-sm text-gray-600">
@@ -87,7 +92,7 @@ export const ProductCard = ({
           <>
             <Link to={`/product/${data._id}`}>
               <h3 className="mt-2 text-sm font-medium hover:underline">
-                {data.name}
+                {truncate(data.name)}
               </h3>
             </Link>
           </>
@@ -98,7 +103,7 @@ export const ProductCard = ({
           <>
             <Link to={`/product/${data._id}`}>
               <h3 className="mt-4 text-xl font-bold hover:underline">
-                {data.name}
+                {truncate(data.name)}
               </h3>
               <p className="mt-1 text-lg font-semibold">${data.price}</p>
             </Link>
@@ -117,15 +122,15 @@ export const ProductCard = ({
           <>
             <Link to={`/product/${data._id}`}>
               <h3 className="mt-2 text-lg font-medium hover:underline">
-                {data.name}
+                {truncate(data.name)}
               </h3>
             </Link>
-            <p className="mt-2 text-xl font-semibold">
+            <p className="mt-2 mb-2 text-xl font-semibold">
               {formatPrice(data.price)}
             </p>
 
             <div className="flex justify-center w-full px-4 mt-auto">
-              <div className="w-full lg:max-w-[127px]">
+              <div className="w-full ">
                 <AddToCartButton product={data} className="w-full" />
               </div>
             </div>
@@ -136,23 +141,23 @@ export const ProductCard = ({
 
   return (
     <div
-      className={`relative card-base h-full flex flex-col justify-between text-center ${className} ${
+      className={`relative card-base shadow-none border-none h-full bg-[#F6F6F6] flex flex-col justify-between text-center ${className} ${
         variant === "highlight"
           ? "w-full p-4"
           : variant === "feature"
           ? "w-full md:max-w-[400px] bg-white p-6 border-none  "
-          : "w-72"
+          : "w-72 p-3"
       }`}
     >
       <Link to={`/product/${data._id}`}>
         <div
-          className={`relative overflow-hidden bg-white rounded-md ${getImageClasses()}`}
+          className={`relative overflow-hidden bg-transparent p-2 rounded-md ${getImageClasses()}`}
         >
           <img
             src={imageUrl}
             alt={data.name}
             loading="lazy"
-            className="absolute top-0 left-0 object-contain w-full h-full "
+            className="absolute inset-0 object-contain w-full h-full"
           />
         </div>
       </Link>
@@ -162,17 +167,26 @@ export const ProductCard = ({
       ) : (
         <button
           onClick={toggleLike}
-          className="absolute top-4 right-4 p-[6px] bg-white rounded-full shadow-md hover:bg-gray-100 transition"
+          className="absolute top-0 right-4 p-[6px]  transition"
         >
           {liked ? (
             <Heart className="w-6 h-6 text-red-500" fill="red" />
           ) : (
-            <Heart className="w-6 h-6" />
+            <Heart className="w-6 h-6 " color="gray" />
           )}
         </button>
       )}
 
       <div className="flex flex-col justify-between flex-1 mt-4">
+        {/* stock availability */}
+        {/* <div className="mt-2 text-sm font-medium">
+          {data.stock > 0 ? (
+            <span className="text-green-600">In Stock</span>
+          ) : (
+            <span className="text-red-600">Out of Stock</span>
+          )}
+        </div> */}
+
         {renderContent()}
       </div>
     </div>
@@ -241,7 +255,7 @@ const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => {
           <h4 className="text-base font-semibold sm:text-sm">
             {data?.name || data?.title}
           </h4>
-          <p className="text-xs text-gray-600">{data?.category}</p>
+          <p className="text-xs text-gray-600">{data?.category?.name || ""}</p>
         </div>
       </div>
 

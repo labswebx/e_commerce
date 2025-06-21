@@ -1,5 +1,6 @@
 import React, { useState, useRef, useEffect } from "react";
 import { ChevronDown, X } from "lucide-react";
+import classNames from "classnames";
 
 const SelectBox = ({
   options = [],
@@ -7,6 +8,7 @@ const SelectBox = ({
   placeholder = "Select...",
   onChange,
   value = isMulti ? [] : null,
+  size = "md",
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [selected, setSelected] = useState(value);
@@ -26,11 +28,15 @@ const SelectBox = ({
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  useEffect(() => {
+    setSelected(value);
+  }, [value]);
+
   const handleSelect = (option) => {
     if (isMulti) {
-      const isAlreadySelected = selected.includes(option);
+      const isAlreadySelected = selected.some((v) => v.value === option.value);
       const newSelection = isAlreadySelected
-        ? selected.filter((v) => v !== option)
+        ? selected.filter((v) => v.value !== option.value)
         : [...selected, option];
       setSelected(newSelection);
       onChange?.(newSelection);
@@ -41,23 +47,25 @@ const SelectBox = ({
     }
   };
 
-  const filteredOptions = options.filter((opt) =>
-    opt.toLowerCase().includes(search.toLowerCase())
-  );
-
   const removeItem = (item) => {
-    const newSelection = selected.filter((v) => v !== item);
+    const newSelection = selected.filter((v) => v.value !== item.value);
     setSelected(newSelection);
     onChange?.(newSelection);
   };
 
   const isSelected = (option) =>
-    isMulti ? selected.includes(option) : selected === option;
+    isMulti
+      ? selected.some((v) => v.value === option.value)
+      : selected?.value === option.value;
+
+  const filteredOptions = options.filter((opt) =>
+    opt.label.toLowerCase().includes(search.toLowerCase())
+  );
 
   return (
     <div className="selectbox-container" ref={ref}>
       <div className="selectbox-input-wrapper" onClick={toggleDropdown}>
-        <div className="flex flex-wrap gap-1 text-sm">
+        <div className="flex flex-wrap gap-1">
           {isMulti ? (
             selected.length > 0 ? (
               selected.map((item, idx) => (
@@ -66,7 +74,7 @@ const SelectBox = ({
                   className="selectbox-multi-selected-item"
                   onClick={(e) => e.stopPropagation()}
                 >
-                  <span>{item}</span>
+                  {item.label}
                   <X
                     size={12}
                     className="selectbox-multi-selected-remove"
@@ -79,12 +87,14 @@ const SelectBox = ({
             )
           ) : (
             <span className={selected ? "" : "selectbox-placeholder"}>
-              {selected || placeholder}
+              {selected?.label || placeholder}
             </span>
           )}
         </div>
         <ChevronDown
-          className={`selectbox-chevron ${isOpen ? "rotate-180" : ""}`}
+          className={classNames("selectbox-chevron", {
+            "rotate-180": isOpen,
+          })}
         />
       </div>
 
@@ -100,12 +110,13 @@ const SelectBox = ({
           {filteredOptions.map((option, idx) => (
             <div
               key={idx}
-              className={`selectbox-option ${
-                isSelected(option) ? "selectbox-option-selected" : ""
-              }`}
+              className={classNames(
+                "selectbox-option",
+                isSelected(option) && "selectbox-option-selected"
+              )}
               onClick={() => handleSelect(option)}
             >
-              <span>{option}</span>
+              <span>{option.label}</span>
               {isSelected(option) && <span>✔</span>}
             </div>
           ))}

@@ -9,7 +9,7 @@ const AddToCartButton = ({ product }) => {
   const quantity = cartItem?.quantity || 0;
 
   return (
-    <div className="btn-cart-base">
+    <div className="w-full btn-cart-base">
       {quantity === 0 ? (
         <Button
           onClick={() => addToCart(product)}

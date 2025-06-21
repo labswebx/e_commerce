@@ -1,55 +1,72 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  fetchProducts,
-  fetchTrendingProducts,
-  fetchFavouriteProducts,
-  fetchMostOrderedProducts,
-} from "../../../features/products/productsSlice";
+import { useProducts } from "../../../features/products/productHooks";
 import ProductGrid from "./ProductGrid";
+import ProductFilters from "./ProductFilters";
+import ErrorMessage from "../../../utils/ErrorMessage";
+import toastMessage from "../../../constants/toastMessage";
+import Button from "../../../components/ui/Button";
+import ProductLayout from "../../../components/layout/ProductLayout";
 
 const ProductList = () => {
-  const dispatch = useDispatch();
   const [page, setPage] = useState(1);
-  const limit = 50;
+  const [filters, setFilters] = useState({});
+  const [limit, setLimit] = useState(12);
+  const [isLoadMore, setIsLoadMore] = useState(false);
+  const [sort, setSort] = useState("rating");
 
-  const {
-    products,
-    productsCount,
-    loading: productsLoading,
-  } = useSelector((state) => state.products);
-
-  useEffect(() => {
-    dispatch(fetchTrendingProducts());
-    dispatch(fetchFavouriteProducts());
-    dispatch(fetchMostOrderedProducts());
-  }, [dispatch]);
-
-  // Fetch next page automatically until all products are loaded
-  useEffect(() => {
-    if (products.length < productsCount) {
-      dispatch(fetchProducts({ page, limit }));
-    }
-  }, [dispatch, page, products.length, productsCount]);
+  const { products, productsCount, loading } = useProducts({
+    page,
+    limit,
+    filters,
+    sort,
+  });
 
   useEffect(() => {
-    if (products.length < productsCount) {
-      const interval = setTimeout(() => {
-        setPage((prev) => prev + 1);
-      }, 500); // slight delay to avoid flooding
-      return () => clearTimeout(interval);
-    }
-  }, [products.length, productsCount]);
+    setPage(1);
+    setLimit(12);
+    setIsLoadMore(false);
+  }, [filters]);
+
+  const noProductsFound = !loading && products.length === 0;
 
   return (
-    <div className="px-4 mx-auto space-y-6 max-w-7xl sm:px-6 lg:px-8">
-      <h2 className="text-xl font-semibold">All Products</h2>
-      <ProductGrid
-        products={products}
-        loading={productsLoading}
-        title="All Products"
-      />
-    </div>
+    <ProductLayout filters={filters} setFilters={setFilters}>
+      <section className="px-4 pt-6 pb-2 md:px-8">
+        {noProductsFound ? (
+          <div className="py-8 text-lg font-medium text-center text-gray-600">
+            No products found with the applied filters.
+          </div>
+        ) : (
+          <ProductGrid
+            products={products}
+            loading={loading && !isLoadMore}
+            grid="flex flex-wrap"
+          />
+        )}
+      </section>
+
+      {/* Load More Button */}
+      {!noProductsFound && products.length < productsCount && !loading && (
+        <div className="flex justify-center mt-4">
+          <Button
+            label="Load more"
+            variant="ghost"
+            onClick={() => {
+              setIsLoadMore(true);
+              setLimit((prev) => prev + 10);
+            }}
+            className="hover:bg-transparent hover:text-gray-500"
+          />
+        </div>
+      )}
+
+      {/* Loading state when loading more */}
+      {loading && isLoadMore && (
+        <div className="py-4 text-center text-gray-500 animate-pulse">
+          Loading more products...
+        </div>
+      )}
+    </ProductLayout>
   );
 };
 

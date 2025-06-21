@@ -7,7 +7,7 @@ import { ProductCard } from "../../components/ui/Card";
 const ProductsByCategory = () => {
   const { id } = useParams();
   const { categoryProducts, loading, error } = useCategoryProducts(id);
-  console.log(categoryProducts, loading, error);
+
   if (loading) return <Loader />;
 
   return (

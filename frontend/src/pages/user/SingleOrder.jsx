@@ -26,7 +26,7 @@ const SingleOrder = () => {
 
   const orderData = order.order;
   const { shippingAddress, paymentInfo, orderItems } = orderData;
-  console.log(orderItems);
+
   const paymentMethod = paymentInfo?.paymentInstrument || "N/A";
   const maskedCard =
     paymentInfo?.paymentInstrument?.cardNumber?.replace(

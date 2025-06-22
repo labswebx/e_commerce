@@ -18,6 +18,8 @@ const Button = ({
   iconRight: IconRight,
   className = "",
   ariaLabel,
+  iconColor,
+
   ref,
   to,
   ...props
@@ -61,6 +63,7 @@ const Button = ({
             <Icon
               icon={IconLeft}
               size={size}
+              color={iconColor}
               className={classNames(disabled && "opacity-50")}
             />
           )}
@@ -74,6 +77,7 @@ const Button = ({
           {IconRight && (
             <Icon
               icon={IconRight}
+              color={iconColor}
               size={size}
               className={classNames(disabled && "opacity-50")}
             />

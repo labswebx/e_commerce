@@ -5,9 +5,8 @@ import DatePicker from "./DatePicker";
 import Button from "./Button";
 import AddToCartButton from "./AddToCartButton";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { Heart, HeartOff } from "lucide-react";
 import { formatPrice } from "../../utils/formatter";
+import WishlistButton from "./WishlistButton";
 
 // Product card
 export const ProductCard = ({
@@ -16,14 +15,7 @@ export const ProductCard = ({
   variant = "default",
   className,
 }) => {
-  // state
-  const [liked, setLiked] = useState(false);
-
   const imageUrl = data.images?.[0]?.url || "/logo-icon.jpg";
-  // event handler for like
-  const toggleLike = () => {
-    setLiked(!liked);
-  };
 
   const getImageClasses = () => {
     switch (variant) {
@@ -40,6 +32,7 @@ export const ProductCard = ({
         return "w-48 h-40 sm:h-48 sm:w-full";
     }
   };
+
   const truncate = (str, n = 20) =>
     str?.length > n ? str.substr(0, n - 1) + "..." : str;
 
@@ -162,20 +155,7 @@ export const ProductCard = ({
         </div>
       </Link>
 
-      {variant === "feature" ? (
-        ""
-      ) : (
-        <button
-          onClick={toggleLike}
-          className="absolute top-0 right-4 p-[6px]  transition"
-        >
-          {liked ? (
-            <Heart className="w-6 h-6 text-red-500" fill="red" />
-          ) : (
-            <Heart className="w-6 h-6 " color="gray" />
-          )}
-        </button>
-      )}
+      {variant === "feature" ? "" : <WishlistButton product={data} />}
 
       <div className="flex flex-col justify-between flex-1 mt-4">
         {/* stock availability */}

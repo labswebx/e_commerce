@@ -46,7 +46,7 @@ const ProductList = () => {
       </section>
 
       {/* Load More Button */}
-      {!noProductsFound && products.length < productsCount && !loading && (
+      {!noProductsFound && !loading && (
         <div className="flex justify-center mt-4">
           <Button
             label="Load more"

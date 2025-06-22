@@ -3,7 +3,7 @@ import Button from "./Button";
 import { useCart } from "../../features/cart/cartHooks";
 
 // manages the add, remove, and update quantity operations for a product in the shopping cart:
-const AddToCartButton = ({ product }) => {
+const AddToCartButton = ({ product, label = "Add to cart" }) => {
   const { getCartItem, addToCart, removeFromCart } = useCart();
   const cartItem = getCartItem(product._id);
   const quantity = cartItem?.quantity || 0;
@@ -13,7 +13,7 @@ const AddToCartButton = ({ product }) => {
       {quantity === 0 ? (
         <Button
           onClick={() => addToCart(product)}
-          label="Add to cart"
+          label={label}
           className="btn-full max-sm:btn-md"
         />
       ) : (

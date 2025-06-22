@@ -130,6 +130,8 @@ const Home = () => {
         <section className="space-y-4">
           <h2 className="text-xl font-semibold">Discounts up to -50%</h2>
           <ProductGrid
+            btnText="Buy Now"
+            
             products={trendingProducts}
             loading={productsLoading}
             title="Trending Products"

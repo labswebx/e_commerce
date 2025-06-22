@@ -8,6 +8,7 @@ import {
   useWishlistCollections,
 } from "../../features/wishlist/wishlistHooks";
 import Toast from "./Toast";
+import Tooltip from "./Tooltip";
 
 const WishlistButton = ({ product }) => {
   const [showModal, setShowModal] = useState(false);
@@ -151,9 +152,13 @@ const WishlistButton = ({ product }) => {
         {isProcessing ? (
           <span className="w-6 h-6 border-2 border-gray-300 rounded-full animate-spin border-t-black" />
         ) : isLiked ? (
-          <Heart className="w-6 h-6 text-red-500" fill="red" />
+          <Tooltip text="Remove from wishlist" position="bottom">
+            <Heart className="w-6 h-6 text-red-500" fill="red" />
+          </Tooltip>
         ) : (
-          <Heart className="w-6 h-6 text-gray-400 hover:text-red-500" />
+          <Tooltip text="Add to wishlist" position="bottom">
+            <Heart className="w-6 h-6 text-gray-400 hover:text-red-500" />
+          </Tooltip>
         )}
       </button>
 

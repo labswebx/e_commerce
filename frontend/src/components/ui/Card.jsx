@@ -72,8 +72,9 @@ export const ProductCard = ({
             <div className="flex items-start">
               <Button
                 variant="outline"
-                onClick={() => onAddToCart(data)}
+                // onClick={() => onAddToCart(data)}
                 label="Shop Now"
+                to="/shop"
                 className="mt-4 px-14"
               />
             </div>
@@ -124,7 +125,11 @@ export const ProductCard = ({
 
             <div className="flex justify-center w-full px-4 mt-auto">
               <div className="w-full ">
-                <AddToCartButton product={data} className="w-full" />
+                <AddToCartButton
+                  product={data}
+                  className="w-full"
+                  label="Buy Now"
+                />
               </div>
             </div>
           </>

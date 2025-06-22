@@ -30,6 +30,9 @@ const productsApi = {
       if (filters.price?.max !== undefined) {
         params.max = filters.price.max;
       }
+      if (filters.category !== undefined) {
+        params.category = filters.category;
+      }
       const res = await axiosInstance.get(PRODUCTS_API_ENDPOINTS.GET_PRODUCTS, {
         params,
       });

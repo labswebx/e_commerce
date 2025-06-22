@@ -58,9 +58,12 @@ const SelectBox = ({
       ? selected.some((v) => v.value === option.value)
       : selected?.value === option.value;
 
-  const filteredOptions = options.filter((opt) =>
-    opt.label.toLowerCase().includes(search.toLowerCase())
-  );
+      const filteredOptions = options.filter(
+        (opt) =>
+          typeof opt?.label === "string" &&
+          opt.label.toLowerCase().includes(search.toLowerCase())
+      );
+      
 
   return (
     <div className="selectbox-container" ref={ref}>

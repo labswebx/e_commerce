@@ -5,7 +5,7 @@ import classNames from "classnames";
 import { useNavigate } from "react-router-dom";
 
 const Button = ({
-  label = "Label",
+  label = "",
   onClick,
   size = "md", // sm | md | lg
   variant = "filled", // filled | outline | ghost
@@ -18,10 +18,9 @@ const Button = ({
   iconRight: IconRight,
   className = "",
   ariaLabel,
-  iconColor,
-
-  ref,
   to,
+  iconColor,
+  ref,
   ...props
 }) => {
   const navigate = useNavigate();

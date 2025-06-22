@@ -1,63 +1,58 @@
 import { Outlet } from "react-router-dom";
-
 import { Menu } from "lucide-react";
-
-import Breadcrumb from "../ui/BreadCrumb";
-
 import { useCategory } from "../../features/category/categoryHooks";
-
-import useSidebarToggle from "../../hooks/useSidebarToggle";
 import useBreadcrumbItems from "../../hooks/useBreadcrumbItems";
-
 import SidebarCategoryList from "../../pages/category/SidebarCategoryList";
+import Layout from "./Layout";
+import Breadcrumb from "../ui/BreadCrumb";
+import Button from "../ui/Button";
+import SelectBox from "../ui/SelectBox";
+import { useState } from "react";
 
-// layout wrap category-related pages.
 const CategoriesLayout = () => {
-  const [sidebarOpen, setSidebarOpen, toggleSidebar] = useSidebarToggle(false);
   const { categories } = useCategory();
+  const [sort, setSort] = useState(null);
+  console.log(sort);
   const breadcrumbItems = useBreadcrumbItems({
     lookupList: categories,
   });
+  console.log("Categories:", categories);
 
-  return (
-    <div className="layout-base">
-      {/* Sidebar */}
-      <aside
-        className={`sidebar-base md:translate-x-0 ${
-          !sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        }`}
-        aria-label="Sidebar"
-        role="navigation"
-      >
-        <SidebarCategoryList />
-      </aside>
-
-      {/* Overlay for Mobile */}
-      {sidebarOpen && (
-        <div onClick={toggleSidebar} className="sidebar-overlay" />
-      )}
-
-      {/* Main Content */}
-      <div className="main-content-area">
-        {/* Mobile Topbar */}
-        <header className="topbar-mobile">
-          <button onClick={toggleSidebar} className="sidebar-toggle-btn">
-            <Menu className="w-6 h-6" />
-          </button>
-          <h1 className="text-lg font-semibold text-gray-800">Categories</h1>
-        </header>
-
-        {/* Breadcrumb */}
-        <div className="breadcrumb-wrapper">
-          <Breadcrumb items={breadcrumbItems} />
-        </div>
-
-        {/* Page Content */}
-        <main className="main-inner">
-          <Outlet />
-        </main>
+  const controls = (
+    <div className="flex items-center gap-2">
+      <div className="w-full sm:w-48">
+        <SelectBox
+          options={
+            categories?.flatMap((cat) =>
+              cat.products?.map((product) => ({
+                label: product?.name ?? "Unnamed Product",
+                value: product?.name ?? "Unnamed Product",
+              }))
+            ) || []
+          }
+          placeholder="Sort By"
+          value={sort}
+          onChange={(val) => {
+            console.log("Selected:", val);
+            setSort(val); // full { label, value } object
+          }}
+        />
       </div>
     </div>
+  );
+  return (
+    <Layout
+      sidebarContent={({ toggleSidebar }) => (
+        <SidebarCategoryList toggleSidebar={toggleSidebar} />
+      )}
+      breadcrumbs={<Breadcrumb items={breadcrumbItems} />}
+      sidebarTitle="Categories"
+      showMobileFilters={true}
+      controls={controls}
+      itemCount={categories.length}
+    >
+      <Outlet />
+    </Layout>
   );
 };
 

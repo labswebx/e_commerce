@@ -33,12 +33,12 @@ const CategoryDetails = () => {
   return (
     <div className="p-2 space-y-10 md:p-2">
       {/* Category Info */}
-      <div className="space-y-6">
+      <div className="space-y-6 max-w-7xl">
         <h2 className="text-3xl font-bold text-gray-800">{category.name}</h2>
 
         <div className="flex flex-col gap-6 md:flex-row">
           {/* Image */}
-          <div className="w-full bg-zinc-800 md:w-1/3 max-w-[320px] rounded-md">
+          <div className="w-full bg-zinc-800 sm:w-1/3 max-w-[320px] rounded-md">
             <img
               src={category.image?.url || "/placeholder.png"}
               alt={category.name}
@@ -72,6 +72,13 @@ const CategoryDetails = () => {
                 <span className="font-semibold text-gray-700">Updated At:</span>{" "}
                 <span className="text-gray-500">
                   {new Date(category.updatedAt).toLocaleString()}
+                </span>
+              </p>
+
+              <p>
+                <span className="font-semibold text-gray-700">Products:</span>{" "}
+                <span className="text-gray-500">
+                  {categoryProducts?.length}
                 </span>
               </p>
             </div>

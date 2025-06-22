@@ -99,7 +99,7 @@ const Wishlist = () => {
               }}
               className={`cursor-pointer px-3 py-2 rounded hover:bg-gray-100 ${
                 selectedCollectionId === col._id
-                  ? "bg-blue-100 text-blue-700"
+                  ? "bg-gray-200 text-gray-700"
                   : ""
               }`}
             >
@@ -128,6 +128,14 @@ const Wishlist = () => {
         <section className="w-full px-4 pt-4 pb-2 border-b md:px-8">
           <div className="flex items-center justify-between">
             <h1 className="text-2xl font-bold">My Wishlist</h1>
+            <Button
+              size="sm"
+              variant="outline"
+              iconRight={Plus}
+              className=""
+              onClick={() => setShowCreateModal(true)}
+              label="Add"
+            />
             <button
               onClick={toggleSidebar}
               className="flex items-center justify-center px-4 py-2 text-sm font-medium border rounded md:hidden"
@@ -175,15 +183,9 @@ const Wishlist = () => {
 
       {/* Create Collection Modal */}
       <Modal isOpen={showCreateModal} onClose={() => setShowCreateModal(false)}>
-        <div className="w-full max-w-md p-6 bg-white rounded-lg">
+        <div className="w-full max-w-full p-6 rounded-lg">
           <div className="flex justify-between mb-4">
             <h3 className="text-lg font-semibold">Create New Collection</h3>
-            <button
-              onClick={() => setShowCreateModal(false)}
-              className="text-gray-400 hover:text-gray-600"
-            >
-              <X className="w-5 h-5" />
-            </button>
           </div>
           <InputField
             label="Collection Name"

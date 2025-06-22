@@ -826,14 +826,13 @@ const About = () => {
                   label="Shop Now"
                   className="text-white border-white"
                   variant="outline"
-                  // href="/shop"
-                  // className="inline-flex items-center justify-center px-8 py-3 text-base font-medium text-gray-900 bg-gray-400 border border-transparent rounded-md hover:bg-gray-500 md:py-4 md:text-lg md:px-10"
+                  to="/shop"
                 >
                   Shop Now
                 </Button>
               </div>
               <div className="inline-flex ml-3">
-                <Button label="contact" href="/contact"></Button>
+                <Button label="contact" to="/contact"></Button>
               </div>
             </div>
           </div>

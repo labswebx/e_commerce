@@ -1,11 +1,20 @@
-import { GitBranch, Joystick, VenetianMask, X } from "lucide-react";
+import {
+  Clock,
+  GitBranch,
+  Joystick,
+  Mail,
+  Phone,
+  Store,
+  VenetianMask,
+  X,
+} from "lucide-react";
 import Logo from "../../components/ui/Logo";
 import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
     <footer className="px-6 py-10 text-gray-300 bg-gray-900 footer-container">
-      <div className="grid grid-cols-1 gap-8 footer-grid sm:grid-cols-2 lg:grid-cols-3">
+      <div className="grid justify-between grid-cols-1 gap-8 footer-grid sm:grid-cols-2 lg:grid-cols-3">
         {/* Column 1: Branding & Socials */}
         <div className="space-y-4 footer-column">
           <div className="flex items-center gap-2 text-2xl font-bold text-white">
@@ -32,42 +41,10 @@ export default function Footer() {
         </div>
 
         {/* Column 2: Services */}
-        <div className="footer-column">
+        {/* <div className="footer-column">
           <h3 className="mb-3 text-lg font-semibold text-white">Services</h3>
           <p className="text-sm text-gray-400">More services coming soon.</p>
-          {/* <ul className="space-y-2 text-sm">
-            <li>
-              <Link to="/bonus-program" className="hover:text-white">
-                Bonus Program
-              </Link>
-            </li>
-            <li>
-              <Link to="/gift-cards" className="hover:text-white">
-                Gift Cards
-              </Link>
-            </li>
-            <li>
-              <Link to="/credit-payment" className="hover:text-white">
-                Credit & Payment
-              </Link>
-            </li>
-            <li>
-              <Link to="/service-contracts" className="hover:text-white">
-                Service Contracts
-              </Link>
-            </li>
-            <li>
-              <Link to="/wallet" className="hover:text-white">
-                Non-Cash Account
-              </Link>
-            </li>
-            <li>
-              <Link to="/payment-options" className="hover:text-white">
-                Payment
-              </Link>
-            </li>
-          </ul> */}
-        </div>
+        </div> */}
 
         {/* Column 3: Help */}
         <div className="footer-column">
@@ -99,6 +76,34 @@ export default function Footer() {
               <Link to="/privacy-policy" className="hover:text-white">
                 Privacy Policy
               </Link>
+            </li>
+          </ul>
+        </div>
+
+        {/* Column 4: Contact Information */}
+        <div className="footer-column">
+          <h3 className="mb-3 text-lg font-semibold text-white">Contact Us</h3>
+          <ul className="space-y-3 text-sm">
+            <li className="flex items-start gap-3">
+              <Mail className="flex-shrink-0 w-4 h-4 mt-0.5 text-gray-400" />
+              <span>support@cyber.com</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <Phone className="flex-shrink-0 w-4 h-4 mt-0.5 text-gray-400" />
+
+              <span>+91 83077 47802</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <Store className="flex-shrink-0 w-4 h-4 mt-0.5 text-gray-400" />
+              <span>123 Tech Street, Mumbai, India</span>
+            </li>
+            <li className="flex items-start gap-3">
+              <Clock className="flex-shrink-0 w-4 h-4 mt-0.5 text-gray-400" />
+              <div>
+                <p>Mon-Fri: 10:00 AM - 7:00 PM</p>
+                <p>Sat: 10:00 AM - 5:00 PM</p>
+                <p>Sun: Closed</p>
+              </div>
             </li>
           </ul>
         </div>

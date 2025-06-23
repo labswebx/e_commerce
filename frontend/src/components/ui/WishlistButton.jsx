@@ -9,6 +9,8 @@ import {
 } from "../../features/wishlist/wishlistHooks";
 import Toast from "./Toast";
 import Tooltip from "./Tooltip";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const WishlistButton = ({ product }) => {
   const [showModal, setShowModal] = useState(false);
@@ -16,6 +18,9 @@ const WishlistButton = ({ product }) => {
   const [isProcessing, setIsProcessing] = useState(false);
   const [selectedCollectionId, setSelectedCollectionId] = useState(null);
   const [isLiked, setIsLiked] = useState(false);
+
+  const isAuthenticated = useSelector((state) => state.user.isAuthenticated);
+  const navigate = useNavigate();
 
   const {
     collections,
@@ -56,6 +61,14 @@ const WishlistButton = ({ product }) => {
   }, [collectionError]);
 
   const toggleLike = async () => {
+    if (!isAuthenticated) {
+      Toast.info("Please login to use wishlist");
+      setTimeout(() => {
+        navigate("/login");
+      }, 1200);
+      return;
+    }
+
     try {
       setIsProcessing(true);
       const newLikeState = !isLiked;

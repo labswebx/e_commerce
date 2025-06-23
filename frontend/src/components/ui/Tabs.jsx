@@ -1,7 +1,7 @@
 import React from "react";
 import classNames from "classnames";
 import Icon from "./Icon";
-import theme from "../../theme";
+import { useNavigate } from "react-router-dom";
 
 const Tabs = ({
   tabs,
@@ -12,7 +12,18 @@ const Tabs = ({
   box = false,
   size,
   minimal = false,
+  navigateUrl,
 }) => {
+  const navigate = useNavigate();
+  const handleClick = (isDisabled, tab) => {
+    if (!isDisabled) {
+      onSelect(tab.key);
+      if (navigateUrl) {
+        navigate(`${navigateUrl}/${tab.key}`);
+      }
+    }
+  };
+
   return (
     <div className="relative w-full overflow-x-auto scrollbar-hide scroll-smooth touch-auto">
       <div
@@ -50,7 +61,7 @@ const Tabs = ({
             <React.Fragment key={tab.key}>
               <div
                 className={tabClass}
-                onClick={() => !isDisabled && onSelect(tab.key)}
+                onClick={() => handleClick(isDisabled, tab)}
               >
                 {tab.image && (
                   <img

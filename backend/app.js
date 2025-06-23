@@ -36,6 +36,8 @@ const subCategoryRoutes = require("./routes/subCategoryRoutes");
 const addressRoutes = require("./routes/addressRoute");
 const couponRoutes = require("./routes/couponRoutes");
 const constantsRoutes = require("./routes/constantsRoute");
+const wishlistRoutes = require("./routes/wishlistRoute");
+const contactRoutes = require("./routes/contactRoutes");
 
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", userRoutes);
@@ -45,6 +47,8 @@ app.use("/api/v1", addressRoutes);
 app.use("/api/v1", couponRoutes);
 app.use("/api/v1", subCategoryRoutes);
 app.use("/api/v1", constantsRoutes);
+app.use("/api/v1", wishlistRoutes);
+app.use("/api/v1", contactRoutes);
 
 app.get("/ping", (req, res) => {
   res.status(200).json({

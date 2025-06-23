@@ -1,37 +1,42 @@
-import { Cross, Edit, Pencil, X } from "lucide-react";
-import React from "react";
+import { Pencil, X } from "lucide-react";
 import InputField from "./InputField";
 import Icon from "./Icon";
 import DatePicker from "./DatePicker";
 import Button from "./Button";
 import AddToCartButton from "./AddToCartButton";
 import { Link } from "react-router-dom";
-import { useState } from "react";
-import { Heart, HeartOff } from "lucide-react";
 import { formatPrice } from "../../utils/formatter";
-export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
-  const [liked, setLiked] = useState(false);
-  const imageUrl = data.images?.[0]?.url || "/logo-icon.jpg";
+import WishlistButton from "./WishlistButton";
 
-  const toggleLike = () => {
-    setLiked(!liked);
-  };
+// Product card
+export const ProductCard = ({
+  data,
+  onAddToCart,
+  variant = "default",
+  className,
+}) => {
+  const imageUrl = data.images?.[0]?.url || "/logo-icon.jpg";
 
   const getImageClasses = () => {
     switch (variant) {
       case "compact":
-        return "w-full h-40 sm:h-48 md:h-52";
+      case "default":
+        return "w-full sm:h-48 h-32";
       case "minimal":
-        return "w-full h-32";
+        return "w-full sm:h-32 h-28";
       case "highlight":
-        return "w-full h-60";
+        return "w-full sm:h-60 sm:52";
       case "feature":
-        return "w-full  h-44 sm:h-56 md:h-64 object-contain";
+        return "w-full sm:h-64 h-56 object-contain";
       default:
-        return "mx-auto w-full h-40 sm:h-48 md:h-52";
+        return "w-48 h-40 sm:h-48 sm:w-full";
     }
   };
 
+  const truncate = (str, n = 20) =>
+    str?.length > n ? str.substr(0, n - 1) + "..." : str;
+
+  // product card with variant
   const renderContent = () => {
     switch (variant) {
       case "compact":
@@ -39,7 +44,7 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
           <>
             <Link to={`/product/${data._id}`}>
               <h3 className="mt-2 text-base font-semibold hover:underline">
-                {data.name}
+                {truncate(data.name)}
               </h3>
             </Link>
             <Button
@@ -53,7 +58,10 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
         return (
           <>
             <Link to={`/product/${data._id}`}>
-              <h3 className="mt-4 text-xl font-semibold">{data.name}</h3>
+              <h3 className="mt-4 text-xl font-semibold">
+                {" "}
+                {truncate(data.name)}
+              </h3>
             </Link>
 
             <p className="mt-2 text-sm text-gray-600">
@@ -61,12 +69,15 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
                 "iPad combines a magnificent 10.2-inch Retina display, incredible performance, multitasking and ease of use."}
             </p>
 
-            <Button
-              variant="outline"
-              onClick={() => onAddToCart(data)}
-              label="Shop Now"
-              className="mt-4"
-            />
+            <div className="flex items-start">
+              <Button
+                variant="outline"
+                // onClick={() => onAddToCart(data)}
+                label="Shop Now"
+                to="/shop"
+                className="mt-4 px-14"
+              />
+            </div>
           </>
         );
 
@@ -75,7 +86,7 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
           <>
             <Link to={`/product/${data._id}`}>
               <h3 className="mt-2 text-sm font-medium hover:underline">
-                {data.name}
+                {truncate(data.name)}
               </h3>
             </Link>
           </>
@@ -86,11 +97,11 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
           <>
             <Link to={`/product/${data._id}`}>
               <h3 className="mt-4 text-xl font-bold hover:underline">
-                {data.name}
+                {truncate(data.name)}
               </h3>
               <p className="mt-1 text-lg font-semibold">${data.price}</p>
             </Link>
-            {/* <p className="text-sm text-gray-600">{data.description}</p> */}
+
             <Button
               variant="outline"
               onClick={() => onAddToCart(data)}
@@ -105,16 +116,20 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
           <>
             <Link to={`/product/${data._id}`}>
               <h3 className="mt-2 text-lg font-medium hover:underline">
-                {data.name}
+                {truncate(data.name)}
               </h3>
             </Link>
-            <p className="mt-2 text-xl font-semibold">
+            <p className="mt-2 mb-2 text-xl font-semibold">
               {formatPrice(data.price)}
             </p>
 
             <div className="flex justify-center w-full px-4 mt-auto">
-              <div className="w-full lg:max-w-[127px]">
-                <AddToCartButton product={data} className="w-full" />
+              <div className="w-full ">
+                <AddToCartButton
+                  product={data}
+                  className="w-full"
+                  label="Buy Now"
+                />
               </div>
             </div>
           </>
@@ -124,45 +139,46 @@ export const ProductCard = ({ data, onAddToCart, variant = "default" }) => {
 
   return (
     <div
-      className={`relative card-base h-full flex flex-col justify-between text-center ${
+      className={`relative card-base shadow-none border-none h-full bg-[#F6F6F6] flex flex-col justify-between text-center ${className} ${
         variant === "highlight"
           ? "w-full p-4"
           : variant === "feature"
-          ? "w-full max-w-[324px] bg-white p-6 rounded-md shadow-md"
-          : "w-72"
+          ? "w-full md:max-w-[400px] bg-white p-6 border-none  "
+          : "w-48 sm:w-72 p-3"
       }`}
     >
       <Link to={`/product/${data._id}`}>
         <div
-          className={`relative overflow-hidden bg-white rounded-md ${getImageClasses()}`}
+          className={`relative overflow-hidden bg-transparent p-2 rounded-md ${getImageClasses()}`}
         >
           <img
             src={imageUrl}
             alt={data.name}
             loading="lazy"
-            className="absolute top-0 left-0 object-contain w-full h-full "
+            className="absolute inset-0 object-contain w-full h-full"
           />
         </div>
       </Link>
 
-      <button
-        onClick={toggleLike}
-        className="absolute top-4 right-4 p-[6px] bg-white rounded-full shadow-md hover:bg-gray-100 transition"
-      >
-        {liked ? (
-          <Heart className="w-6 h-6 text-red-500" fill="red" />
-        ) : (
-          <Heart className="w-6 h-6" />
-        )}
-      </button>
+      {variant === "feature" ? "" : <WishlistButton product={data} />}
 
       <div className="flex flex-col justify-between flex-1 mt-4">
+        {/* stock availability */}
+        {/* <div className="mt-2 text-sm font-medium">
+          {data.stock > 0 ? (
+            <span className="text-green-600">In Stock</span>
+          ) : (
+            <span className="text-red-600">Out of Stock</span>
+          )}
+        </div> */}
+
         {renderContent()}
       </div>
     </div>
   );
 };
 
+// categoryCard
 const CategoryCard = ({ data }) => {
   return (
     <div className="card-category ">
@@ -224,34 +240,12 @@ const CartItemCard = ({ data, onIncrement, onDecrement, onRemove }) => {
           <h4 className="text-base font-semibold sm:text-sm">
             {data?.name || data?.title}
           </h4>
-          <p className="text-xs text-gray-600">{data?.category}</p>
+          <p className="text-xs text-gray-600">{data?.category?.name || ""}</p>
         </div>
       </div>
 
       {/* Quantity and Price Controls */}
       <div className="flex flex-wrap items-center justify-between gap-2 sm:flex-nowrap sm:gap-4">
-        {/* <div className="flex items-center gap-2 px-2 py-1 border rounded">
-          <button
-            onClick={() => onDecrement(data || data._id)}
-            className="text-xl font-medium"
-          >
-            −
-          </button>
-          <span className="text-sm font-semibold">{data?.quantity}</span>
-          <button
-            onClick={() => onIncrement(data || data._id)}
-            className="text-xl font-medium"
-          >
-            +
-          </button>
-        </div> */}
-        {/* <p className="text-lg font-bold text-gray-800">₹{data?.price}</p>
-        <button
-          onClick={() => onRemove(data?._id)}
-          className="text-xl text-gray-500 hover:text-red-600"
-        >
-          ✕
-        </button> */}
         <AddToCartButton product={data} />
       </div>
     </div>
@@ -309,6 +303,7 @@ const AddressCard = ({
   );
 };
 
+// shipping card
 const ShippingCard = ({
   data,
   selectedId,
@@ -349,6 +344,8 @@ const ShippingCard = ({
     ))}
   </div>
 );
+
+// Dynamically renders different card components (product, category, review, etc.) based on the 'type' prop
 
 const Card = ({ type, data, imageOnly, ...handlers }) => {
   switch (type) {

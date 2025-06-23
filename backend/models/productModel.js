@@ -63,13 +63,15 @@ const productSchema = new mongoose.Schema(
       },
     ],
     category: {
-      type: String,
+      type: mongoose.Schema.ObjectId,
+      ref: "Category",
       requred: [true, "Please enter valid product category"],
+      default: null,
     },
     subCategory: {
       type: mongoose.Schema.ObjectId,
       ref: "SubCategory",
-      default: "",
+      default: null,
     },
     stock: {
       type: Number,

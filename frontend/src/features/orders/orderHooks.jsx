@@ -11,12 +11,21 @@ import {
 
 export const useOrders = () => {
   const dispatch = useDispatch();
-  const { loading, error, order, myOrders, allOrders, paymentStatus, success } =
-    useSelector((state) => state.order);
+  const {
+    loading,
+    error,
+    order,
+    myOrders,
+    allOrders,
+    paymentStatus,
+    success,
+    totalPages,
+    currentPage,
+  } = useSelector((state) => state.order);
 
   // Order actions
   const placeOrder = (data) => dispatch(createOrder(data));
-  const getMyOrders = () => dispatch(fetchMyOrders());
+  const getMyOrders = (page = 1) => dispatch(fetchMyOrders(page));
   const getOrderById = (id) => dispatch(fetchSingleOrder(id));
   const checkTxnPaymentStatus = (txnId) => dispatch(checkPaymentStatus(txnId));
   const resetOrder = () => dispatch(resetOrderState());
@@ -30,6 +39,8 @@ export const useOrders = () => {
     allOrders,
     paymentStatus,
     success,
+    totalPages,
+    currentPage,
 
     // Actions
     placeOrder,

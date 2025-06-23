@@ -30,7 +30,23 @@
 @import "./styles/components/_nav-tab.css";
 @import "./styles/pages/_footer.css";
 @import "./styles/pages/_header.css";
+@import "./styles/components/_sidebar.css";
 /* @import "./styles/components"; */
 .scrollbar-thin::-webkit-scrollbar {
   height: 6px;
+}
+.overflow-hidden-body {
+  overflow: hidden !important;
+}
+
+/* index.css or global.css */
+.scrollbar-thin-black::-webkit-scrollbar {
+  width: 6px;
+}
+.scrollbar-thin-black::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+.scrollbar-thin-black::-webkit-scrollbar-thumb {
+  background-color: #000;
+  border-radius: 6px;
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Card from "../../components/ui/Card";
 import AddNewAddressDivider from "../../components/ui/AddressDivider";
 import Button from "../../components/ui/Button";
-import AddAddressModal from "../../components/ui/AddAddressModal";
+import AddressModal from "../../components/ui/AddressModal";
 import Toast from "../../components/ui/Toast";
 import toastMessage from "../../constants/toastMessage";
 import { useDispatch } from "react-redux";
@@ -23,7 +23,7 @@ const CheckoutStep1 = () => {
     error,
   } = useAddress();
   const { next, back } = useCheckout();
-  
+
   const [selectedId, setSelectedId] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [editData, setEditData] = useState(null);
@@ -50,7 +50,7 @@ const CheckoutStep1 = () => {
 
   const handleModalClose = () => {
     setShowModal(false);
-    setEditData(null);
+    setEditData(null); 
   };
 
   const handleSelectAddress = (address) => {
@@ -65,7 +65,7 @@ const CheckoutStep1 = () => {
       <div>
         <NoData message="No saved addresses." />
         <AddNewAddressDivider onClick={() => setShowModal(true)} />
-        <AddAddressModal
+        <AddressModal
           isOpen={showModal}
           onClose={handleModalClose}
           initialData={editData}
@@ -89,7 +89,7 @@ const CheckoutStep1 = () => {
         />
       ))}
       <AddNewAddressDivider onClick={() => setShowModal(true)} />
-      <AddAddressModal
+      <AddressModal
         isOpen={showModal}
         onClose={handleModalClose}
         initialData={editData}

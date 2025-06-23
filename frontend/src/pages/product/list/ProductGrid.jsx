@@ -10,11 +10,16 @@ const getInitialCount = () => {
   return 4; // sm and below
 };
 
-const ProductGrid = ({ products = [], loading, title = "" }) => {
+const ProductGrid = ({
+  products = [],
+
+  loading,
+  title = "",
+  grid = "grid gap-4 grid-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4",
+}) => {
   const [visibleCount, setVisibleCount] = useState(getInitialCount());
   const observerRef = useRef(null);
 
-  // Auto-load more products as user scrolls
   const lastProductRef = useCallback(
     (node) => {
       if (loading || !node) return;
@@ -32,26 +37,31 @@ const ProductGrid = ({ products = [], loading, title = "" }) => {
     [loading, visibleCount, products.length]
   );
 
-  const visibleProducts = products.slice(0, 8);
-
   return (
     <div className="space-y-4">
       {/* Grid layout */}
-      <div className="grid gap-4 grid-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4">
+      <div className={grid}>
         {loading
           ? Array.from({ length: getInitialCount() }).map((_, idx) => (
               <div
                 key={idx}
-                className="flex flex-col gap-3 p-4 bg-white border shadow rounded-xl animate-pulse"
+                className="flex flex-col p-4 space-y-4 bg-white border border-gray-200 shadow-sm rounded-xl animate-pulse"
               >
-                <div className="w-full h-40 bg-gray-500 rounded-md" />
+                {/* Image skeleton */}
+                <div className="w-full aspect-[4/3] bg-gray-300 rounded-md" />
+
+                {/* Title skeleton */}
                 <div className="w-3/4 h-4 bg-gray-200 rounded" />
+
+                {/* Price skeleton */}
                 <div className="w-1/2 h-4 bg-gray-200 rounded" />
-                <div className="w-full h-8 mt-2 bg-gray-300 rounded" />
+
+                {/* Button skeleton */}
+                <div className="w-full h-10 mt-2 bg-gray-300 rounded" />
               </div>
             ))
-          : visibleProducts.map((product, index) => {
-              const isLast = index === visibleProducts.length - 1;
+          : products.map((product, index) => {
+              const isLast = index === products.length - 1;
               return (
                 <div
                   key={product._id}
@@ -63,13 +73,6 @@ const ProductGrid = ({ products = [], loading, title = "" }) => {
               );
             })}
       </div>
-
-      {/* Loader when more products are being fetched */}
-      {/* {!loading && visibleCount < products.length && (
-        <div className="flex justify-center mt-4">
-          <Loader small />
-        </div>
-      )} */}
     </div>
   );
 };

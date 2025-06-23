@@ -99,6 +99,51 @@ const toastMessage = {
     ERROR: "Failed to submit review",
   },
 
+  // Category messages
+  CATEGORY_CREATE: {
+    SUCCESS: "Category created successfully",
+    ERROR: "Failed to create category",
+  },
+  CATEGORY_UPDATE: {
+    SUCCESS: "Category updated successfully",
+    ERROR: "Failed to update category",
+  },
+  CATEGORY_DELETE: {
+    SUCCESS: "Category deleted successfully",
+    ERROR: "Failed to delete category",
+  },
+  CATEGORY_LOAD: {
+    ERROR: "Failed to load categories",
+    EMPTY: "No categories found",
+  },
+
+  // contact messages
+  CONTACT: {
+    SUCCESS: "Message sent successfully!",
+    ERROR: "Failed to send message",
+  },
+  // Wishlist Messages
+  WISHLIST: {
+    ADD: {
+      SUCCESS: "Added to wishlist",
+      ERROR: "Failed to add to wishlist",
+    },
+    REMOVE: {
+      SUCCESS: "Removed from wishlist",
+      ERROR: "Failed to remove from wishlist",
+    },
+    COLLECTION: {
+      CREATE_SUCCESS: "Collection created",
+      CREATE_ERROR: "Failed to create collection",
+      ADD_SUCCESS: "Product added to collection",
+      ADD_ERROR: "Failed to add to collection",
+    },
+    GENERAL: {
+      ERROR: "Wishlist operation failed",
+    },
+    LOGIN_REQUIRED: "Please login to use wishlist",
+  },
+
   // General Fallback
   GENERAL: {
     ERROR: "Something went wrong",

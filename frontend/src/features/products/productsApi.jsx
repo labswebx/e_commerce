@@ -4,11 +4,39 @@ import { PRODUCTS_API_ENDPOINTS } from "./productApiEndpoints";
 
 const productsApi = {
   // Public Products
-  getAllProducts: async (page = 1, limit = 5) => {
+  getAllProducts: async (page = 1, limit, filters = {}, sort) => {
     try {
-      const res = await axiosInstance.get(
-        `${PRODUCTS_API_ENDPOINTS.GET_PRODUCTS}?page=${page}&limit=${limit}`
-      );
+      const params = {
+        page,
+        limit,
+      };
+      if (sort) {
+        params.sort = sort;
+      }
+      if (filters.search) {
+        params.search = filters.search;
+      }
+
+      if (filters.brands?.length) {
+        params.brands = filters.brands.join(",");
+      }
+      if (filters.memories?.length) {
+        params.memories = filters.memories.join(",");
+      }
+      if (filters.price?.min !== undefined) {
+        params.min = filters.price.min;
+      }
+
+      if (filters.price?.max !== undefined) {
+        params.max = filters.price.max;
+      }
+      if (filters.category !== undefined) {
+        params.category = filters.category;
+      }
+      const res = await axiosInstance.get(PRODUCTS_API_ENDPOINTS.GET_PRODUCTS, {
+        params,
+      });
+
       return res.data;
     } catch (err) {
       handleError(err);
@@ -20,10 +48,9 @@ const productsApi = {
       const res = await axiosInstance.get(
         PRODUCTS_API_ENDPOINTS.GET_TRENDING_PRODUCTS
       );
-      console.log(res.data);
+
       return res.data;
     } catch (err) {
-      console.log(err);
       handleError(err);
     }
   },
@@ -90,10 +117,9 @@ const productsApi = {
         PRODUCTS_API_ENDPOINTS.CREATE_REVIEW,
         data
       );
-      console.log(res.data);
+
       return res.data;
     } catch (err) {
-      console.log(err);
       handleError(err);
     }
   },
@@ -103,7 +129,7 @@ const productsApi = {
       const res = await axiosInstance.get(
         PRODUCTS_API_ENDPOINTS.GET_REVIEWS(id)
       );
-      console.log(res.data);
+
       return res.data;
     } catch (err) {
       handleError(err);

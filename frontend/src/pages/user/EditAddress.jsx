@@ -56,14 +56,6 @@ const EditAddress = () => {
 
   return (
     <section className="p-6 bg-white rounded shadow">
-      <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: "User Dashboard", href: "/user/profile" },
-          { label: "Address", href: "/user/address" },
-          { label: "Edit Address" },
-        ]}
-      />
       <h2 className="mb-4 text-xl font-semibold text-gray-800">Edit Address</h2>
       <form
         onSubmit={handleSubmit}

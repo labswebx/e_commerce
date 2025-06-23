@@ -10,10 +10,10 @@
     @apply rounded-full;
   }
   .avatar-sm {
-    @apply w-8 h-8;
+    @apply w-10 h-10;
   }
   .avatar-md {
-    @apply w-10 h-10;
+    @apply h-14 w-14;
   }
   .avatar-lg {
     @apply w-12 h-12;

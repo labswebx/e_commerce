@@ -54,7 +54,7 @@ const Layout = ({
               {showMobileFilters && (
                 <button
                   onClick={toggleSidebar}
-                  className="flex items-center justify-center w-full px-4 py-2 text-sm font-medium border rounded-md md:hidden sm:w-auto"
+                  className="flex items-center justify-center w-40 px-4 py-2 text-sm font-medium border rounded-md md:hidden sm:w-auto"
                 >
                   {sidebarTitle}
                   <ListFilter className="w-4 h-4 ml-2" />

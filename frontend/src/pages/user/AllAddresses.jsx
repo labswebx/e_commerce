@@ -1,32 +1,39 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import useAddress from "../../features/address/addressHooks";
 import NavItem from "../../components/ui/NavItems";
 import Breadcrumb from "../../components/ui/BreadCrumb";
 import Loader from "../../components/ui/Loader";
 import ErrorMessage from "../../utils/ErrorMessage";
+import Pagination from "../../components/ui/Pagination";
 
 const AllAddresses = () => {
-  const { addresses, fetchAddresses, loading, error } = useAddress();
+  const {
+    addresses,
+    fetchAddresses,
+    loading,
+    error,
+    totalPages,
+    currentPage,
+    resultsPerPage,
+  } = useAddress();
+
+  const [search, setSearch] = useState("");
+  const [sort, setSort] = useState("recent");
+  const [page, setPage] = useState(1);
+
   useEffect(() => {
-    // fetchProfile();
-    fetchAddresses();
-  }, []);
+    fetchAddresses({ page });
+  }, [page]);
   if (loading) return <Loader />;
   if (error) return <ErrorMessage message={error} />;
   return (
     <div className="p-6">
-      <Breadcrumb
-        items={[
-          { label: "Home", href: "/" },
-          { label: "User Dashboard", href: "/user/profile" },
-          { label: "Address" },
-        ]}
-      />
       {/* Address Info */}
       <div className="pt-6 border-t border-white border-opacity-20">
         <h3 className="mb-4 text-xl font-semibold opacity-90">
           Address Details
         </h3>
+        {/* Filters */}
 
         {addresses?.length === 0 ? (
           <p className="text-sm text-gray-500">No addresses found.</p>
@@ -38,7 +45,8 @@ const AllAddresses = () => {
             >
               <div className="flex items-center justify-between mb-2">
                 <h4 className="text-lg font-semibold opacity-90">
-                  Address {index + 1} — {address?.label || "Unnamed"}
+                  Address {(currentPage - 1) * resultsPerPage + index + 1} —
+                  {address?.label || "Unnamed"}
                 </h4>
                 {address?._id && (
                   <NavItem to={`/user/address/${address._id}`}>
@@ -91,6 +99,13 @@ const AllAddresses = () => {
           ))
         )}
       </div>
+      {totalPages > 1 && (
+        <Pagination
+          currentPage={currentPage}
+          totalPages={totalPages}
+          onPageChange={(newPage) => setPage(newPage)}
+        />
+      )}
     </div>
   );
 };

@@ -3,6 +3,7 @@ import Loader from "../../components/ui/Loader";
 import ErrorMessage from "../../utils/ErrorMessage";
 import { useUser } from "../../features/user/userHooks";
 import NavItem from "../../components/ui/NavItems";
+import Avatar from "../../components/ui/Avatar";
 
 const UserProfile = () => {
   const { user, loading, error, fetchProfile } = useUser();
@@ -13,11 +14,7 @@ const UserProfile = () => {
   return (
     <div className="max-w-5xl p-6 mx-auto mt-8 space-y-6 text-black bg-white shadow-xl bg-opacity-10 rounded-2xl backdrop-blur-sm">
       <div className="flex flex-col items-center gap-6 sm:flex-row">
-        <img
-          src={user?.avatar?.url || "/logo-icon.jpg"}
-          alt={user?.name}
-          className="object-cover w-24 h-24 border-4 border-white rounded-full shadow-lg sm:w-28 sm:h-28"
-        />
+        <Avatar src={user?.avatar?.url} alt={user?.name} rounded={true} />
         <div className="text-center sm:text-left">
           <h2 className="text-2xl font-semibold">{user?.name || "N/A"}</h2>
           <p className="text-sm opacity-70">{user?.email}</p>

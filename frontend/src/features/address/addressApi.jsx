@@ -38,10 +38,10 @@ const addressApi = {
     }
   },
 
-  getMyAddresses: async () => {
+  getMyAddresses: async (query = "") => {
     try {
       const res = await axiosInstance.get(
-        ADDRESS_API_ENDPOINTS.GET_MY_ADDRESSES
+        `${ADDRESS_API_ENDPOINTS.GET_MY_ADDRESSES}${query}`
       );
       return res.data;
     } catch (err) {

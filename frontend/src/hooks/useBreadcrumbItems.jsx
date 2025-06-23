@@ -1,52 +1,81 @@
+// hooks/useBreadcrumbItems.ts
 import { useLocation } from "react-router-dom";
 import { useMemo } from "react";
 
-/**
- * A reusable hook to generate breadcrumb items from a path.
- * @param {Array} lookupList - Optional array of items to resolve segment names (e.g., categories).
- * @param {string} basePath - Optional path string to override useLocation (useful for reuse).
- * @param {string} matchKey - Key to match in lookupList (default is "_id").
- * @param {string} displayKey - Key to display in breadcrumb (default is "name").
- * @returns {Array} - Breadcrumb items: [{ label, href }]
- */
 export default function useBreadcrumbItems({
   lookupList = [],
   basePath = null,
   matchKey = "_id",
   displayKey = "name",
+  pathLabelMap = {},
 } = {}) {
   const location = useLocation();
   const pathname = basePath || location.pathname;
+
+  // Debug: Log all input parameters
+  console.groupCollapsed("[useBreadcrumbItems] Input Parameters");
+  console.log("lookupList:", lookupList);
+  console.log("basePath:", basePath);
+  console.log("Current pathname:", location.pathname);
+  console.log("Using pathname:", pathname);
+  console.log("matchKey:", matchKey);
+  console.log("displayKey:", displayKey);
+  console.log("pathLabelMap:", pathLabelMap);
+  console.groupEnd();
+
   return useMemo(() => {
     const pathSegments = pathname.split("/").filter(Boolean);
     const breadcrumbItems = [{ label: "Home", href: "/" }];
 
+    console.groupCollapsed("[useBreadcrumbItems] Processing Segments");
+    console.log("Path segments:", pathSegments);
+
     pathSegments.forEach((segment, index) => {
       const href = "/" + pathSegments.slice(0, index + 1).join("/");
+      const previousSegment = index > 0 ? pathSegments[index - 1] : null;
 
-      const matchedItem =
-        lookupList.find((item) => item[matchKey] === segment)?.[displayKey] ||
-        segment.charAt(0).toUpperCase() + segment.slice(1);
+      console.group(`Segment ${index}: "${segment}"`);
+      console.log("Full href:", href);
+      console.log("Previous segment:", previousSegment);
 
-      breadcrumbItems.push({ label: matchedItem, href });
+      let label = segment;
+
+      // Check if we should use a mapped label first
+      if (pathLabelMap[segment]) {
+        label = pathLabelMap[segment];
+        console.log("Using pathLabelMap:", pathLabelMap[segment]);
+      }
+      // For address ID segments (when previous segment is "address")
+      else if (previousSegment === "address" && matchKey === "_id") {
+        console.log("Looking for address with ID:", segment);
+        const matchedAddress = lookupList.find((item) => {
+          console.log(`Checking item ${item[matchKey]} against ${segment}`);
+          return item[matchKey] === segment;
+        });
+        label = matchedAddress?.[displayKey] || "Address";
+        console.log("Matched address:", matchedAddress);
+        console.log("Resolved label:", label);
+      }
+      // For other dynamic segments
+      else {
+        console.log("Looking for generic match with key:", matchKey);
+        const matchedItem = lookupList.find((item) => {
+          console.log(`Checking item ${item[matchKey]} against ${segment}`);
+          return item[matchKey] === segment;
+        });
+        label = matchedItem?.[displayKey] || segment;
+        console.log("Matched item:", matchedItem);
+        console.log("Resolved label:", label);
+      }
+
+      breadcrumbItems.push({ label, href });
+      console.log("Final label:", label);
+      console.groupEnd();
     });
 
+    console.log("Generated breadcrumbItems:", breadcrumbItems);
+    console.groupEnd();
+
     return breadcrumbItems;
-  }, [pathname, lookupList, matchKey, displayKey]);
+  }, [pathname, lookupList, matchKey, displayKey, pathLabelMap]);
 }
-
-// How it works:
-//  Parse URL into individual path segments
-// e.g., /categories/123 → ["categories", "123"]
-
-//  Create base breadcrumb
-// Starts with Home → /
-
-//  Generate breadcrumb links from segments
-// Each segment becomes a breadcrumb with a valid link
-
-//  Replace segment with readable name (if matched)
-// e.g., "123" → "Mobiles" using lookupList (like categories list)
-
-//  Return breadcrumb array for UI display
-// e.g., [{ label: "Home" }, { label: "Categories" }, { label: "Mobiles" }]

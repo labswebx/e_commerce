@@ -49,6 +49,7 @@ const WishlistButton = ({ product }) => {
 
   //  Show errors from API
   useEffect(() => {
+    if (!isAuthenticated) return;
     if (collectionsError) {
       Toast.error(collectionsError.message || "Collection error");
       clearCollectionsError();
@@ -56,6 +57,7 @@ const WishlistButton = ({ product }) => {
   }, [collectionsError]);
 
   useEffect(() => {
+    if (!isAuthenticated) return;
     if (collectionError) {
       Toast.error(collectionError.message || "Wishlist action failed");
       clearCollectionError();

@@ -25,17 +25,26 @@ const Button = ({
 }) => {
   const navigate = useNavigate();
   const handleClick = (event) => {
-    // Prevent action if the button is disabled or loading
     if (disabled || loading) return;
-
-    // If an onClick prop is provided, call it with the event
     if (onClick) onClick(event);
 
-    // If a "to" prop is provided, perform navigation
     if (to) {
-      navigate(to);
+      if (to.startsWith("#")) {
+        const el = document.querySelector(to);
+        if (el) el.scrollIntoView({ behavior: "smooth" });
+      } else if (to.includes("#")) {
+        const [path, hash] = to.split("#");
+        navigate(path);
+        setTimeout(() => {
+          const el = document.querySelector(`#${hash}`);
+          if (el) el.scrollIntoView({ behavior: "smooth" });
+        }, 100);
+      } else {
+        navigate(to);
+      }
     }
   };
+
   return (
     <button
       ref={ref}

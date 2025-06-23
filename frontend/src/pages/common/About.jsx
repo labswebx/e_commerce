@@ -119,13 +119,13 @@ const About = () => {
                     <Button
                       variant="outline"
                       label="Shop Now"
-                      href="/shop"
+                      to="/shop"
                       className="text-white border-white"
                       fullWidth
                     ></Button>
                   </div>
                   <div className="mt-3 sm:mt-0 sm:ml-3">
-                    <Button label="Learn More" href="#features"></Button>
+                    <Button label="Learn More" to="#features"></Button>
                   </div>
                 </div>
               </div>

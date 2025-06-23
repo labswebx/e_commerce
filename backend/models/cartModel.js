@@ -22,9 +22,23 @@ const cartSchema = new mongoose.Schema(
         },
       },
     ],
-    updatedAt: {
-      type: Date,
-      default: Date.now,
+    discount: {
+      type: Number,
+      default: 0,
+    },
+    couponCode: {
+      type: String,
+      default: null,
+    },
+
+    // address
+    shippingMethod: {
+      type: String,
+      default: null,
+    },
+    shippingCost: {
+      type: Number,
+      default: 0,
     },
   },
   { timestamps: true }

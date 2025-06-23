@@ -132,7 +132,7 @@ const Wishlist = () => {
               size="sm"
               variant="outline"
               iconRight={Plus}
-              className=""
+              className="hidden md:flex "
               onClick={() => setShowCreateModal(true)}
               label="Add"
             />

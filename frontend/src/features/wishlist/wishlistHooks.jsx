@@ -30,13 +30,15 @@ export const useWishlistCollections = () => {
   const handleCreateCollection = (data) => dispatch(createCollection(data));
   const handleDeleteCollection = (id) => dispatch(deleteCollection(id));
   const clearError = () => dispatch(clearWishlistError());
-
+  const handleRemoveFromCollection = (collectionId, productId) =>
+    dispatch(removeFromCollection({ collectionId, productId }));
   return {
     collections,
     loading,
     error,
     createCollection: handleCreateCollection,
     deleteCollection: handleDeleteCollection,
+    removeFromCollection: handleRemoveFromCollection,
     clearError,
   };
 };

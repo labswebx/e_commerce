@@ -122,6 +122,27 @@ const toastMessage = {
     SUCCESS: "Message sent successfully!",
     ERROR: "Failed to send message",
   },
+  // Wishlist Messages
+  WISHLIST: {
+    ADD: {
+      SUCCESS: "Added to wishlist",
+      ERROR: "Failed to add to wishlist",
+    },
+    REMOVE: {
+      SUCCESS: "Removed from wishlist",
+      ERROR: "Failed to remove from wishlist",
+    },
+    COLLECTION: {
+      CREATE_SUCCESS: "Collection created",
+      CREATE_ERROR: "Failed to create collection",
+      ADD_SUCCESS: "Product added to collection",
+      ADD_ERROR: "Failed to add to collection",
+    },
+    GENERAL: {
+      ERROR: "Wishlist operation failed",
+    },
+    LOGIN_REQUIRED: "Please login to use wishlist",
+  },
 
   // General Fallback
   GENERAL: {

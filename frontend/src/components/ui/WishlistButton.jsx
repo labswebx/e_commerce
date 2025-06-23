@@ -11,6 +11,7 @@ import Toast from "./Toast";
 import Tooltip from "./Tooltip";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import toastMessage from "../../constants/toastMessage";
 
 const WishlistButton = ({ product }) => {
   const [showModal, setShowModal] = useState(false);
@@ -27,6 +28,7 @@ const WishlistButton = ({ product }) => {
     createCollection,
     error: collectionsError,
     clearError: clearCollectionsError,
+    removeFromCollection,
   } = useWishlistCollections();
 
   const {
@@ -62,7 +64,7 @@ const WishlistButton = ({ product }) => {
 
   const toggleLike = async () => {
     if (!isAuthenticated) {
-      Toast.info("Please login to use wishlist");
+      Toast.info(toastMessage.WISHLIST.LOGIN_REQUIRED);
       setTimeout(() => {
         navigate("/login");
       }, 1200);
@@ -75,28 +77,34 @@ const WishlistButton = ({ product }) => {
       setIsLiked(newLikeState);
 
       if (newLikeState) {
-        Toast.success("Added to wishlist");
+        Toast.success(toastMessage.WISHLIST.ADD.SUCCESS);
+
         const sortedCollections = [...collections].sort(
           (a, b) => new Date(b.createdAt) - new Date(a.createdAt)
         );
-
         const latestCollection = sortedCollections[0];
 
         if (latestCollection) {
           await addProduct(latestCollection._id, product._id);
         }
+
         setShowModal(true);
       } else {
-        // Remove from all collections
         for (const col of collections) {
-          if (col.products?.includes?.(product._id)) {
+          const hasProduct = col.products?.some?.((p) =>
+            typeof p === "string" ? p === product._id : p._id === product._id
+          );
+
+          if (hasProduct) {
+            console.log("Removing product from collection:", col.name);
             await removeFromCollection(col._id, product._id);
           }
         }
-        Toast.info("Removed from wishlist");
+
+        Toast.info(toastMessage.WISHLIST.REMOVE.SUCCESS);
       }
     } catch (err) {
-      Toast.error("Failed to update wishlist");
+      Toast.error(toastMessage.WISHLIST.GENERAL.ERROR);
     } finally {
       setIsProcessing(false);
     }
@@ -105,7 +113,6 @@ const WishlistButton = ({ product }) => {
   const handleCreateCollection = async () => {
     if (!newCollectionName.trim()) {
       Toast.warning("Collection name required");
-
       return;
     }
 
@@ -119,21 +126,16 @@ const WishlistButton = ({ product }) => {
       const result = await createCollection(payload);
 
       if (result?.type?.includes("/fulfilled")) {
-        Toast.success("Collection created");
-
+        Toast.success(toastMessage.WISHLIST.COLLECTION.CREATE_SUCCESS);
         setNewCollectionName("");
-        if (result?.type?.includes("/rejected")) {
-          Toast.error(result?.payload?.message || "Collection creation failed");
-        }
       } else {
-        if (result?.type?.includes("/rejected")) {
-          Toast.error(result?.payload?.message || "Collection creation failed");
-        }
-
-        Toast.error("Collection creation failed");
+        Toast.error(
+          result?.payload?.message ||
+            toastMessage.WISHLIST.COLLECTION.CREATE_ERROR
+        );
       }
     } catch (err) {
-      Toast.error("Failed to create collection");
+      Toast.error(toastMessage.WISHLIST.COLLECTION.CREATE_ERROR);
     } finally {
       setIsProcessing(false);
     }
@@ -145,10 +147,10 @@ const WishlistButton = ({ product }) => {
       setSelectedCollectionId(collectionId);
 
       await addProduct(collectionId, product._id);
-      Toast.success("Product added to collection");
+      Toast.success(toastMessage.WISHLIST.COLLECTION.ADD_SUCCESS);
       setShowModal(false);
     } catch (err) {
-      Toast.error("Failed to add to collection");
+      Toast.error(toastMessage.WISHLIST.COLLECTION.ADD_ERROR);
     } finally {
       setIsProcessing(false);
     }

@@ -7,12 +7,12 @@ import CATEGORY_ACTION_TYPES from "./categoryActionTypes";
 import categoryApi from "./categoryApi";
 
 export const fetchCategories = createAsyncThunkHandler(
-  CATEGORY_ACTION_TYPES.FETCH_ALL,
+  CATEGORY_ACTION_TYPES.FETCH_ALL_CATEGORIES,
   async () => categoryApi.getAllCategories()
 );
 
 export const fetchCategoryDetails = createAsyncThunkHandler(
-  CATEGORY_ACTION_TYPES.FETCH_DETAILS,
+  CATEGORY_ACTION_TYPES.FETCH_CATEGORY_DETAILS,
   async (id) => categoryApi.getCategoryDetails(id)
 );
 
@@ -31,6 +31,7 @@ const categorySlice = createSlice({
       state.loading = false;
       state.error = null;
       state.success = false;
+      state.categories = [];
       state.currentCategory = null;
     },
   },

@@ -47,7 +47,7 @@ export const fetchProductDetails = createAsyncThunkHandler(
 
 // 	Category-wise products
 export const fetchCategoryProducts = createAsyncThunkHandler(
-  PRODUCT_ACTION_TYPES.FETCH_CATEGORY,
+  PRODUCT_ACTION_TYPES.FETCH_CATEGORY_PRODUCTS,
   async (id) => productsApi.getCategoryProducts(id)
 );
 
@@ -66,7 +66,7 @@ export const fetchReviews = createAsyncThunkHandler(
 const initialState = {
   // product lists
   products: [],
-  resultsPerPage: 0,
+  resultsPerPage: 10,
   productsCount: 0,
   currentCount: 0,
   totalCount: 0,
@@ -87,6 +87,7 @@ const initialState = {
 
   // reviews
   reviews: [],
+  message: "",
 
   // general
   loading: true,
@@ -122,6 +123,7 @@ const productSlice = createSlice({
         state.currentCount = action.payload.currentCount || 0;
         (state.totalCount = action.payload.totalCount || 0),
           (state.resultsPerPage = action.payload.resultsPerPage || 0);
+
         state.productsCount = action.payload.productsCount || 0;
         if (isPaginated) {
           state.products = [...state.products, ...action.payload.products];
@@ -187,7 +189,7 @@ const productSlice = createSlice({
       .addCase(createReview.pending, setLoading)
       .addCase(createReview.fulfilled, (state, action) => {
         state.loading = false;
-        state.reviews = action.payload;
+        state.message = action.payload.message;
       })
       .addCase(createReview.rejected, setError)
 

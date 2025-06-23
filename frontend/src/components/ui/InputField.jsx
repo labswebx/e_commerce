@@ -20,6 +20,8 @@ const InputField = ({
   className = "",
   name,
   size,
+  iconsize = "sm",
+  iconColor = "#989898",
   ...props
 }) => {
   const [showPassword, setShowPassword] = useState(false);
@@ -32,7 +34,7 @@ const InputField = ({
   };
 
   const isPasswordField = type === "password";
-
+  // #989898"
   return (
     <div
       className={`${
@@ -50,7 +52,7 @@ const InputField = ({
       <div className="relative input-wrapper">
         {showIcon && icon && (
           <div className="absolute transform -translate-y-1/2 left-3 top-1/2">
-            <Icon icon={icon} size="sm" color="#989898" />
+            <Icon icon={icon} size={iconsize} color={iconColor} />
           </div>
         )}
 

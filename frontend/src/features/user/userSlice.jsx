@@ -11,10 +11,10 @@ import {
 import USER_ACTION_TYPES from "./userActionTypes";
 import { userApi } from "./userApi";
 
-function saveUserData(data) {
+const saveUserData = (data) => {
   localStorage.setItem("user", JSON.stringify(data.user));
   localStorage.setItem("token", data.token);
-}
+};
 const userFromStorage = JSON.parse(localStorage.getItem("user"));
 const tokenFromStorage = localStorage.getItem("token");
 
@@ -49,7 +49,11 @@ export const updateProfile = createAsyncThunkHandler(
 
 export const changePassword = createAsyncThunkHandler(
   USER_ACTION_TYPES.CHANGE_PASSWORD,
-  async (data) => userApi.changePassword(data)
+  async (data) => {
+    const response = await userApi.changePassword(data);
+    saveUserData(response);
+    return response;
+  }
 );
 
 export const forgotPassword = createAsyncThunkHandler(

@@ -106,6 +106,7 @@ export default function Footer() {
         {/* Footer Bottom */}
         <div className="pt-8 mt-10 text-sm text-center text-gray-500 border-t border-gray-700">
           © {new Date().getFullYear()} Cyber Studio. All rights reserved.
+
         </div>
       </div>
     </footer>

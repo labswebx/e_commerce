@@ -15,6 +15,7 @@ export const createOrder = createAsyncThunkHandler(
 export const fetchMyOrders = createAsyncThunkHandler(
   ORDER_ACTION_TYPES.FETCH_MY_ORDER,
   async (page = 1) => orderApi.getMyOrders(page)
+
 );
 
 export const fetchSingleOrder = createAsyncThunkHandler(
@@ -33,7 +34,6 @@ const initialState = {
   error: null,
   order: null,
   myOrders: [],
-  allOrders: [],
   paymentStatus: null,
   success: false,
   totalOrders: [],

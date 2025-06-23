@@ -38,6 +38,7 @@ const couponRoutes = require("./routes/couponRoutes");
 const constantsRoutes = require("./routes/constantsRoute");
 const wishlistRoutes = require("./routes/wishlistRoute");
 const contactRoutes = require("./routes/contactRoutes");
+const cartRoutes = require("./routes/cartRoutes");
 
 app.use("/api/v1", productRoutes);
 app.use("/api/v1", userRoutes);
@@ -49,6 +50,7 @@ app.use("/api/v1", subCategoryRoutes);
 app.use("/api/v1", constantsRoutes);
 app.use("/api/v1", wishlistRoutes);
 app.use("/api/v1", contactRoutes);
+app.use("/api/v1", cartRoutes);
 
 app.get("/ping", (req, res) => {
   res.status(200).json({

@@ -2,7 +2,12 @@ import classNames from "classnames";
 import { ChevronDown } from "lucide-react";
 import React, { useState } from "react";
 
-const Accordion = ({ items = [], classNames: extraClassNames = "" }) => {
+const Accordion = ({
+  items = [],
+  classNames: extraClassNames = "",
+  itemClassName,
+  buttonClassName,
+}) => {
   const [openIndices, setOpenIndices] = useState([]);
 
   const toggle = (index) => {
@@ -16,10 +21,13 @@ const Accordion = ({ items = [], classNames: extraClassNames = "" }) => {
       {items.map((item, index) => {
         const isOpen = openIndices.includes(index);
         return (
-          <div key={index} className="accordion-item">
+          <div
+            key={index}
+            className={classNames("accordion-item", itemClassName)}
+          >
             <button
               onClick={() => toggle(index)}
-              className="accordion-button"
+              className={classNames("accordion-button", buttonClassName)}
               aria-expanded={isOpen}
               aria-controls={`panel-${index}`}
               id={`accordion-${index}`}

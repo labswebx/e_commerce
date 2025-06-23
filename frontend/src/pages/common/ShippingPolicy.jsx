@@ -224,7 +224,7 @@ const ShippingPolicy = () => {
             </p>
             <div className="flex justify-center mt-4 space-x-6">
               <a
-                href="/terms"
+                href="/term-and-conditions"
                 className="text-sm font-medium text-cyan-600 hover:underline"
               >
                 Terms & Conditions

@@ -113,6 +113,7 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
             <InputField
               type="number"
               name="min"
+              label="from"
               value={priceRange.min}
               onChange={handlePriceChange}
               placeholder="Min"
@@ -122,6 +123,7 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
             <InputField
               type="number"
               name="max"
+              label="to"
               value={priceRange.max}
               onChange={handlePriceChange}
               placeholder="Max"
@@ -147,7 +149,7 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
             <InputField
               type="range"
               min={0}
-              max={10000}
+              // max={10000}
               value={priceRange.max}
               onChange={(e) =>
                 handlePriceChange({
@@ -260,7 +262,9 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
       </h3>
       <Accordion
         items={items}
-        classNames="bg-white border border-gray-200 rounded-xl shadow-sm"
+        itemClassName="border-none border-b rounded-0 "
+        buttonClassName=" border-b rounded-0 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-100"
+        // classNames="bg-white border border-gray-200 rounded-xl shadow-sm"
       />
       <div className="flex justify-between gap-4 mt-6 md:hidden">
         <Button

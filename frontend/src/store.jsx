@@ -11,6 +11,7 @@ import addressReducer from "./features/address/addressSlice";
 import cartReducer from "./features/cart/cartSlice";
 import checkoutReducer from "./features/checkout/checkoutSlice";
 import wishlistReducer from "./features/wishlist/wishlistSlice";
+import contactReducer from "./features/contact/contactSlice";
 import { loadCartState, saveCartState } from "./utils/localStorage";
 
 const preloadedCart = loadCartState();
@@ -27,6 +28,7 @@ export const store = configureStore({
     cart: cartReducer,
     checkout: checkoutReducer,
     wishlist: wishlistReducer,
+    contact: contactReducer,
   },
   preloadedState: {
     cart: preloadedCart, // load persisted cart

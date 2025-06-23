@@ -1,9 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import InputField from "../../components/ui/InputField";
 import Button from "../../components/ui/Button";
 import { Clock, Mail, Phone, Store } from "lucide-react";
+import {
+  clearContactState,
+  sendContactMessage,
+} from "../../features/contact/contactSlice";
+import toastMessage from "../../constants/toastMessage";
+import Toast from "../../components/ui/Toast";
 
 const Contact = () => {
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    contactNumber: "",
+    message: "",
+  });
+
+  const dispatch = useDispatch();
+
+  // change handler
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.id]: e.target.value });
+  };
+
+  // submit handler
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    const resultAction = await dispatch(sendContactMessage(form));
+
+    if (sendContactMessage.fulfilled.match(resultAction)) {
+      Toast.success(toastMessage.CONTACT.SUCCESS);
+      setForm({ name: "", email: "", contactNumber: "", message: "" });
+    } else {
+      Toast.error(resultAction?.payload || toastMessage.CONTACT.ERROR);
+    }
+
+    setTimeout(() => {
+      dispatch(clearContactState());
+    }, 3000);
+  };
+
   return (
     <div className="px-6 py-12 text-gray-900 bg-white md:px-20">
       <div className="max-w-6xl mx-auto space-y-12">
@@ -26,17 +65,38 @@ const Contact = () => {
               Send Us a Message
             </h2>
             <div className="w-12 h-1 mb-6 bg-gray-800"></div>
-            <form className="space-y-6">
+            <form className="space-y-6" onSubmit={handleSubmit}>
               <div>
-                <InputField type="text" id="name" label="Name" />
+                <InputField
+                  type="text"
+                  id="name"
+                  label="Name"
+                  name="name"
+                  value={form.name}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
-                <InputField type="email" id="email" label="email" />
+                <InputField
+                  type="email"
+                  id="email"
+                  label="Email"
+                  name="email"
+                  value={form.email}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
-                <InputField type="tel" id="contactNumber" label="Phone" />
+                <InputField
+                  type="tel"
+                  name="contactNumber"
+                  id="contactNumber"
+                  label="Phone"
+                  value={form.contactNumber}
+                  onChange={handleChange}
+                />
               </div>
 
               <div>
@@ -49,6 +109,9 @@ const Contact = () => {
                 <textarea
                   id="message"
                   rows="5"
+                  name="message"
+                  value={form.message}
+                  onChange={handleChange}
                   className="w-full px-4 py-3 text-gray-900 border border-gray-300 rounded-lg focus:ring-gray-500 focus:border-gray-500"
                   required
                 ></textarea>

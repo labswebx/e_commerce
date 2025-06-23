@@ -117,6 +117,12 @@ const toastMessage = {
     EMPTY: "No categories found",
   },
 
+  // contact messages
+  CONTACT: {
+    SUCCESS: "Message sent successfully!",
+    ERROR: "Failed to send message",
+  },
+
   // General Fallback
   GENERAL: {
     ERROR: "Something went wrong",

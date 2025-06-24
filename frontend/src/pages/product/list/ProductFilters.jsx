@@ -4,8 +4,14 @@ import InputField from "../../../components/ui/InputField";
 import { ChevronLeft } from "lucide-react";
 import Button from "../../../components/ui/Button";
 import { useCategory } from "../../../features/category/categoryHooks";
+import { useNavigate } from "react-router-dom";
 
-const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
+const ProductFilters = ({
+  filters,
+  onChange,
+  toggleSidebar,
+  initialCategory,
+}) => {
   const brands = [
     "Apple",
     "Samsung",
@@ -27,7 +33,7 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
   });
 
   const [selectedCategory, setSelectedCategory] = useState(
-    filters.category || ""
+    initialCategory || filters.category || ""
   );
   const [selectedBrands, setSelectedBrands] = useState(filters.brands || []);
   const [selectedMemories, setSelectedMemories] = useState(
@@ -38,6 +44,7 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
   const [memorySearch, setMemorySearch] = useState("");
   const [categorySearch, setCategorySearch] = useState("");
 
+  const navigate = useNavigate();
   useEffect(() => {
     setPriceRange({
       min: filters.price?.min || 0,
@@ -51,6 +58,7 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
   const handlePriceChange = (e) => {
     const { name, value } = e.target;
     const updated = { ...priceRange, [name]: parseInt(value) || 0 };
+
     setPriceRange(updated);
     onChange({ ...filters, price: updated });
   };
@@ -75,7 +83,18 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
     const updated = selectedCategory === categoryId ? "" : categoryId;
     setSelectedCategory(updated);
     onChange({ ...filters, category: updated });
+    navigate(`/categories/${categoryId}`);
   };
+
+  useEffect(() => {
+    setPriceRange({
+      min: filters.price?.min || 0,
+      max: filters.price?.max || 10000,
+    });
+    setSelectedBrands(filters.brands || []);
+    setSelectedMemories(filters.memories || []);
+    setSelectedCategory(filters.category || "");
+  }, [filters]);
 
   const filterList = (list, searchTerm) =>
     list.filter((item) =>
@@ -103,6 +122,13 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
     onChange({});
     toggleSidebar();
   };
+
+  useEffect(() => {
+    if (initialCategory) {
+      setSelectedCategory(initialCategory);
+      onChange({ ...filters, category: initialCategory });
+    }
+  }, [initialCategory]);
 
   const items = [
     {
@@ -237,16 +263,22 @@ const ProductFilters = ({ filters, onChange, toggleSidebar }) => {
                 .map((category) => (
                   <label
                     key={category._id}
+                    onClick={() => navigate(`/categories/${category._id}`)}
                     className="flex items-center text-sm"
                   >
                     <InputField
-                      type="checkbox"
+                      type="radio"
                       name="category"
                       checked={selectedCategory === category._id}
                       onChange={() => handleCategoryChange(category._id)}
                       className="mr-2"
                     />
                     {category.name}
+                    {initialCategory && selectedCategory === category._id && (
+                      <span className="ml-1 text-xs text-gray-500">
+                        (Current category)
+                      </span>
+                    )}
                   </label>
                 ))}
           </div>

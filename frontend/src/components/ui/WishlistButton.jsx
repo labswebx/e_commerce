@@ -98,7 +98,6 @@ const WishlistButton = ({ product }) => {
           );
 
           if (hasProduct) {
-            console.log("Removing product from collection:", col.name);
             await removeFromCollection(col._id, product._id);
           }
         }

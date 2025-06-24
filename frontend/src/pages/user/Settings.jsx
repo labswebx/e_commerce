@@ -64,12 +64,10 @@ const Settings = () => {
           updateData.avatar = base64;
         }
 
-        console.log("Update payload:", updateData);
         await handleProfileUpdate(updateData);
         Toast.success(toastMessage.PROFILE_UPDATE.SUCCESS);
         fetchProfile();
       } catch (error) {
-        console.error("Update error:", error);
         Toast.error(toastMessage.PROFILE_UPDATE.ERROR);
       }
     },

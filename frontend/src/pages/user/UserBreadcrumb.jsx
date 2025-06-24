@@ -17,15 +17,13 @@ const UserBreadcrumb = () => {
     order: "Order Details",
     track: "Track Order",
   };
-  //   console.log(addresses);
+
   const breadcrumbItems = useBreadcrumbItems({
     lookupList: addresses,
     matchKey: "_id",
     displayKey: "address",
     pathLabelMap,
   });
-
-  console.groupEnd();
 
   return (
     <nav

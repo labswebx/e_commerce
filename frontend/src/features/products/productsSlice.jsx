@@ -11,8 +11,8 @@ import productsApi from "./productsApi";
 // ALl products
 export const fetchProducts = createAsyncThunkHandler(
   PRODUCT_ACTION_TYPES.FETCH_PRODUCTS,
-  async ({ page = 1, limit = 5 }) =>
-    await productsApi.getAllProducts(page, limit)
+  async ({ page = 1, limit, filters = {}, sort }) =>
+    await productsApi.getAllProducts(page, limit, filters, sort)
 );
 
 // fetch trending products
@@ -68,6 +68,8 @@ const initialState = {
   products: [],
   resultsPerPage: 10,
   productsCount: 0,
+  currentCount: 0,
+  totalCount: 0,
 
   // Single product details
   product: null,
@@ -118,7 +120,10 @@ const productSlice = createSlice({
         const isPaginated = action.meta.arg.page > 1;
         state.loading = false;
         state.products = action.payload.products || [];
-        state.resultsPerPage = action.payload.resultsPerPage || 10;
+        state.currentCount = action.payload.currentCount || 0;
+        (state.totalCount = action.payload.totalCount || 0),
+          (state.resultsPerPage = action.payload.resultsPerPage || 0);
+
         state.productsCount = action.payload.productsCount || 0;
         if (isPaginated) {
           state.products = [...state.products, ...action.payload.products];

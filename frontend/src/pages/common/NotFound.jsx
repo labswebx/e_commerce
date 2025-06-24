@@ -1,6 +1,4 @@
-import React from "react";
-import { Link } from "react-router-dom";
-import NavItem from "../components/ui/NavItems";
+import NavItem from "../../components/ui/NavItems";
 
 const NotFound = () => {
   return (

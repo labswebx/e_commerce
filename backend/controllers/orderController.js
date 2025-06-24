@@ -5,6 +5,7 @@ const Product = require("../models/productModel");
 const ErrorHandler = require("../utils/errorHandler");
 const catchAsyncErrors = require("../middleware/catchAsyncErrors");
 const enums = require("../utils/enums");
+const ApiFeatures = require("../utils/apiFeatures");
 const {
   sendOrderCreateSMS,
   sendRatingSMS,
@@ -75,16 +76,24 @@ exports.getSingleOrder = catchAsyncErrors(async (req, res, next) => {
 
 // My Orders for a logged in user
 exports.myOrders = catchAsyncErrors(async (req, res, next) => {
-  console.log("req.body data", req.user, req.body);
-  const orders = await Order.find({
-    user: req.user._id,
-    // orderStatus: { $ne: enums.ORDER_STATUS.PLACED },
-  })
+  const resultPerPage = 10;
+
+  const apiFeature = new ApiFeatures(
+    Order.find({ user: req.user._id }).populate("orderItems.product"),
+    req.query
+  )
     .sort({ createdAt: -1 })
-    .populate("orderItems.product");
-  console.log("get my orders", orders);
+    .pagination(resultPerPage);
+
+  const orders = await apiFeature.query;
+  const totalOrders = await Order.countDocuments({ user: req.user._id });
+
   res.status(200).json({
     success: true,
+    totalOrders,
+    resultPerPage,
+    currentPage: Number(req.query.page) || 1,
+    totalPages: Math.ceil(totalOrders / resultPerPage),
     orders,
   });
 });

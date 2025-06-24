@@ -16,9 +16,11 @@ const orderApi = {
     }
   },
 
-  getMyOrders: async () => {
+  getMyOrders: async (page = 1) => {
     try {
-      const res = await axiosInstance.get(ORDER_API_ENDPOINTS.GET_MY_ORDERS);
+      const res = await axiosInstance.get(
+        `${ORDER_API_ENDPOINTS.GET_MY_ORDERS}?page=${page}`
+      );
       return res.data;
     } catch (err) {
       handleError(err);

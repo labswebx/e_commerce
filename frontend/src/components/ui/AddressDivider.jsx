@@ -1,22 +1,19 @@
-import React from "react";
-import { Plus } from "lucide-react"; // optional: use any plus icon
+import { Plus } from "lucide-react";
 
 const AddNewAddressDivider = ({ onClick }) => {
   return (
-    <div className="relative w-full mt-6 mb-2 text-center">
+    <div className="address-divider">
       {/* Horizontal line */}
-      <div className="w-full border-2 border-gray-900 border-dashed"></div>
+      <div className="address-divider-line" />
 
       {/* Plus button */}
-      <button
-        onClick={onClick}
-        className="absolute flex items-center justify-center w-6 h-6 text-white transform -translate-x-1/2 bg-black rounded-full left-1/2 -top-3"
-      >
+      <button onClick={onClick} className="address-divider-btn">
+        {" "}
         <Plus size={14} />
       </button>
 
-      {/* Label below */}
-      <p className="mt-2 text-sm text-gray-600">Add New Address</p>
+      {/* Label */}
+      <p className="address-divider-text">Add New Address</p>
     </div>
   );
 };

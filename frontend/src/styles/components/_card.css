@@ -1,6 +1,6 @@
 @layer components {
   .card-base {
-    @apply w-full max-w-xs p-4 mx-auto transition bg-white border shadow sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm rounded-2xl hover:shadow-lg;
+    @apply w-full max-w-xs p-4 mx-2 transition bg-white border shadow sm:max-w-sm md:max-w-sm lg:max-w-sm xl:max-w-sm rounded-2xl hover:shadow-lg;
   }
 
   .card-product-img {

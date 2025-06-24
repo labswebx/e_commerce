@@ -278,6 +278,13 @@ export const BUTTON_THEME = {
   },
 };
 
+// used in category
+export const bgColors = [
+  "bg-[#E6EFE4]",
+  "bg-[#E6EFE4]",
+  "bg-[#ECE4EF]",
+  "bg-[#EFE4E4]",
+];
 export const INPUT_THEME = {
   base: {
     borderColor: COLORS.gray[750],

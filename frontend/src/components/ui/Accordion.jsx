@@ -1,40 +1,51 @@
-import React, { useState } from "react";
+import classNames from "classnames";
 import { ChevronDown } from "lucide-react";
+import React, { useState } from "react";
 
-const Accordion = ({ items = [] }) => {
-  const [openIndex, setOpenIndex] = useState(null);
+const Accordion = ({
+  items = [],
+  classNames: extraClassNames = "",
+  itemClassName,
+  buttonClassName,
+}) => {
+  const [openIndices, setOpenIndices] = useState([]);
 
   const toggle = (index) => {
-    setOpenIndex(openIndex === index ? null : index);
+    setOpenIndices((prev) =>
+      prev.includes(index) ? prev.filter((i) => i !== index) : [...prev, index]
+    );
   };
 
   return (
-    <div className="accordion-container" role="presentation">
+    <div className={classNames("accordion-container", extraClassNames)}>
       {items.map((item, index) => {
-        const isOpen = openIndex === index;
+        const isOpen = openIndices.includes(index);
         return (
-          <div className="accordion-item" key={index}>
+          <div
+            key={index}
+            className={classNames("accordion-item", itemClassName)}
+          >
             <button
-              id={`accordion-header-${index}`}
-              aria-controls={`accordion-panel-${index}`}
-              aria-expanded={isOpen}
               onClick={() => toggle(index)}
-              className="accordion-button"
+              className={classNames("accordion-button", buttonClassName)}
+              aria-expanded={isOpen}
+              aria-controls={`panel-${index}`}
+              id={`accordion-${index}`}
             >
               {item.title}
               <ChevronDown
-                className={`accordion-icon ${
-                  isOpen ? "accordion-icon-open" : ""
-                }`}
+                className={classNames("accordion-icon", {
+                  "accordion-icon-open": isOpen,
+                })}
                 aria-hidden="true"
               />
             </button>
             {isOpen && (
               <div
-                id={`accordion-panel-${index}`}
-                role="region"
-                aria-labelledby={`accordion-header-${index}`}
+                id={`panel-${index}`}
                 className="accordion-panel"
+                role="region"
+                aria-labelledby={`accordion-${index}`}
               >
                 {item.content}
               </div>

@@ -17,7 +17,7 @@ import {
 } from "./productsSlice";
 
 // Combined hook for fetching all kinds of products & reviews
-export const useProducts = () => {
+export const useProducts = ({ page = 1, limit, filters, sort } = {}) => {
   const dispatch = useDispatch();
 
   const {
@@ -34,13 +34,13 @@ export const useProducts = () => {
   } = useSelector((state) => state.products);
 
   useEffect(() => {
-    dispatch(fetchProducts());
+    dispatch(fetchProducts({ page, limit, filters, sort }));
     dispatch(fetchTrendingProducts());
     dispatch(fetchFavouriteProducts());
     dispatch(fetchMostOrderedProducts());
     dispatch(fetchSuggestedProducts());
     dispatch((id) => fetchReviews(id));
-  }, [dispatch]);
+  }, [dispatch, page, limit, filters, sort]);
 
   return {
     products,
@@ -126,4 +126,17 @@ export const useProductReviews = (productId) => {
   }, [dispatch, productId]);
 
   return { reviews, loading, error };
+};
+
+export const useSearchProducts = () => {
+  const dispatch = useDispatch();
+  const { products, loading, error } = useSelector((state) => state.products);
+
+  const search = (query) => {
+    const filters = { search: query };
+
+    dispatch(fetchProducts({ page: 1, limit: 5, filters }));
+  };
+
+  return { products, loading, error, search };
 };

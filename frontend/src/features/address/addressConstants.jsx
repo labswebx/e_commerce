@@ -1,5 +1,10 @@
 export const initialAddressState = {
   address: null,
+  count: 0,
+  resultsPerPage: 10,
+  currentPage: 0,
+  totalPages: 0,
+  totalCount: 0,
   addresses: [],
   loading: false,
   error: null,

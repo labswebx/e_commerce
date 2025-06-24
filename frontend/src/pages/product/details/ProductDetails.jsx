@@ -13,6 +13,7 @@ import DescriptionWithToggle from "./components/DescriptionWithToggle";
 import ProductInfoIcons from "./components/ProductInfoIcons";
 import CommentSection from "./components/CommentSection";
 import ProductReviews from "./components/ProductReviews";
+import Button from "../../../components/ui/Button";
 
 const ProductDetails = () => {
   const { id } = useParams();
@@ -59,11 +60,15 @@ const ProductDetails = () => {
           )}
 
           {/* Category */}
-          <p className="mb-2 text-sm text-gray-500">Category: {category}</p>
-
+          {category?.name && (
+            <p className="mb-2 text-sm text-gray-500">
+              Category: {category?.name}
+            </p>
+          )}
           {/* Add to Cart Button */}
-          <div className="mb-4">
-            <AddToCartButton product={id} className="w-full lg:w-auto" />
+          <div className="flex flex-col justify-between w-full gap-2 mb-4 sm:flex-row ">
+            <AddToCartButton product={id} className="w-full" />
+            <Button label="Wishlist" variant="outline" className="" fullWidth />
           </div>
 
           {/* Product Info Icons */}

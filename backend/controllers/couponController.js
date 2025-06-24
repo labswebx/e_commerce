@@ -88,7 +88,7 @@ exports.deleteCoupon = catchAsyncErrors(async (req, res, next) => {
 exports.validateCoupon = catchAsyncErrors(async (req, res, next) => {
   const { code, cartValue } = req.body;
   const coupon = await Coupon.findOne({ code });
-  console.log(coupon, code, cartValue);
+
   // if (!cartValue) {
   //   return next(new ErrorHandler("Invalid cart value", 400));
   // }
@@ -119,7 +119,6 @@ exports.validateCoupon = catchAsyncErrors(async (req, res, next) => {
     discount = (cartValue * coupon.value) / 100;
     finalPrice = cartValue - discount;
   }
-  console.log("coupon code", coupon);
 
   return res.status(200).json({
     success: true,

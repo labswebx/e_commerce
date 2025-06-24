@@ -1,15 +1,6 @@
-import React, { useState, useEffect } from "react";
-import {
-  Smartphone,
-  Monitor,
-  Watch,
-  Camera,
-  Headphones,
-  Gamepad2,
-} from "lucide-react";
+import { useState, useEffect } from "react";
 import Tabs from "../../components/ui/Tabs";
 import { useCategory } from "../../features/category/categoryHooks";
-// import { useCategory } from "../../features/category/categoryHooks";
 
 const SubNav = () => {
   const { categories, loading } = useCategory();
@@ -37,18 +28,17 @@ const SubNav = () => {
     <div className="subnav-container">
       <div className="subnav-wrapper">
         <div className="whitespace-nowrap">
-          {loading ? (
-            <p className="text-sm text-gray-500">Loading categories...</p>
-          ) : (
+          {
             <Tabs
               tabs={categoryTabs}
               selected={selected}
               onSelect={setSelected}
               minimal={true}
+              navigateUrl="/categories"
               size="sm"
               showBottomLine={false}
             />
-          )}
+          }
         </div>
       </div>
     </div>

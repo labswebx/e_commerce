@@ -1,6 +1,6 @@
 @layer components {
   .selectbox-container {
-    @apply relative w-64;
+    @apply relative;
   }
 
   .selectbox-input-wrapper {

@@ -64,4 +64,13 @@
   .btn-full {
     @apply w-full;
   }
+  .btn-cart-base {
+    @apply flex items-center gap-2 max-sm:justify-between max-sm:w-full;
+  }
+  .btn-cart-ghost {
+    @apply bg-transparent hover:bg-gray-200;
+  }
+  .btn-cart-qty {
+    @apply min-w-[20px] text-center font-semibold;
+  }
 }

@@ -134,6 +134,7 @@ productSchema.pre("save", function (next) {
   this.finalPrice = this.price - this.discount;
   next();
 });
+productSchema.index({ category: 1 });
 
 // Handling the update of discount & price to finally calculate the finalPrice
 productSchema.pre("findOneAndUpdate", async function (next) {

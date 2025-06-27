@@ -76,14 +76,13 @@ const addressSlice = createSlice({
       // get my
       .addCase(getMyAddresses.pending, setLoading)
       .addCase(getMyAddresses.fulfilled, (state, action) => {
-        console.log(action.payload);
         state.loading = false;
         state.addresses = action.payload.addresses;
         state.count = action.payload.count;
         state.resultsPerPage = action.payload.resultsPerPage;
         state.totalCount = action.payload.totalCount;
-        state.totalPages=action.payload.totalPages
-        state.currentPage=action.payload.currentPage
+        state.totalPages = action.payload.totalPages;
+        state.currentPage = action.payload.currentPage;
       })
       .addCase(getMyAddresses.rejected, setError)
 

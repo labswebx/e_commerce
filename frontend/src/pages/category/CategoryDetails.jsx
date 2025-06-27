@@ -1,13 +1,30 @@
-import { useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { useOutletContext, useParams } from "react-router-dom";
 import { useCategory } from "../../features/category/categoryHooks";
-import { useCategoryProducts } from "../../features/products/productHooks";
+import {
+  useCategoryProducts,
+  useProducts,
+} from "../../features/products/productHooks";
 import { ProductCard } from "../../components/ui/Card";
 import ErrorMessage from "../../utils/ErrorMessage";
 import toastMessage from "../../constants/toastMessage";
 
 const CategoryDetails = () => {
-  const { id } = useParams();
+  const {
+    filters,
+    sort,
+    id,
+    // setPage,
+    page,
+    limit,
+    setLimit,
+    isLoadMore,
+    setIsLoadMore,
+    products,
+    productsCount,
+    loading,
+    error,
+  } = useOutletContext();
 
   // Category Info
   const {
@@ -16,12 +33,24 @@ const CategoryDetails = () => {
     getCategoryById,
   } = useCategory();
 
-  // Products under this category
   const {
     categoryProducts,
     loading: loadingProducts,
     error: productError,
   } = useCategoryProducts(id);
+
+  const {} = useProducts({
+    page,
+    limit,
+    ...filters,
+    sort,
+  });
+
+  // useEffect(() => {
+  //   // setPage(1);
+  //   setLimit(12);
+  //   setIsLoadMore(false);
+  // }, [filters]);
 
   useEffect(() => {
     if (id) getCategoryById(id);
@@ -77,9 +106,7 @@ const CategoryDetails = () => {
 
               <p>
                 <span className="font-semibold text-gray-700">Products:</span>{" "}
-                <span className="text-gray-500">
-                  {categoryProducts?.length}
-                </span>
+                <span className="text-gray-500">{products?.length}</span>
               </p>
             </div>
           </div>
@@ -90,13 +117,13 @@ const CategoryDetails = () => {
       <div className="space-y-4">
         <h3 className="text-2xl font-semibold text-gray-800">Products</h3>
 
-        {productError ? (
-          <p className="text-red-500">Error loading products: {productError}</p>
-        ) : categoryProducts.length === 0 ? (
+        {error ? (
+          <p className="text-gray-500">Error loading products: {error}</p>
+        ) : products.length === 0 ? (
           <p className="text-gray-500">No products found for this category.</p>
         ) : (
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-3">
-            {categoryProducts.map((product) => (
+            {products.map((product) => (
               <ProductCard key={product._id} data={product} />
             ))}
           </div>
